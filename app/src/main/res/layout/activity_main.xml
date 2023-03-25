@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.drawerlayout.widget.DrawerLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/drawer_layout"
+    android:fitsSystemWindows="true"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".UI.MainActivity"
+    tools:openDrawer="start"
+    >
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <com.google.android.material.appbar.AppBarLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            >
+
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="?attr/colorPrimary"
+                android:elevation="4dp"
+                app:popupTheme="@style/Theme.ApplicationManager.PopupOverlay"
+                app:subtitleTextColor="@color/white"
+                app:titleTextColor="@color/white">
+
+                <TextView
+                    android:id="@+id/app_name_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/app_name"
+                    android:textColor="@color/white"
+                    android:textSize="24sp" />
+
+                <LinearLayout
+                    android:id="@+id/search_bar"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    android:visibility="gone">
+
+                    <ImageButton
+                        android:id="@+id/close_search_bar_btn"
+                        android:layout_width="40dp"
+                        android:layout_height="match_parent"
+                        android:background="@color/transparent"
+                        android:contentDescription="@string/hide_search_bar"
+                        android:src="@drawable/ic_arrow_back"
+                        app:tint="@color/white" />
+
+                    <androidx.appcompat.widget.SearchView
+                        android:id="@+id/search_app"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:focusable="true"
+                        android:focusableInTouchMode="true"
+                        android:iconifiedByDefault="false"
+                        android:imeOptions="actionSearch"
+                        android:queryHint="Search"
+                        app:actionViewClass="androidx.appcompat.widget.SearchView" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/select_options_bar"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    android:visibility="gone">
+
+                    <ImageButton
+                        android:id="@+id/close_select_options_bar"
+                        android:layout_width="40dp"
+                        android:layout_height="match_parent"
+                        android:background="@color/transparent"
+                        android:contentDescription="@string/hide_search_bar"
+                        android:src="@drawable/ic_arrow_back"
+                        app:tint="@color/white" />
+
+                    <TextView
+                        android:id="@+id/amount_selected"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:text="@string/default_zero"
+                        android:textColor="@color/white" />
+
+                    <ImageButton
+                        android:id="@+id/select_all"
+                        android:layout_width="40dp"
+                        android:layout_height="match_parent"
+                        android:background="@color/transparent"
+                        android:contentDescription="@string/hide_search_bar"
+                        android:src="@drawable/ic_select_all" />
+
+                    <ImageButton
+                        android:id="@+id/deselect_all"
+                        android:layout_width="40dp"
+                        android:layout_height="match_parent"
+                        android:background="@color/transparent"
+                        android:contentDescription="@string/hide_search_bar"
+                        android:src="@drawable/ic_deselect" />
+                </LinearLayout>
+            </androidx.appcompat.widget.Toolbar>
+            <TextView
+                android:id="@+id/app_group_description"
+                android:layout_width="match_parent"
+                android:layout_height="16dp"
+                android:textColor="#eeeeee"
+                android:lineHeight="16dp"
+                android:background="@color/cardview_dark_background"
+                android:text="@string/group_app_description_default_0"
+                />
+        </com.google.android.material.appbar.AppBarLayout>
+        <FrameLayout
+            android:id="@+id/frame_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/list_app"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:fadeScrollbars="false"
+                android:overScrollMode="always"
+                android:scrollbarDefaultDelayBeforeFade="10"
+                android:scrollbarSize="10dp"
+                android:scrollbarThumbVertical="@drawable/custom_scrollbar_thumb"
+                android:scrollbars="vertical" />
+        </FrameLayout>
+    </LinearLayout>
+
+    <com.google.android.material.navigation.NavigationView
+        android:id="@+id/nav_view"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:layout_marginTop="80dp"
+        app:headerLayout="@layout/nav_header"
+        app:menu="@menu/menu_drawer" />
+</androidx.drawerlayout.widget.DrawerLayout>

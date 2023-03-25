@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shortcuts xmlns:android="http://schemas.android.com/apk/res/android">
+    <shortcut
+        android:shortcutId="freeze_apps"
+        android:enabled="true"
+        android:icon="@drawable/ic_free_breakfast"
+        android:shortcutShortLabel="@string/freeze_all_app"
+        android:shortcutLongLabel="@string/freeze_all_app"
+        >
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:targetPackage="com.god.ApplicationManager.UI"
+            android:targetClass="com.god.ApplicationManager.Service.FreezeService"
+            />
+    </shortcut>
+</shortcuts>

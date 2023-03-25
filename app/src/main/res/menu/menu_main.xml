@@ -1,0 +1,95 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:iconTint="@color/white"
+    tools:context="com.god.ApplicationManager.UI.MainActivity">
+    <item
+        android:id="@+id/menu_filter_app"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:icon="@drawable/ic_menu_filter"
+        android:title="@string/menu_filter_by"
+        app:showAsAction="always">
+        <menu>
+            <group
+                android:id="@+id/group_filter_app"
+                android:checkableBehavior="single">
+                <item
+                    android:id="@+id/not_filter_app"
+                    android:checkable="true"
+                    android:textColor="@color/white"
+                    android:title="@string/all" />
+                <item
+                    android:id="@+id/filter_system_app"
+                    android:checkable="true"
+                    android:textColor="@color/white"
+                    android:title="@string/system" />
+                <item
+                    android:id="@+id/filter_user_app"
+                    android:checkable="true"
+                    android:textColor="@color/white"
+                    android:title="@string/user" />
+            </group>
+        </menu>
+    </item>
+    <item
+        android:id="@+id/menu_sort_app"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:icon="@drawable/ic_menu_order"
+        android:title="@string/menu_sort_by"
+        app:showAsAction="always">
+        <menu>
+            <group
+                android:id="@+id/group_sort_app"
+                android:checkableBehavior="single">
+                <item
+                    android:id="@+id/sort_a_to_z"
+                    android:checkable="true"
+                    android:textColor="@color/white"
+                    android:title="@string/a_z" />
+                <item
+                    android:id="@+id/sort_z_to_a"
+                    android:checkable="true"
+                    android:textColor="@color/white"
+                    android:title="@string/z_a" />
+            </group>
+            <group
+                android:id="@+id/group_order_app"
+                android:checkableBehavior="single">
+                <item
+                    android:id="@+id/order_by_app_name"
+                    android:checkable="true"
+                    android:textColor="@color/white"
+                    android:title="@string/order_by_app_name" />
+                <item
+                    android:id="@+id/order_by_package_name"
+                    android:checkable="true"
+                    android:textColor="@color/white"
+                    android:title="@string/order_by_package_name" />
+            </group>
+        </menu>
+    </item>
+    <item
+        android:id="@+id/menu_other_options"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:icon="@drawable/ic_menu_white"
+        android:title="@string/menu_order_by"
+        app:showAsAction="always">
+        <menu>
+            <item
+                android:id="@+id/open_search_bar"
+                android:icon="@drawable/ic_search"
+                android:title="@string/search" />
+            <item
+                android:id="@+id/select_multiple"
+                android:icon="@drawable/ic_add_to_photos"
+                android:title="@string/multiple_select" />
+            <item
+                android:id="@+id/open_setting"
+                android:icon="@drawable/ic_settings"
+                android:title="@string/settings" />
+        </menu>
+    </item>
+</menu>

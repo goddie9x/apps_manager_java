@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="5dp"
+    android:background="@color/cardview_shadow_start_color"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/app_icon"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="5dp"
+                android:contentDescription="@string/app_icon_default"
+                android:src="@drawable/ic_launcher_foreground" />
+
+            <ImageView
+                android:id="@+id/selected_icon"
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:layout_gravity="end|bottom"
+                android:layout_marginEnd="15dp"
+                android:layout_marginRight="15dp"
+                android:src="@drawable/ic_checked"
+                android:visibility="gone" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:id="@+id/app_modify"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="70dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/app_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="35dp"
+                    android:singleLine="true"
+                    android:text="@string/app_name_default"
+                    android:textSize="24sp" />
+
+                <TextView
+                    android:id="@+id/app_package"
+                    android:layout_width="match_parent"
+                    android:layout_height="25dp"
+                    android:singleLine="true"
+                    android:text="@string/package_default"
+                    android:textSize="18sp" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/system_label"
+                android:layout_width="wrap_content"
+                android:layout_height="18dp"
+                android:layout_gravity="end|top"
+                android:layout_marginEnd="10dp"
+                android:singleLine="true"
+                android:text="@string/system"
+                android:textColor="@color/red"
+                android:textSize="15sp" />
+
+            <TextView
+                android:id="@+id/running_label"
+                android:layout_width="wrap_content"
+                android:layout_height="18dp"
+                android:layout_gravity="end|bottom"
+                android:layout_marginEnd="15dp"
+                android:singleLine="true"
+                android:text="@string/stopped"
+                android:textColor="@color/yellow_orange"
+                android:textSize="15sp" />
+        </FrameLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/list_service"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <CheckBox
+            android:layout_width="match_parent"
+            android:layout_height="20dp"
+            android:text="service" />
+    </LinearLayout>
+</LinearLayout>
