@@ -1,11 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:showIn="@layout/activity_main"
-    >
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:showIn="@layout/activity_main">
     <item
-        android:id="@+id/refesh_list_app"
-        android:title="refesh"
-        android:icon="@drawable/ic_refresh"
-        android:iconTint="@color/white"/>
+        android:id="@+id/refresh_list_app"
+        android:title="@string/refresh"
+        android:icon="@drawable/ic_refresh"/>
+    <item android:title="@string/dark_mode">
+        <menu>
+            <group android:checkableBehavior="single">
+                <item
+                    android:id="@+id/action_dark_mode"
+                    android:title="@string/dark_mode"
+                    android:icon="@drawable/ic_dark_mode"
+                    android:checked="false"
+                    android:orderInCategory="100"
+                    app:showAsAction="ifRoom" />
+                <item
+                    android:id="@+id/action_light_mode"
+                    android:title="@string/light_mode"
+                    android:icon="@drawable/ic_light_mode"
+                    android:checked="true"
+                    android:orderInCategory="100"
+                    app:showAsAction="ifRoom" />
+            </group>
+        </menu>
+    </item>
+    <item
+        android:id="@+id/open_setting"
+        android:icon="@drawable/ic_settings"
+        android:title="@string/settings" />
+    <item
+        android:id="@+id/freeze_zone"
+        android:icon="@drawable/ic_freeze"
+        android:title="@string/freeze_zone" />
+    <item
+        android:id="@+id/notification_zone"
+        android:icon="@drawable/ic_notification"
+        android:title="@string/notification_zone" />
 </menu>

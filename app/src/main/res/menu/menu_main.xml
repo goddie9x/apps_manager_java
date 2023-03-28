@@ -1,7 +1,6 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:iconTint="@color/white"
     tools:context="com.god.ApplicationManager.UI.MainActivity">
     <item
         android:id="@+id/menu_filter_app"
@@ -17,17 +16,14 @@
                 <item
                     android:id="@+id/not_filter_app"
                     android:checkable="true"
-                    android:textColor="@color/white"
                     android:title="@string/all" />
                 <item
                     android:id="@+id/filter_system_app"
                     android:checkable="true"
-                    android:textColor="@color/white"
                     android:title="@string/system" />
                 <item
                     android:id="@+id/filter_user_app"
                     android:checkable="true"
-                    android:textColor="@color/white"
                     android:title="@string/user" />
             </group>
         </menu>
@@ -46,12 +42,10 @@
                 <item
                     android:id="@+id/sort_a_to_z"
                     android:checkable="true"
-                    android:textColor="@color/white"
                     android:title="@string/a_z" />
                 <item
                     android:id="@+id/sort_z_to_a"
                     android:checkable="true"
-                    android:textColor="@color/white"
                     android:title="@string/z_a" />
             </group>
             <group
@@ -60,12 +54,10 @@
                 <item
                     android:id="@+id/order_by_app_name"
                     android:checkable="true"
-                    android:textColor="@color/white"
                     android:title="@string/order_by_app_name" />
                 <item
                     android:id="@+id/order_by_package_name"
                     android:checkable="true"
-                    android:textColor="@color/white"
                     android:title="@string/order_by_package_name" />
             </group>
         </menu>
@@ -86,10 +78,6 @@
                 android:id="@+id/select_multiple"
                 android:icon="@drawable/ic_add_to_photos"
                 android:title="@string/multiple_select" />
-            <item
-                android:id="@+id/open_setting"
-                android:icon="@drawable/ic_settings"
-                android:title="@string/settings" />
         </menu>
     </item>
 </menu>

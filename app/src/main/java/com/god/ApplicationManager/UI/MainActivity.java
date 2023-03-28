@@ -114,17 +114,31 @@ public class MainActivity extends AppCompatActivity {
     private void initLayout(ActivityMainBinding binding) {
         setSupportActionBar(binding.toolbar);
         mainDrawer = binding.drawerLayout;
-        NavigationView navView = findViewById(R.id.nav_view);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, mainDrawer,
                 binding.toolbar, R.string.navigation_draw_open, R.string.navigation_drawer_close);
         binding.drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
+        initDrawableLayoutEvent();
+    }
+
+    private void initDrawableLayoutEvent() {
+        NavigationView navView = findViewById(R.id.nav_view);
         navView.setNavigationItemSelectedListener(item -> {
             int id = item.getItemId();
             switch (id) {
-                case R.id.refesh_list_app: {
+                case R.id.refresh_list_app: {
                     taskingHandler.execTaskGetAllInstalledApp();
                 }
+                case R.id.action_dark_mode:
+                    item.setChecked(true);
+                    setTheme(R.style.Theme_ApplicationManager_DarkMode);
+                    recreate();
+                    return true;
+                case R.id.action_light_mode:
+                    item.setChecked(true);
+                    setTheme(R.style.Theme_ApplicationManager_LightMode);
+                    recreate();
+                    return true;
             }
             mainDrawer.closeDrawer(GravityCompat.START);
             return true;
@@ -251,9 +265,6 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case R.id.select_multiple:
                 toggleMultipleSelect();
-                break;
-            case R.id.open_setting:
-                handleOpenSettings();
                 break;
         }
     }
@@ -422,13 +433,13 @@ public class MainActivity extends AppCompatActivity {
     private Stream handleFilterListAppStream(Stream<AppInfo> listAppStream) {
         switch (selectedGroupAppType) {
             case SYSTEM_APP:
-                sortAppDes.setText("System applications (");
+                sortAppDes.setText(R.string.filter_sytem_app_amount_title);
                 return listAppStream.filter(appInfo -> appInfo.isSystemApp);
             case USER_APP:
-                sortAppDes.setText("User applications (");
+                sortAppDes.setText(R.string.filter_user_app_amount_title);
                 return listAppStream.filter(appInfo -> !appInfo.isSystemApp);
             default:
-                sortAppDes.setText("All applications (");
+                sortAppDes.setText(R.string.filter_all_app_amount_title);
                 return listAppStream;
         }
     }

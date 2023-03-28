@@ -11,4 +11,6 @@
     <color name="yellow_green">#8BC34A</color>
     <color name="yellow_orange">#FFC107</color>
     <color name="red">#FF0000</color>
+    <color name="text_default_color_dark_mode">#fff</color>
+    <color name="text_default_color">#000</color>
 </resources>
