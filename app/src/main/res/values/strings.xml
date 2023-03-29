@@ -77,4 +77,11 @@
     <string name="filter_sytem_app_amount_title">System applications (</string>
     <string name="filter_user_app_amount_title">User applications (</string>
     <string name="filter_all_app_amount_title">All applications (</string>
+    <string name="nothingToFreeze">List  app to freeze is empty</string>
+    <string name="power_button_hint">Hint: Press the Power button to abort the freeze process</string>
+    <string name="warning_accessibility_require">Warning accessiblity require</string>
+    <string name="assessibility_reqire_message">Your app need accessibility to perform freeze apps</string>
+    <string name="cant_freeze">Cannot freeze package %s</string>
+    <string name="freeze_screen_off_failed">\'Freeze when the screen turns off\' failed</string>
+    <string name="disable_power_btn_instantly_locks_warning">You have to disable \'Power button instantly locks\' in the system settings for this to work.</string>
 </resources>

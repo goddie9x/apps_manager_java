@@ -1,18 +1,21 @@
 package com.god.ApplicationManager.Permission;
 
 import android.Manifest;
+import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
+import android.provider.Settings;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.god.ApplicationManager.R;
 import com.god.ApplicationManager.Util.DialogUtils;
 
 public class PermissionHandler {
     private final AppCompatActivity activity;
     private static final int PERMISSION_QUERY_ALL_PACKAGES_CODE = 69;
-
     public PermissionHandler(AppCompatActivity activity){
         this.activity = activity;
     }
@@ -52,5 +55,16 @@ public class PermissionHandler {
                         PERMISSION_QUERY_ALL_PACKAGES_CODE);
             }
         }
+    }
+
+    public static void getUseAccessibilityService(Context context){
+        DialogUtils.showAlertDialog(
+                context,
+                context.getString(R.string.warning_accessibility_require),
+                context.getString(R.string.assessibility_reqire_message),
+                (dialog,which)->{
+                    Intent intent = new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS);
+                    context.startActivity(intent);
+                });
     }
 }

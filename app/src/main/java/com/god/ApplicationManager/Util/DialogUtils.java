@@ -6,6 +6,9 @@ import android.content.DialogInterface;
 import androidx.appcompat.app.AlertDialog;
 
 public class DialogUtils {
+    public interface SetMoreOptions{
+        void callback(AlertDialog.Builder builder);
+    }
     public static void showAlertDialog(Context context, String title, String message,
                                        DialogInterface.OnClickListener positiveListener,
                                        DialogInterface.OnClickListener negativeListener) {
@@ -31,6 +34,22 @@ public class DialogUtils {
 
         if (positiveListener != null) {
             builder.setPositiveButton(android.R.string.ok, positiveListener);
+        }
+        builder.show();
+    }
+    public static void showAlertDialog(Context context, String title, String message,
+                                       DialogInterface.OnClickListener positiveListener,
+                                       SetMoreOptions setMoreOptions) {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle(title);
+        builder.setMessage(message);
+
+        if (positiveListener != null) {
+            builder.setPositiveButton(android.R.string.ok, positiveListener);
+        }
+        if(setMoreOptions!=null){
+            setMoreOptions.callback(builder);
         }
         builder.show();
     }

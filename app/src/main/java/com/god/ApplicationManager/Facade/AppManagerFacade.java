@@ -1,5 +1,6 @@
 package com.god.ApplicationManager.Facade;
 
+import android.accessibilityservice.AccessibilityServiceInfo;
 import android.app.ActivityManager;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -15,10 +16,12 @@ import android.os.Build;
 import android.os.IBinder;
 import android.service.notification.StatusBarNotification;
 import android.util.Log;
+import android.view.accessibility.AccessibilityManager;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.god.ApplicationManager.DB.AppInfoDB;
 import com.god.ApplicationManager.Entity.AppInfo;
 import com.god.ApplicationManager.Util.DialogUtils;
 
@@ -172,10 +175,16 @@ public class AppManagerFacade {
         }
         return appNotificationIds;
     }
-    public void turnOffNotifPermanenly(String packageName) throws PackageManager.NameNotFoundException {
-        NotificationManager crrAppNotifManager = (NotificationManager) activity
-                .createPackageContext(packageName, 0)
-                .getSystemService(Context.NOTIFICATION_SERVICE);
+    public void turnOffNotifPermanenly(AppInfo appInfo)  {
+        turnOffNotif(getAllNotifIdOfPackage(appInfo.packageName));
+        NotificationManager crrAppNotifManager = null;
+        try {
+            crrAppNotifManager = (NotificationManager) activity
+                    .createPackageContext(appInfo.packageName, 0)
+                    .getSystemService(Context.NOTIFICATION_SERVICE);
+        } catch (PackageManager.NameNotFoundException e) {
+            throw new RuntimeException(e);
+        }
 
         // Get a list of all the notification channels
         List<NotificationChannel> channels = null;
@@ -199,17 +208,19 @@ public class AppManagerFacade {
                 Method getNotificationChannelsForPackage = iNotificationManager.getClass()
                         .getDeclaredMethod("getNotificationChannelsForPackage", String.class, int.class);
                 channels = (List<NotificationChannel>) getNotificationChannelsForPackage.invoke(iNotificationManager,
-                        packageName, android.os.Process.myUid() / 100000);
+                        appInfo.packageName, android.os.Process.myUid() / 100000);
 
             } catch (Exception e) {
                 Log.e(TAG,e.getMessage());
             }
         }
+        AppInfoDB appInfoDB = new AppInfoDB();
+        appInfoDB.appName = appInfo.appName;
+        appInfoDB.packageName = appInfo.packageName;
+        appInfoDB.isHaveToTurnOffNotif = true;
+        AppInfoDB.updateOrCreate(appInfoDB);
     }
-    public void handleGetNotifs(){
-        activeNotifications = notificationManager.getActiveNotifications();
-    }
-    public void turnOffNotif(int[] notifIds){
+    public void turnOffNotif(List<Integer> notifIds){
         for (int notifId:notifIds) {
             notificationManager.cancel(notifId);
         }
@@ -238,6 +249,34 @@ public class AppManagerFacade {
             }
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+    public static void freezeAppUsingRoot(String packageName,
+                                           Context context,
+                                           boolean putScreenOffAfterFreezing) {
+        try {
+            Shell.Threaded shell = Shell.Pool.SU.get();
+            //if (Build.VERSION.SDK_INT >= 23) shell.run("dumpsys battery unplug")
+            if (Build.VERSION.SDK_INT >= 23) {
+                try {
+                    shell.run("am set-inactive "+packageName+" true");
+                    shell.run("am force-stop "+packageName);
+                    shell.run("am kill "+packageName);
+                } catch (Shell.ShellDiedException e) {
+                    Log.e(TAG,e.getMessage());
+                }
+            }
+            if (packageName == context.getPackageName()) {
+                if (putScreenOffAfterFreezing) {
+                    try {
+                        shell.run("input keyevent 26");
+                    } catch (Shell.ShellDiedException e) {
+                        Log.e(TAG,e.getMessage());
+                    }
+                }
+            }
+        } catch (Shell.ShellDiedException e) {
+            Log.e(TAG, "ShellDiedException, probably we did not have root access. (???)");
         }
     }
     public static void freezeAppsUsingRoot(List<String>packages,
@@ -305,6 +344,9 @@ public class AppManagerFacade {
         return activityManager
                 .getRunningServices(Integer.MAX_VALUE);
     }
+    public static List<AppInfoDB>getListAppFromDB(){
+        return AppInfoDB.listAll(AppInfoDB.class);
+    }
     public ActivityInfo[]getServices(String packageName) {
         try {
             PackageInfo packageInfo = packageManager.getPackageInfo(
@@ -314,5 +356,37 @@ public class AppManagerFacade {
             e.printStackTrace();
         }
         return null;
+    }
+    public static boolean hasUseAccessibilityServicePermission(Context context) {
+        try {
+            PackageManager packageManager = context.getPackageManager();
+
+            AccessibilityManager accessibilityManager = (AccessibilityManager) context.getSystemService(Context.ACCESSIBILITY_SERVICE);
+            if (accessibilityManager == null) {
+                return false;
+            }
+
+            // Check if the package name is enabled in the Accessibility settings
+            for (AccessibilityServiceInfo serviceInfo : accessibilityManager.getEnabledAccessibilityServiceList(AccessibilityServiceInfo.FEEDBACK_ALL_MASK)) {
+                if (serviceInfo.getResolveInfo().serviceInfo.packageName.equals(context.getPackageName())) {
+                    return true;
+                }
+            }
+            // Check if the package has the UseAccessibilityService permission
+            String[] requestedPermissions = packageManager.getPackageInfo(context.getPackageName(),
+                    PackageManager.GET_PERMISSIONS).requestedPermissions;
+            if (requestedPermissions != null) {
+                for (String permission : requestedPermissions) {
+                    if (permission.equals(android.Manifest.permission.BIND_ACCESSIBILITY_SERVICE)) {
+                        return true;
+                    }
+                }
+            }
+
+        } catch (PackageManager.NameNotFoundException e) {
+            Log.e(TAG,e.getMessage());
+        }
+
+        return false;
     }
 }

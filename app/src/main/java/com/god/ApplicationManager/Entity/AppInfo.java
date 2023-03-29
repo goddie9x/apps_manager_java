@@ -2,6 +2,7 @@ package com.god.ApplicationManager.Entity;
 
 import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.graphics.drawable.AdaptiveIconDrawable;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
@@ -77,9 +78,15 @@ public class AppInfo implements Parcelable {
     public void writeToParcel(@NonNull Parcel dest, int flags) {
         dest.writeString(appName);
         dest.writeString(packageName);
-        if(appIcon!=null){
-            Bitmap bitmap = ((BitmapDrawable) appIcon).getBitmap();
-            dest.writeParcelable(bitmap, flags);
+        if (appIcon != null) {
+            if (appIcon instanceof BitmapDrawable) {
+                Bitmap bitmap = ((BitmapDrawable) appIcon).getBitmap();
+                dest.writeParcelable(bitmap, flags);
+            } else if (appIcon instanceof AdaptiveIconDrawable) {
+                Drawable foregroundDrawable = ((AdaptiveIconDrawable) appIcon).getForeground();
+                Bitmap bitmap = ((BitmapDrawable) foregroundDrawable).getBitmap();
+                dest.writeParcelable(bitmap, flags);
+            }
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             dest.writeBoolean(isSystemApp);
