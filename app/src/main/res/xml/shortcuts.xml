@@ -3,7 +3,7 @@
     <shortcut
         android:shortcutId="freeze_apps"
         android:enabled="true"
-        android:icon="@drawable/ic_free_breakfast"
+        android:icon="@drawable/ic_freeze"
         android:shortcutShortLabel="@string/freeze_all_app"
         android:shortcutLongLabel="@string/freeze_all_app"
         >

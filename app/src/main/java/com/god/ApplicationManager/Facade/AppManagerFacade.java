@@ -12,7 +12,6 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
-import android.os.Build;
 import android.os.IBinder;
 import android.service.notification.StatusBarNotification;
 import android.util.Log;
@@ -25,7 +24,6 @@ import com.god.ApplicationManager.DB.AppInfoDB;
 import com.god.ApplicationManager.Entity.AppInfo;
 import com.god.ApplicationManager.Util.DialogUtils;
 
-import java.io.DataOutputStream;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -236,44 +234,33 @@ public class AppManagerFacade {
             }
         } catch (Exception e) {
             e.printStackTrace();
+            Toast.makeText (activity,"Failed",Toast.LENGTH_SHORT).show();
         }
     }
     public void executeCommandWithSuShell(String command,String textSuccess,String textFail){
         try {
-            Log.i(TAG, "exec executeCommandWithSuShell");
-            try {
                 shell.run(command);
                 Toast.makeText (activity,textSuccess,Toast.LENGTH_SHORT).show();
-            } catch (Exception e) {
-                Toast.makeText (activity,textFail,Toast.LENGTH_SHORT).show();
-            }
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.e(TAG, "ShellDiedException, probably we did not have root access. (???)");
+            Toast.makeText (activity,textFail,Toast.LENGTH_SHORT).show();
         }
     }
     public static void freezeAppUsingRoot(String packageName,
                                            Context context,
                                            boolean putScreenOffAfterFreezing) {
+        String crrPackageName = context.getPackageName();
         try {
             Shell.Threaded shell = Shell.Pool.SU.get();
-            //if (Build.VERSION.SDK_INT >= 23) shell.run("dumpsys battery unplug")
-            if (Build.VERSION.SDK_INT >= 23) {
-                try {
-                    shell.run("am set-inactive "+packageName+" true");
-                    shell.run("am force-stop "+packageName);
-                    shell.run("am kill "+packageName);
-                } catch (Shell.ShellDiedException e) {
-                    Log.e(TAG,e.getMessage());
+            if (packageName == crrPackageName) {
+                if (putScreenOffAfterFreezing) {
+                    shell.run("input keyevent 26");
                 }
             }
-            if (packageName == context.getPackageName()) {
-                if (putScreenOffAfterFreezing) {
-                    try {
-                        shell.run("input keyevent 26");
-                    } catch (Shell.ShellDiedException e) {
-                        Log.e(TAG,e.getMessage());
-                    }
-                }
+            else{
+                shell.run("am set-inactive "+packageName+" true");
+                shell.run("am force-stop "+packageName);
+                shell.run("am kill "+packageName);
             }
         } catch (Shell.ShellDiedException e) {
             Log.e(TAG, "ShellDiedException, probably we did not have root access. (???)");
@@ -284,17 +271,7 @@ public class AppManagerFacade {
                                            boolean putScreenOffAfterFreezing) {
         try {
             Shell.Threaded shell = Shell.Pool.SU.get();
-            //if (Build.VERSION.SDK_INT >= 23) shell.run("dumpsys battery unplug")
             packages.forEach(it->{
-                if (Build.VERSION.SDK_INT >= 23) {
-                    try {
-                        shell.run("am set-inactive $it true");
-                        shell.run("am force-stop $it");
-                        shell.run("am kill $it");
-                    } catch (Shell.ShellDiedException e) {
-                        Log.e(TAG,e.getMessage());
-                    }
-                }
                 if (it == context.getPackageName()) {
                     if (putScreenOffAfterFreezing) {
                         try {
@@ -302,6 +279,15 @@ public class AppManagerFacade {
                         } catch (Shell.ShellDiedException e) {
                             Log.e(TAG,e.getMessage());
                         }
+                    }
+                }
+                else {
+                    try {
+                        shell.run("am set-inactive "+it+" true");
+                        shell.run("am force-stop "+it);
+                        shell.run("am kill "+it);
+                    } catch (Shell.ShellDiedException e) {
+                        Log.e(TAG,e.getMessage());
                     }
                 }
             });
@@ -316,14 +302,9 @@ public class AppManagerFacade {
         try {
             Log.i(TAG, "exec command");
             try {
-                Process suProcess = Runtime.getRuntime().exec("su");
-                DataOutputStream os = new DataOutputStream(suProcess.getOutputStream());
-                os.writeBytes("adb shell" + "\n");
-                os.flush();
-                os.writeBytes(command + "\n");
-                os.flush();
+                shell.run(command);
                 onSuccess.callback();
-            } catch (IOException e) {
+            } catch (Exception e) {
                 onFailed.callback();
                 Toast.makeText (activity,"Failed",Toast.LENGTH_SHORT).show();
             }

@@ -1,6 +1,6 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
-    <style name="Theme.ApplicationManager.DarkMode" parent="Theme.MaterialComponents.DayNight">
+    <!-- LightMode-->
+    <style name="Theme.ApplicationManager" parent="Theme.MaterialComponents.NoActionBar">
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/purple_500</item>
         <item name="colorPrimaryVariant">@color/purple_700</item>
@@ -12,15 +12,49 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
+        <item name="itemTextColor">@color/black</item>
+        <item name="buttonIconTint">@color/black</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:iconTint" tools:targetApi="o">@color/black</item>
+        <item name="iconTint">@color/black</item>
+        <item name="tint">@color/black</item>
+        <item name="popupTheme">@style/Theme.ApplicationManager.PopupMenuStyle</item>
+    </style>
+
+    <style name="Theme.ApplicationManager.Toolbar">
+        <item name="background">?attr/colorPrimary</item>
+        <item name="subtitleTextColor">@color/black</item>
+        <item name="titleTextColor">@color/black</item>
+        <item name="android:actionOverflowMenuStyle">@style/Theme.ApplicationManager.ActionOverflowMenuStyle</item>
+    </style>
+
+    <style name="Theme.ApplicationManager.ActionOverflowMenuStyle">
+        <item name="tint">@color/black</item>
+    </style>
+    <style name="Theme.ApplicationManager.PopupMenuStyle">
+        <item name="itemTextColor">@color/black</item>
+        <item name="tint">@color/white</item>
+        <item name="backgroundColor">@color/cardview_light_background</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+    <!-- Darkmode -->
+    <style name="Theme.ApplicationManager.DarkMode" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/purple_500</item>
+        <item name="colorPrimaryVariant">@color/purple_700</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/teal_200</item>
+        <item name="colorSecondaryVariant">@color/teal_700</item>
+        <item name="colorOnSecondary">@color/yellow_green</item>
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
+        <!-- Customize your theme here. -->
         <item name="itemTextColor">@color/white</item>
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
         <item name="buttonIconTint">@color/white</item>
         <item name="android:textColor">@color/white</item>
         <item name="android:iconTint" tools:targetApi="o">@color/white</item>
         <item name="iconTint">@color/white</item>
-        <item name="tint">@color/white</item>
-        <item name="toolbarStyle">@style/Theme.ApplicationManager.DarkMode.Toolbar</item>
         <item name="popupTheme">@style/Theme.ApplicationManager.DarkMode.PopupMenuStyle</item>
     </style>
     <style name="Theme.ApplicationManager.DarkMode.Toolbar">
@@ -32,51 +66,14 @@
     <style name="Theme.ApplicationManager.DarkMode.ActionOverflowMenuStyle">
         <item name="tint">@color/white</item>
     </style>
-    <style name="Theme.ApplicationManager.LightMode" parent="Theme.MaterialComponents.DayNight">
-        <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/purple_500</item>
-        <item name="colorPrimaryVariant">@color/purple_700</item>
-        <item name="colorOnPrimary">@color/white</item>
-        <!-- Secondary brand color. -->
-        <item name="colorSecondary">@color/teal_200</item>
-        <item name="colorSecondaryVariant">@color/teal_700</item>
-        <item name="colorOnSecondary">@color/black</item>
-        <!-- Status bar color. -->
-        <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
-        <!-- Customize your theme here. -->
-        <item name="itemTextColor">@color/black</item>
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
-        <item name="buttonIconTint">@color/black</item>
-        <item name="android:textColor">@color/black</item>
-        <item name="android:iconTint" tools:targetApi="o">@color/black</item>
-        <item name="iconTint">@color/black</item>
-        <item name="tint">@color/black</item>
-        <item name="toolbarStyle">@style/Theme.ApplicationManager.LightMode.Toolbar</item>
-        <item name="popupTheme">@style/Theme.ApplicationManager.LightMode.PopupMenuStyle</item>
-    </style>
-
     <style name="Theme.ApplicationManager.DarkMode.PopupMenuStyle">
         <item name="itemTextColor">@color/white</item>
         <item name="tint">@color/black</item>
         <item name="backgroundColor">@color/cardview_dark_background</item>
         <item name="android:textColor">@color/white</item>
     </style>
-
-    <style name="Theme.ApplicationManager.LightMode.Toolbar">
-        <item name="background">?attr/colorPrimary</item>
-        <item name="subtitleTextColor">@color/black</item>
-        <item name="titleTextColor">@color/black</item>
-        <item name="android:actionOverflowMenuStyle">@style/Theme.ApplicationManager.LightMode.ActionOverflowMenuStyle</item>
-    </style>
-
-    <style name="Theme.ApplicationManager.LightMode.ActionOverflowMenuStyle">
-        <item name="tint">@color/black</item>
-    </style>
-    <style name="Theme.ApplicationManager.LightMode.PopupMenuStyle">
-        <item name="itemTextColor">@color/black</item>
-        <item name="tint">@color/white</item>
-        <item name="backgroundColor">@color/cardview_light_background</item>
-        <item name="android:textColor">@color/black</item>
+    <style name="Theme.ApplicationManager.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
     </style>
 </resources>

@@ -5,8 +5,7 @@
     android:background="@color/cardview_dark_background"
     android:gravity="bottom"
     android:orientation="vertical"
-    android:padding="16dp"
-    android:theme="@style/ThemeOverlay.AppCompat.Dark">
+    android:padding="16dp">
 
     <ImageView
         android:layout_width="wrap_content"
