@@ -84,4 +84,10 @@
     <string name="cant_freeze">Cannot freeze package %s</string>
     <string name="freeze_screen_off_failed">\'Freeze when the screen turns off\' failed</string>
     <string name="disable_power_btn_instantly_locks_warning">You have to disable \'Power button instantly locks\' in the system settings for this to work.</string>
+    <string name="manager_app">Manager app</string>
+    <string name="notification">Notification</string>
+    <string name="remove_from_this_list">Remove from this list</string>
+    <string name="select_option">Select option</string>
+    <string name="applications">applications</string>
+    <string name="action">Action</string>
 </resources>

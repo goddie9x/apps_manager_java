@@ -10,10 +10,13 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.god.ApplicationManager.DB.AppInfoDB;
 import com.god.ApplicationManager.Entity.AppInfo;
+import com.god.ApplicationManager.Enum.MenuContextType;
 import com.god.ApplicationManager.Facade.AppManagerFacade;
 import com.god.ApplicationManager.Util.AsyncTaskBuilder;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -25,6 +28,7 @@ public class TaskingHandler {
     }
     private SetListAppToRecycleView setListAppToRecycleView;
     private List<AppInfo> listApp;
+    private MenuContextType crrMenuContext;
 
     public List<AppInfo> getListApp() {
         return listApp;
@@ -148,15 +152,33 @@ public class TaskingHandler {
         taskUninstallApp.execute();
     }
 
-    public void execTaskGetAllInstalledApp() {
+    public void execTaskGetAllInstalledApp(MenuContextType crrMenuContext) {
         if(!checkCallBackSetListAppToRecycleViewInitialed())return;
         AsyncTaskBuilder<Void, Void, Void> taskGetAllInstalledApp = new AsyncTaskBuilder<>();
         ProgressDialog progressDialog = new ProgressDialog(activity);
+        this.crrMenuContext = crrMenuContext;
 
         taskGetAllInstalledApp.setDoInBackgroundFunc(ts -> {
             listApp = appManagerFacade.GetAllInstalledApp();
+            final List<AppInfo>newListApp;
+            switch (this.crrMenuContext){
+                case FREEZE_MENU:
+                    List<AppInfoDB> listFreezeApp =
+                            AppInfoDB.find(AppInfoDB.class,
+                                    "is_have_to_be_freeze =1");
+                    newListApp = getListAppHasPackageNameInBothList(listApp,listFreezeApp);
+                    break;
+                case NOTIFICATION_MENU:
+                    List<AppInfoDB> listTurnOffNotif =
+                            AppInfoDB.find(AppInfoDB.class,
+                                    "is_have_to_turn_off_notif =1");
+                    newListApp = getListAppHasPackageNameInBothList(listApp,listTurnOffNotif);
+                    break;
+                default:
+                    newListApp = listApp;
+            }
             Handler handler = new Handler(Looper.getMainLooper());
-            handler.post(() -> setListAppToRecycleView.callback(listApp));
+            handler.post(() -> setListAppToRecycleView.callback(newListApp));
             return null;
         });
         taskGetAllInstalledApp.setOnPreExecuteFunc(() -> {
@@ -179,6 +201,20 @@ public class TaskingHandler {
         );
         taskGetAllInstalledApp.execute();
     }
+
+    private List<AppInfo> getListAppHasPackageNameInBothList(List<AppInfo> listApp, List<AppInfoDB> listFreezeApp) {
+        List<AppInfo> newListApp = new ArrayList<>();
+        for (AppInfo appInfo : listApp) {
+            for (AppInfoDB appInfoDB : listFreezeApp) {
+                if (appInfo.packageName.equals(appInfoDB.packageName)) {
+                    newListApp.add(appInfo);
+                    break; // Once a match is found, no need to check further.
+                }
+            }
+        }
+        return newListApp;
+    }
+
     public void handleSelectAllItemInRecycleView(){
 
     }

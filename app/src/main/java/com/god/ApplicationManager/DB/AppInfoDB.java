@@ -14,7 +14,7 @@ public class AppInfoDB extends SugarRecord {
     public static AppInfoDB findOrCreateByPackageName(String packageName,
                                                       AppInfoDB defaultDataIfNotFound){
         List<AppInfoDB> listAppInfoDD = AppInfoDB.find(AppInfoDB.class,
-                "packageName=?",packageName);
+                "package_name=?",packageName);
         if(!listAppInfoDD.isEmpty()){
             return listAppInfoDD.get(0);
         }
@@ -23,7 +23,7 @@ public class AppInfoDB extends SugarRecord {
     }
     public static AppInfoDB updateOrCreate(AppInfoDB appInfoDB){
         List<AppInfoDB> listAppInfoDD = AppInfoDB.find(AppInfoDB.class,
-                "packageName=?",appInfoDB.packageName);
+                "package_name=?",appInfoDB.packageName);
         if(!listAppInfoDD.isEmpty()){
             appInfoDB = listAppInfoDD.get(0);
             appInfoDB.CloneJustDefinedFields(appInfoDB);

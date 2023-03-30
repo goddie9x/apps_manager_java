@@ -6,6 +6,7 @@ import android.text.TextUtils;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -16,42 +17,53 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.god.ApplicationManager.Entity.AppInfo;
+import com.god.ApplicationManager.Enum.MenuContextType;
 import com.god.ApplicationManager.R;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class ListAppAdapter extends RecyclerView.Adapter<ListAppAdapter.AppItemHolder>
-        implements View.OnCreateContextMenuListener{
+        implements View.OnCreateContextMenuListener {
     private List<AppInfo> listApp;
     private AppInfo selectedAppInfo;
     private List<AppInfo> listSelectedApp = new ArrayList<>();
     private boolean isEnableSelect = false;
-    private int amountSelected;
+    private MenuContextType crrMenuContext=MenuContextType.MAIN_MENU;
+
+    public void setMenuContextType(MenuContextType menuContextType) {
+        crrMenuContext = menuContextType;
+    }
 
     public void setListAppSelected(List<AppInfo> listAppSelected) {
         this.listSelectedApp = listSelectedApp;
         notifyDataSetChanged();
     }
 
-    public interface TouchItemEvent{
-        void onTouch(LinearLayout view,AppInfo appInfo);
+    public interface TouchItemEvent {
+        void onTouch(LinearLayout view, AppInfo appInfo);
     }
+
     private TouchItemEvent onTouchEvent;
 
     public void setOnTouchEvent(TouchItemEvent onTouchEvent) {
         this.onTouchEvent = onTouchEvent;
     }
-    public interface ChangeAmountSelectionEvent{
+
+    public interface ChangeAmountSelectionEvent {
         void callback(List<AppInfo> listSelectedApp);
     }
+
     private ChangeAmountSelectionEvent onChangeAmountSelectionEvent;
-    public void setOnChangeAmountSelectionEvent(ChangeAmountSelectionEvent callback){
+
+    public void setOnChangeAmountSelectionEvent(ChangeAmountSelectionEvent callback) {
         this.onChangeAmountSelectionEvent = callback;
     }
-    public ListAppAdapter(List<AppInfo> listApp){
+
+    public ListAppAdapter(List<AppInfo> listApp) {
         this.listApp = listApp;
     }
+
     @NonNull
     @Override
     public AppItemHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -59,11 +71,12 @@ public class ListAppAdapter extends RecyclerView.Adapter<ListAppAdapter.AppItemH
                 R.layout.activity_app_info_item,
                 parent,
                 false
-                );
+        );
         AppItemHolder holder = new AppItemHolder(itemView);
         itemView.setTag(holder);
-        return holder ;
+        return holder;
     }
+
     @SuppressLint("ResourceAsColor")
     @Override
     public void onBindViewHolder(@NonNull ListAppAdapter.AppItemHolder holder, int position) {
@@ -71,56 +84,67 @@ public class ListAppAdapter extends RecyclerView.Adapter<ListAppAdapter.AppItemH
         holder.appNameLabel.setText(crrAppInfo.appName);
         holder.appPackageLabel.setText(crrAppInfo.packageName);
         holder.appIcon.setImageDrawable(crrAppInfo.appIcon);
-        if(!crrAppInfo.isSystemApp){
+        if (!crrAppInfo.isSystemApp) {
             holder.systemLabel.setText(R.string.user);
             holder.systemLabel.setTextColor(Color.GREEN);
         }
-        if(crrAppInfo.isRunning){
+        if (crrAppInfo.isRunning) {
             holder.runningLabel.setText(R.string.running);
             holder.runningLabel.setTextColor(Color.GREEN);
         }
         holder.setSelectedApp(listSelectedApp.contains(crrAppInfo));
         holder.itemView.setOnCreateContextMenuListener(this);
         holder.itemView.setOnClickListener(v -> {
-            if(isEnableSelect){
+            if (isEnableSelect) {
                 holder.setSelectedApp(!holder.isSelected);
-                if(holder.isSelected){
-                    if(!listSelectedApp.contains(crrAppInfo)) {
+                if (holder.isSelected) {
+                    if (!listSelectedApp.contains(crrAppInfo)) {
                         listSelectedApp.add(crrAppInfo);
                     }
-                }
-                else{
-                    if(listSelectedApp.contains(crrAppInfo)) {
+                } else {
+                    if (listSelectedApp.contains(crrAppInfo)) {
                         listSelectedApp.remove(crrAppInfo);
                     }
                 }
-                if(onChangeAmountSelectionEvent!=null){
+                if (onChangeAmountSelectionEvent != null) {
                     onChangeAmountSelectionEvent.callback(listSelectedApp);
                 }
-            }
-            else{
-                if(onTouchEvent!=null){
-                    onTouchEvent.onTouch(holder.listServiceLayout,crrAppInfo);
+            } else {
+                if (onTouchEvent != null) {
+                    onTouchEvent.onTouch(holder.listServiceLayout, crrAppInfo);
                 }
                 holder.setShowServices(!holder.isShowServices);
             }
         });
     }
+
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         MenuInflater inflater = new MenuInflater(v.getContext());
-        inflater.inflate(R.menu.menu_context_app_item, menu);
-        AppItemHolder holder = (AppItemHolder)v.getTag();
-        if(holder!=null){
-            int indexItemSelected =holder.getBindingAdapterPosition();
-            selectedAppInfo = (indexItemSelected<listApp.size())? listApp.get(indexItemSelected):null;
+        inflater.inflate(R.menu.menu_context, menu);
+        AppItemHolder holder = (AppItemHolder) v.getTag();
+        boolean isOpenMainMenu = crrMenuContext == MenuContextType.MAIN_MENU;
+        int amountMenuItem = menu.size();
+        for (int i = 0; i < amountMenuItem; i++) {
+            MenuItem item = menu.getItem(i);
+            if (item.getItemId() == R.id.remove_from_list) {
+                item.setVisible(!isOpenMainMenu);
+            } else {
+                item.setVisible(isOpenMainMenu);
+            }
+        }
+        if (holder != null) {
+            int indexItemSelected = holder.getBindingAdapterPosition();
+            selectedAppInfo = (indexItemSelected < listApp.size()) ? listApp.get(indexItemSelected) : null;
         }
     }
+
     @Override
     public int getItemCount() {
         return listApp.size();
     }
-    public static class AppItemHolder extends RecyclerView.ViewHolder{
+
+    public static class AppItemHolder extends RecyclerView.ViewHolder {
         private final ImageView appIcon;
         private final TextView appNameLabel;
         private final TextView appPackageLabel;
@@ -131,10 +155,12 @@ public class ListAppAdapter extends RecyclerView.Adapter<ListAppAdapter.AppItemH
         private final TextView runningLabel;
         private boolean isShowServices = false;
         private boolean isSelected = false;
-        private void setShowServices(boolean isShowSevices){
+
+        private void setShowServices(boolean isShowSevices) {
             this.isShowServices = isShowSevices;
-            listServiceLayout.setVisibility(this.isShowServices ?View.VISIBLE:View.GONE);
+            listServiceLayout.setVisibility(this.isShowServices ? View.VISIBLE : View.GONE);
         }
+
         public AppItemHolder(@NonNull View itemView) {
             super(itemView);
             appIcon = itemView.findViewById(R.id.app_icon);
@@ -153,50 +179,56 @@ public class ListAppAdapter extends RecyclerView.Adapter<ListAppAdapter.AppItemH
             currentItem = (LinearLayout) itemView;
         }
 
-        public void setSelectedApp(boolean isSelected){
+        public void setSelectedApp(boolean isSelected) {
             this.isSelected = isSelected;
-            if(isSelected){
+            if (isSelected) {
                 iconSelected.setVisibility(View.VISIBLE);
                 currentItem.setBackgroundResource(androidx.cardview.R.color.cardview_dark_background);
-            }
-            else{
+            } else {
                 iconSelected.setVisibility(View.GONE);
                 currentItem.setBackgroundResource(androidx.cardview.R.color.cardview_shadow_start_color);
             }
         }
     }
-    public AppInfo getSelectedAppInfo(){
+
+    public AppInfo getSelectedAppInfo() {
         return selectedAppInfo;
     }
-    public void clearSelectedAppInfo(){
+
+    public void clearSelectedAppInfo() {
         selectedAppInfo = null;
     }
-    public void setListApp(List<AppInfo> listApp){
+
+    public void setListApp(List<AppInfo> listApp) {
         this.listApp = listApp;
         notifyDataSetChanged();
     }
-    public void toggleEnableSelect(){
+
+    public void toggleEnableSelect() {
         isEnableSelect = !isEnableSelect;
-        if(!isEnableSelect){
+        if (!isEnableSelect) {
             clearSelect();
         }
     }
-    public void selectAll(){
+
+    public void selectAll() {
         listSelectedApp.clear();
         listSelectedApp.addAll(listApp);
-        if(onChangeAmountSelectionEvent!=null){
+        if (onChangeAmountSelectionEvent != null) {
             onChangeAmountSelectionEvent.callback(listSelectedApp);
         }
         notifyDataSetChanged();
     }
-    public void clearSelect(){
+
+    public void clearSelect() {
         listSelectedApp.clear();
-        if(onChangeAmountSelectionEvent!=null){
+        if (onChangeAmountSelectionEvent != null) {
             onChangeAmountSelectionEvent.callback(listSelectedApp);
         }
         notifyDataSetChanged();
     }
-    public boolean getSelectionState(){
+
+    public boolean getSelectionState() {
         return isEnableSelect;
     }
 

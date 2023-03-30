@@ -10,7 +10,7 @@
         <intent
             android:action="android.intent.action.VIEW"
             android:targetPackage="com.god.ApplicationManager.UI"
-            android:targetClass="com.god.ApplicationManager.Service.FreezeService"
+            android:targetClass="com.god.ApplicationManager.UI.FreezeShortcutActivity"
             />
     </shortcut>
 </shortcuts>

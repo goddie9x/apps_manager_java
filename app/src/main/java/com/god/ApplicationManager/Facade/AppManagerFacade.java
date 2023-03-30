@@ -180,16 +180,25 @@ public class AppManagerFacade {
             crrAppNotifManager = (NotificationManager) activity
                     .createPackageContext(appInfo.packageName, 0)
                     .getSystemService(Context.NOTIFICATION_SERVICE);
+            Toast.makeText(activity,
+                    "Turn off notification "+appInfo.packageName+" success",Toast.LENGTH_SHORT).show();
         } catch (PackageManager.NameNotFoundException e) {
-            throw new RuntimeException(e);
+            Toast.makeText(activity,
+                    "Turn off notification "+appInfo.packageName+" success",Toast.LENGTH_SHORT).show();
+            Log.e(TAG,e.getMessage());
         }
 
         // Get a list of all the notification channels
         List<NotificationChannel> channels = null;
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-            channels = crrAppNotifManager.getNotificationChannels();
-            for (NotificationChannel channel : channels) {
-                crrAppNotifManager.deleteNotificationChannel(channel.getId());
+            try {
+                channels = crrAppNotifManager.getNotificationChannels();
+                for (NotificationChannel channel : channels) {
+                    crrAppNotifManager.deleteNotificationChannel(channel.getId());
+                }
+            }
+            catch (Exception e){
+                Log.e(TAG,e.getMessage());
             }
         }
         else{
