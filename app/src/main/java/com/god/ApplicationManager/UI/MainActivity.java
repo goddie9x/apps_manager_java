@@ -1,6 +1,8 @@
 package com.god.ApplicationManager.UI;
 
 import android.content.Context;
+import android.content.Intent;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.view.Menu;
@@ -21,6 +23,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.god.ApplicationManager.Adapeter.ListAppAdapter;
+import com.god.ApplicationManager.DB.AppInfoDB;
 import com.god.ApplicationManager.DB.SettingsDB;
 import com.god.ApplicationManager.Entity.AppInfo;
 import com.god.ApplicationManager.Enum.BackStackState;
@@ -34,6 +37,7 @@ import com.god.ApplicationManager.R;
 import com.god.ApplicationManager.Tasking.TaskingHandler;
 import com.god.ApplicationManager.Util.DialogUtils;
 import com.god.ApplicationManager.databinding.ActivityMainBinding;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 
 import java.util.ArrayList;
@@ -43,7 +47,6 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class MainActivity extends AppCompatActivity {
-    private AppManagerFacade appManagerFacade;
     private ListAppAdapter crrListListAppAdapter;
     private GroupAppType selectedGroupAppType = GroupAppType.ALL;
     private OrderAppType selectedOrderAppType = OrderAppType.NAME;
@@ -55,15 +58,23 @@ public class MainActivity extends AppCompatActivity {
     private TextView amountTextLabel;
     private LinearLayout selectOptionBar;
     private Menu optionsMenu;
+    private FloatingActionButton freezeBtn;
     private boolean isOpenSearchBar = false;
     private DrawerLayout mainDrawer;
     private Stack<BackStackState> backStack = new Stack<>();
-    private TaskingHandler taskingHandler;
     private PermissionHandler permissionHandler;
     private TextView sortAppDes;
     private MenuItem darkModeItem;
     private MenuItem lightModeItem;
     private MenuContextType crrMenuContext;
+    @Override
+    public Resources.Theme getTheme() {
+        Resources.Theme theme = super.getTheme();
+        theme.applyStyle(SettingsDB.getInstance().isEnableDarkMode ?
+                R.style.Theme_ApplicationManager_DarkMode
+                : R.style.Theme_ApplicationManager, true);
+        return theme;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,45 +82,52 @@ public class MainActivity extends AppCompatActivity {
         initPermission();
         initAppManagerFacade();
         initTaskingHandler();
-        if (savedInstanceState == null) {
-            setEnableDarkMode(SettingsDB.getInstance().isEnableDarkMode, false);
-        } else {
-            ActivityMainBinding binding = ActivityMainBinding.inflate(getLayoutInflater());
-            setContentView(binding.getRoot());
-            initProperty();
-            initLayout(binding);
-            initListAppRecycleView();
-            initSearchEvent();
-            initSelectEvent();
+        ActivityMainBinding binding = ActivityMainBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+        initProperty();
+        initLayout(binding);
+        initListAppRecycleView();
+        initSearchEvent();
+        initSelectEvent();
+        initFreezeFloatingBtn();
+        if(savedInstanceState==null||savedInstanceState.isEmpty()){
+            setMenuContextType(MenuContextType.MAIN_MENU);
+            TaskingHandler.execTaskGetAllInstalledApp(crrMenuContext);
+        }else {
             List<AppInfo> listApp = savedInstanceState.getParcelableArrayList("listApp");
-            if (listApp == null) {
-                setMenuContextType(MenuContextType.MAIN_MENU);
-                taskingHandler.execTaskGetAllInstalledApp(crrMenuContext);
-            } else {
-                selectedGroupAppType = (GroupAppType) savedInstanceState.getSerializable("selectedGroupAppType");
-                selectedOrderAppType = (OrderAppType) savedInstanceState.getSerializable("selectedOrderAppType");
-                selectedSortAppType = (SortAppType) savedInstanceState.getSerializable("selectedSortAppType");
-                isOpenSearchBar = savedInstanceState.getBoolean("isOpenSearchBar", false);
-                taskingHandler.setListApp(listApp);
-                List<AppInfo> listAppSelected = savedInstanceState.getParcelableArrayList("listAppSelected");
-                if (listAppSelected != null) {
-                    crrListListAppAdapter.setListAppSelected(listAppSelected);
-                }
-                if (isOpenSearchBar) {
-                    backStack = (Stack<BackStackState>) savedInstanceState.getSerializable("backStack");
-                }
+
+            selectedGroupAppType = (GroupAppType) savedInstanceState.getSerializable("selectedGroupAppType");
+            selectedOrderAppType = (OrderAppType) savedInstanceState.getSerializable("selectedOrderAppType");
+            selectedSortAppType = (SortAppType) savedInstanceState.getSerializable("selectedSortAppType");
+            isOpenSearchBar = savedInstanceState.getBoolean("isOpenSearchBar", false);
+
+            TaskingHandler.setListApp(listApp);
+            List<AppInfo> listAppSelected = savedInstanceState.getParcelableArrayList("listAppSelected");
+            if (listAppSelected != null) {
+                crrListListAppAdapter.setListAppSelected(listAppSelected);
+            }
+            if (isOpenSearchBar) {
+                backStack = (Stack<BackStackState>) savedInstanceState.getSerializable("backStack");
             }
         }
     }
 
+    private void initFreezeFloatingBtn() {
+        freezeBtn = findViewById(R.id.freeze_float_btn);
+        freezeBtn.setOnClickListener((btn) -> {
+            startActivity(new Intent(this, FreezeShortcutActivity.class));
+        });
+    }
+
     private void setMenuContextType(MenuContextType menuContextType) {
         crrMenuContext = menuContextType;
+        freezeBtn.setVisibility(menuContextType==MenuContextType.FREEZE_MENU?View.VISIBLE:View.GONE);
         crrListListAppAdapter.setMenuContextType(menuContextType);
     }
 
     private void initAppManagerFacade() {
-        appManagerFacade = AppManagerFacade.GetInstance(this);
-        appManagerFacade.getRootPermission();
+        AppManagerFacade.setActivity(this);
+        AppManagerFacade.getRootPermission();
     }
 
     private void initPermission() {
@@ -118,8 +136,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initTaskingHandler() {
-        taskingHandler = new TaskingHandler(this);
-        taskingHandler.setCallbackSetListAppToRecycleView(
+        TaskingHandler.setActivity(this);
+        TaskingHandler.setCallbackSetListAppToRecycleView(
                 this::setListAppToRecycleView);
     }
 
@@ -139,40 +157,43 @@ public class MainActivity extends AppCompatActivity {
         darkModeItem = menu.findItem(R.id.action_dark_mode);
         lightModeItem = menu.findItem(R.id.action_light_mode);
 
+        setEnableDarkMode(SettingsDB.getInstance().isEnableDarkMode,
+                false
+                , false);
+
         navView.setNavigationItemSelectedListener(item -> {
             int id = item.getItemId();
             switch (id) {
                 case R.id.refresh_list_app: {
-                    taskingHandler.execTaskGetAllInstalledApp(crrMenuContext);
+                    TaskingHandler.execTaskGetAllInstalledApp(crrMenuContext);
                     break;
                 }
                 case R.id.all_app_zone:
                     setMenuContextType(MenuContextType.MAIN_MENU);
-                    taskingHandler.execTaskGetAllInstalledApp(crrMenuContext);
+                    TaskingHandler.execTaskGetAllInstalledApp(crrMenuContext);
                     break;
                 case R.id.freeze_zone:
                     setMenuContextType(MenuContextType.FREEZE_MENU);
-                    taskingHandler.execTaskGetAllInstalledApp(crrMenuContext);
+                    TaskingHandler.execTaskGetAllInstalledApp(crrMenuContext);
                     break;
                 case R.id.notification_zone:
                     setMenuContextType(MenuContextType.NOTIFICATION_MENU);
-                    taskingHandler.execTaskGetAllInstalledApp(crrMenuContext);
+                    TaskingHandler.execTaskGetAllInstalledApp(crrMenuContext);
                     break;
                 case R.id.action_dark_mode:
                     item.setChecked(true);
-                    setEnableDarkMode(true, true);
+                    setEnableDarkMode(true,true, true);
                     break;
                 case R.id.action_light_mode:
                     item.setChecked(true);
-                    setEnableDarkMode(false, true);
+                    setEnableDarkMode(false,true, true);
                     break;
             }
             mainDrawer.closeDrawer(GravityCompat.START);
             return true;
         });
     }
-
-    private void setEnableDarkMode(boolean isEnableDarkMode, boolean isHaveToUpdateDB) {
+    private void setEnableDarkMode(boolean isEnableDarkMode, boolean isHaveToRerender,boolean isHaveToUpdateDB) {
         if (darkModeItem != null && lightModeItem != null) {
             darkModeItem.setVisible(!isEnableDarkMode);
             lightModeItem.setVisible(isEnableDarkMode);
@@ -181,14 +202,9 @@ public class MainActivity extends AppCompatActivity {
             SettingsDB.getInstance().isEnableDarkMode = isEnableDarkMode;
             SettingsDB.saveSettings();
         }
-        setTheme(isEnableDarkMode ? R.style.Theme_ApplicationManager_DarkMode
-                : R.style.Theme_ApplicationManager);
-        recreate();
-        /*AppCompatDelegate.setDefaultNightMode(isEnableDarkMode?
-                AppCompatDelegate.MODE_NIGHT_NO:
-                AppCompatDelegate.MODE_NIGHT_YES);*/
-        /*getDelegate().setLocalNightMode(isEnableDarkMode ? AppCompatDelegate.MODE_NIGHT_YES : AppCompatDelegate.MODE_NIGHT_NO);
-        recreate();*/
+        if(isHaveToRerender) {
+            recreate();
+        }
     }
 
     @Override
@@ -212,7 +228,7 @@ public class MainActivity extends AppCompatActivity {
                                 Toast.makeText(this,
                                         "Force stopping " + selectedAppInfo.packageName,
                                         Toast.LENGTH_SHORT).show();
-                                appManagerFacade.forceStopApp(selectedAppInfo.packageName);
+                                AppManagerFacade.forceStopApp(selectedAppInfo);
                             }
                     );
                     return true;
@@ -220,17 +236,18 @@ public class MainActivity extends AppCompatActivity {
                     //TODO: make freeze app
                     return true;
                 case R.id.turn_off_notification:
-                    //TODO: turn off notification
-                    appManagerFacade.turnOffNotifPermanenly(selectedAppInfo);
+                    startActionForSelectedApp(selectedAppInfo,AppManagerFacade::turnOffNotifPermanenly);
                     return true;
                 case R.id.uninstall:
-                    taskingHandler.execTaskUninstallApp(selectedAppInfo);
+                    startActionForSelectedApp(selectedAppInfo,TaskingHandler::execTaskUninstallApp);
                     return true;
                 case R.id.open_in_setting:
-                    appManagerFacade.openAppSetting(selectedAppInfo.packageName);
+                    AppManagerFacade.openAppSetting(selectedAppInfo);
                     return true;
                 case R.id.remove_from_list:
-                    appManagerFacade.openAppSetting(selectedAppInfo.packageName);
+                    startActionForSelectedApp(selectedAppInfo,(appInfo)->{
+                        AppInfoDB.removeAppFromList(appInfo.packageName,crrMenuContext);
+                    });
                     return true;
                 default:
                     return super.onContextItemSelected(item);
@@ -272,9 +289,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        if (taskingHandler != null && crrListListAppAdapter != null) {
-            List<AppInfo> listApp = taskingHandler.getListApp();
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        if (TaskingHandler.activity != null && crrListListAppAdapter != null) {
+            List<AppInfo> listApp = TaskingHandler.getListApp();
             List<AppInfo> listAppSelected = crrListListAppAdapter.getListSelectedApp();
             outState.putParcelableArrayList("listApp", (ArrayList<? extends Parcelable>) listApp);
             outState.putParcelableArrayList("listAppSelected",
@@ -298,9 +315,9 @@ public class MainActivity extends AppCompatActivity {
         isHaveToUpdateListApp = isHaveToUpdateListApp || handleMenuSort(item, id);
         if (isHaveToUpdateListApp) {
             item.setChecked(true);
-            taskingHandler.handleTaskSetListAppToRecycleView();
+            TaskingHandler.handleTaskSetListAppToRecycleView();
         } else {
-            handleMenuOther(id);
+            handleMenuOther(item,id);
         }
         return super.onOptionsItemSelected(item);
     }
@@ -311,13 +328,16 @@ public class MainActivity extends AppCompatActivity {
         sortAppDes = findViewById(R.id.app_group_description);
     }
 
-    private void handleMenuOther(int id) {
+    private void handleMenuOther(MenuItem item,int id) {
         switch (id) {
             case R.id.open_search_bar:
                 handleOpenSearchBar();
                 break;
             case R.id.select_multiple:
+                boolean isEnableMultipleSelect = crrListListAppAdapter.getSelectionState();
                 toggleMultipleSelect();
+                item.setIcon(isEnableMultipleSelect?R.drawable.ic_deselect:R.drawable.ic_add_to_photos);
+                item.setTitle(isEnableMultipleSelect?R.string.disable_multiple_select:R.string.multiple_select);
                 break;
         }
     }
@@ -428,7 +448,7 @@ public class MainActivity extends AppCompatActivity {
         crrListListAppAdapter = new ListAppAdapter(new ArrayList<>());
         crrListListAppAdapter.setOnTouchEvent((listServiceLayout,
                                                appInfo)
-                -> taskingHandler.execTaskHandleGetListService(listServiceLayout, appInfo.packageName));
+                -> TaskingHandler.execTaskHandleGetListService(listServiceLayout, appInfo.packageName));
         listAppRecycleView.setAdapter(crrListListAppAdapter);
         registerForContextMenu(listAppRecycleView);
         listAppRecycleView.setVerticalScrollBarEnabled(true);
@@ -446,12 +466,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private Stream handleSortListAppStream(Stream<AppInfo> listAppStream) {
-        switch (selectedSortAppType) {
-            case Z_To_A:
-                return handleSortZtoAListAppStream(listAppStream);
-            default:
-                return handleSortAToZListAppStream(listAppStream);
+        if (selectedSortAppType == SortAppType.Z_To_A) {
+            return handleSortZtoAListAppStream(listAppStream);
         }
+        return handleSortAToZListAppStream(listAppStream);
     }
 
     private Stream handleSortZtoAListAppStream(Stream<AppInfo> listAppStream) {
@@ -506,7 +524,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                taskingHandler.execTaskForSearchApp(newText);
+                TaskingHandler.execTaskForSearchApp(newText);
                 return false;
             }
         });
@@ -539,7 +557,7 @@ public class MainActivity extends AppCompatActivity {
         amountTextLabel = selectOptionBar.findViewById(R.id.amount_selected);
 
         crrListListAppAdapter.setOnChangeAmountSelectionEvent(listAppSelected -> {
-            amountTextLabel.setText(listAppSelected.size() + "");
+            amountTextLabel.setText(String.format("%d", listAppSelected.size()));
         });
         selectOptionBar.findViewById(R.id.close_select_options_bar).setOnClickListener(v -> {
             toggleMultipleSelect();
@@ -550,5 +568,14 @@ public class MainActivity extends AppCompatActivity {
         selectOptionBar.findViewById(R.id.deselect_all).setOnClickListener(v -> {
             crrListListAppAdapter.clearSelect();
         });
+    }
+    private void startActionForSelectedApp(AppInfo selectedApp, TaskingHandler.ActionForSelectedApp action){
+        if(crrListListAppAdapter.getSelectionState()){
+            TaskingHandler.handleForSelectedApp(crrListListAppAdapter.getListSelectedApp(),
+                    action);
+        }
+        else{
+            action.callback(selectedApp);
+        }
     }
 }

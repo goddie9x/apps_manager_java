@@ -4,7 +4,7 @@ import com.orm.SugarRecord;
 
 import java.util.List;
 
-public class SettingsDB extends SugarRecord<SettingsDB> {
+public class SettingsDB extends SugarRecord {
     public boolean isEnableDarkMode;
     public boolean isFreezeWhileScreenOff;
     //    0 NEVER, 1  ALWAYS, 2 WHEN INACTIVE

@@ -31,34 +31,29 @@ import java.util.List;
 
 import eu.chainfire.libsuperuser.Shell;
 public class AppManagerFacade {
+
     public interface EventVoid{
         void callback();
     }
-    private final PackageManager packageManager;
-    private final ActivityManager activityManager;
-    private final AppCompatActivity activity;
+    private static PackageManager packageManager;
+    private static ActivityManager activityManager;
+    private static AppCompatActivity activity;
     private static AppManagerFacade instance;
-    private NotificationManager notificationManager;
-    private StatusBarNotification[] activeNotifications;
+    private static NotificationManager notificationManager;
+    private static StatusBarNotification[] activeNotifications;
     public static final int SDK_VERSION = android.os.Build.VERSION.SDK_INT;
     private static final String TAG = "app manager facade";
     public static boolean hasRootPermission=false;
-    private Shell.Threaded shell;
-    private AppManagerFacade(AppCompatActivity activity){
-        this.activity = activity;
-        this.packageManager = this.activity.getPackageManager();
-        this.activityManager = (ActivityManager) this.activity.getSystemService(Context.ACTIVITY_SERVICE);
-        this.notificationManager = (NotificationManager)this.activity
+    private static Shell.Threaded shell;
+    public static void setActivity(AppCompatActivity activ){
+        activity = activ;
+        packageManager = activity.getPackageManager();
+        activityManager = (ActivityManager) activity.getSystemService(Context.ACTIVITY_SERVICE);
+        notificationManager = (NotificationManager)activity
             .getSystemService(Context.NOTIFICATION_SERVICE);
-        this.activeNotifications = this.notificationManager.getActiveNotifications();
+        activeNotifications = notificationManager.getActiveNotifications();
     }
-    public static AppManagerFacade GetInstance(AppCompatActivity activity){
-        if(instance==null||instance.activity!=activity){
-            instance = new AppManagerFacade((activity));
-        }
-        return instance;
-    }
-    public List<AppInfo> GetAllInstalledApp(){
+    public static List<AppInfo> GetAllInstalledApp(){
         List<AppInfo> appList = new ArrayList<>();
         List<ApplicationInfo> installedApplications = packageManager.getInstalledApplications(PackageManager.GET_META_DATA);
         for (ApplicationInfo applicationInfo : installedApplications) {
@@ -74,10 +69,10 @@ public class AppManagerFacade {
         }
         return appList;
     }
-    public List<ActivityManager.RunningAppProcessInfo> GetAllRunningApp(){
+    public static List<ActivityManager.RunningAppProcessInfo> GetAllRunningApp(){
         return activityManager.getRunningAppProcesses();
     }
-    public void getRootPermission(){
+    public static void getRootPermission(){
         if(!hasRootAccess()){
             try {
                 shell = Shell.Pool.SU.get();
@@ -90,7 +85,7 @@ public class AppManagerFacade {
             }
         }
     }
-    public boolean hasRootAccess() {
+    public static boolean hasRootAccess() {
         try {
             java.util.Scanner s = new java.util.Scanner(Runtime.getRuntime()
                     .exec(new String[]{"/system/bin/su","-c","cd / && ls"})
@@ -102,12 +97,12 @@ public class AppManagerFacade {
         }
         return false;
     }
-    public void uninstallAppWithRoot(String packageName){
+    public static void uninstallAppWithRoot(String packageName){
         executeCommandWithSuShell("pm uninstall  --user 0 "+packageName,
                 "Uninstall "+packageName+" success",
                 "Uninstall "+packageName+" failed");
     }
-    public boolean uninstallApp(AppInfo appInfo){
+    public static boolean uninstallApp(AppInfo appInfo){
         if(appInfo.isSystemApp){
             if(hasRootPermission) {
                 uninstallAppWithRoot(appInfo.packageName);
@@ -126,45 +121,45 @@ public class AppManagerFacade {
             return true;
         }
     }
-    public void forceStopAppWithRootPermission(String packageName){
+    public static void forceStopAppWithRootPermission(String packageName){
         executeCommandWithSuShell("am force-stop "+packageName,
                 "Kill "+packageName+" success",
                 "Kill "+packageName+" failed");
     }
-    public void forceStopApp(String packageName) {
+    public static void forceStopApp(AppInfo appInfo) {
         Log.i(TAG, "forceStopApp");
         if(hasRootPermission){
-            forceStopAppWithRootPermission(packageName);
+            forceStopAppWithRootPermission(appInfo.packageName);
         }
         else{
             //since android 10 (sdk 19) we cannot force stop app, then we open setting of this app
             //so we let users do it by their own
             if(SDK_VERSION<29){
-                activityManager.killBackgroundProcesses(packageName);
+                activityManager.killBackgroundProcesses(appInfo.packageName);
             }
             else{
                 DialogUtils.showAlertDialog(activity,"Manual",
                         "Your android version not support or you do not have root permission" +
                                 "\n must force stop app as manual",(d,w)->{
-                            openAppSetting(packageName);
+                            openAppSetting(appInfo);
                         });
             }
         }
     }
-    public void freezeAppWithRootPermission(String packageName){
+    public static void freezeAppWithRootPermission(String packageName){
         executeCommandWithSuShell("pm disable "+packageName,
                 "Freeze "+packageName+" success",
                 "Freeze "+packageName+" failed");
     }
-    public void freezeApp(String packageName){
+    public static void freezeApp(AppInfo appInfo){
         if(hasRootPermission){
-            freezeAppWithRootPermission(packageName);
+            freezeAppWithRootPermission(appInfo.packageName);
         }
         else{
-            forceStopApp(packageName);
+            forceStopApp(appInfo);
         }
     }
-    public List<Integer> getAllNotifIdOfPackage(String packageName){
+    public static List<Integer> getAllNotifIdOfPackage(String packageName){
         List<Integer> appNotificationIds = new ArrayList<>();
         for (StatusBarNotification notification : activeNotifications) {
             if (notification.getPackageName().equals(packageName)) {
@@ -173,7 +168,7 @@ public class AppManagerFacade {
         }
         return appNotificationIds;
     }
-    public void turnOffNotifPermanenly(AppInfo appInfo)  {
+    public static void turnOffNotifPermanenly(AppInfo appInfo)  {
         turnOffNotif(getAllNotifIdOfPackage(appInfo.packageName));
         NotificationManager crrAppNotifManager = null;
         try {
@@ -225,14 +220,14 @@ public class AppManagerFacade {
         appInfoDB.appName = appInfo.appName;
         appInfoDB.packageName = appInfo.packageName;
         appInfoDB.isHaveToTurnOffNotif = true;
-        AppInfoDB.updateOrCreate(appInfoDB);
+        AppInfoDB.updateOrCreateByPackageName(appInfoDB.appName,appInfoDB);
     }
-    public void turnOffNotif(List<Integer> notifIds){
+    public static void turnOffNotif(List<Integer> notifIds){
         for (int notifId:notifIds) {
             notificationManager.cancel(notifId);
         }
     }
-    public void executeCommandWithSuShell(String command){
+    public static void executeCommandWithSuShell(String command){
         try {
             Log.i(TAG, "exec command");
             try {
@@ -246,7 +241,7 @@ public class AppManagerFacade {
             Toast.makeText (activity,"Failed",Toast.LENGTH_SHORT).show();
         }
     }
-    public void executeCommandWithSuShell(String command,String textSuccess,String textFail){
+    public static void executeCommandWithSuShell(String command,String textSuccess,String textFail){
         try {
                 shell.run(command);
                 Toast.makeText (activity,textSuccess,Toast.LENGTH_SHORT).show();
@@ -305,7 +300,7 @@ public class AppManagerFacade {
             Log.e(TAG, "ShellDiedException, probably we did not have root access. (???)");
         }
     }
-    public void executeCommandWithSuShell(String command,
+    public static void executeCommandWithSuShell(String command,
                                           EventVoid onSuccess,
                                           EventVoid onFailed){
         try {
@@ -322,22 +317,22 @@ public class AppManagerFacade {
             e.printStackTrace();
         }
     }
-    public void openAppSetting(String packageName){
+    public static void openAppSetting(AppInfo appInfo){
         Intent intent = new Intent(android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-        intent.setData(Uri.parse("package:" + packageName));
+        intent.setData(Uri.parse("package:" + appInfo.packageName));
         activity.startActivity(intent);
     }
-    public AppCompatActivity getActivity() {
+    public static AppCompatActivity getActivity() {
         return activity;
     }
-    public List<ActivityManager.RunningServiceInfo> getRunningServices(){
+    public static List<ActivityManager.RunningServiceInfo> getRunningServices(){
         return activityManager
                 .getRunningServices(Integer.MAX_VALUE);
     }
     public static List<AppInfoDB>getListAppFromDB(){
         return AppInfoDB.listAll(AppInfoDB.class);
     }
-    public ActivityInfo[]getServices(String packageName) {
+    public static ActivityInfo[]getServices(String packageName) {
         try {
             PackageInfo packageInfo = packageManager.getPackageInfo(
                     packageName, PackageManager.GET_ACTIVITIES);

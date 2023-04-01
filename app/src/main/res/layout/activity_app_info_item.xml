@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginTop="5dp"
-    android:background="@color/cardview_shadow_start_color"
+    android:background="?attr/colorSecondaryVariant"
     android:orientation="vertical">
 
     <LinearLayout

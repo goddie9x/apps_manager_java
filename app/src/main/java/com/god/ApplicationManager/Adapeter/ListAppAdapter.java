@@ -127,10 +127,14 @@ public class ListAppAdapter extends RecyclerView.Adapter<ListAppAdapter.AppItemH
         int amountMenuItem = menu.size();
         for (int i = 0; i < amountMenuItem; i++) {
             MenuItem item = menu.getItem(i);
-            if (item.getItemId() == R.id.remove_from_list) {
+            int menuId = item.getItemId();
+            if (menuId == R.id.remove_from_list) {
                 item.setVisible(!isOpenMainMenu);
             } else {
                 item.setVisible(isOpenMainMenu);
+                if(menuId==R.id.open_in_setting){
+                    item.setVisible(!isEnableSelect);
+                }
             }
         }
         if (holder != null) {

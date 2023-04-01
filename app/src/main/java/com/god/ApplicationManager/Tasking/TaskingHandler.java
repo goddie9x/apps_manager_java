@@ -22,32 +22,34 @@ import java.util.stream.Collectors;
 
 public class TaskingHandler {
 
-
     public interface SetListAppToRecycleView{
         void callback(List<AppInfo>listApp);
     }
-    private SetListAppToRecycleView setListAppToRecycleView;
-    private List<AppInfo> listApp;
-    private MenuContextType crrMenuContext;
+    public interface ActionForSelectedApp{
+        void callback(AppInfo listSelectedApp);
+    }
 
-    public List<AppInfo> getListApp() {
+    private static SetListAppToRecycleView setListAppToRecycleView;
+    private static  List<AppInfo> listApp;
+    private static  MenuContextType crrMenuContext;
+
+    public static AppCompatActivity activity;
+    private static AppManagerFacade appManagerFacade;
+    public static  List<AppInfo> getListApp() {
         return listApp;
     }
-    public void setListApp(List<AppInfo> listApp){
-        this.listApp = listApp;
+    public static  void setListApp(List<AppInfo> crrListApp){
+        listApp = crrListApp;
         if(!checkCallBackSetListAppToRecycleViewInitialed())return;
         setListAppToRecycleView.callback(listApp);
     }
-    public void setCallbackSetListAppToRecycleView(SetListAppToRecycleView setListAppToRecycleView) {
-        this.setListAppToRecycleView = setListAppToRecycleView;
+    public static void setCallbackSetListAppToRecycleView(SetListAppToRecycleView action) {
+        setListAppToRecycleView = action;
     }
-    private AppCompatActivity activity;
-    private AppManagerFacade appManagerFacade;
-    public TaskingHandler(AppCompatActivity activity){
-        this.activity = activity;
-        appManagerFacade = AppManagerFacade.GetInstance(this.activity);
+    public static void setActivity(AppCompatActivity activ){
+        activity = activ;
     }
-    private boolean checkCallBackSetListAppToRecycleViewInitialed(){
+    private static boolean checkCallBackSetListAppToRecycleViewInitialed(){
         if(setListAppToRecycleView==null){
             Toast.makeText(activity,
                     "setListAppToRecycleView has bean null",Toast.LENGTH_SHORT).show();
@@ -55,7 +57,7 @@ public class TaskingHandler {
         }
         return true;
     }
-    public void execTaskForSearchApp(String queryText) {
+    public static void execTaskForSearchApp(String queryText) {
         if(!checkCallBackSetListAppToRecycleViewInitialed())return;
         AsyncTaskBuilder<Void, Void, Void> taskSearchApp = new AsyncTaskBuilder<>();
         taskSearchApp.setDoInBackgroundFunc((val) -> {
@@ -77,7 +79,7 @@ public class TaskingHandler {
         taskSearchApp.execute();
     }
 
-    public void handleTaskSetListAppToRecycleView() {
+    public static void handleTaskSetListAppToRecycleView() {
         if(!checkCallBackSetListAppToRecycleViewInitialed())return;
 
         AsyncTaskBuilder<Void, Void, Void> taskSetListAppToRecycleView = new AsyncTaskBuilder<>();
@@ -91,7 +93,7 @@ public class TaskingHandler {
         taskSetListAppToRecycleView.execute();
     }
 
-    public void execTaskHandleGetListService(
+    public static void execTaskHandleGetListService(
             LinearLayout listServiceLayout,
             String crrPackageName
     ) {
@@ -123,7 +125,7 @@ public class TaskingHandler {
     }
 
 
-    public void execTaskUninstallApp(AppInfo appInfo) {
+    public static void execTaskUninstallApp(AppInfo appInfo) {
         AsyncTaskBuilder<Void, Void, Boolean> taskUninstallApp = new AsyncTaskBuilder<>();
         ProgressDialog progressDialog = new ProgressDialog(activity);
         taskUninstallApp.setOnPreExecuteFunc(() -> {
@@ -152,16 +154,16 @@ public class TaskingHandler {
         taskUninstallApp.execute();
     }
 
-    public void execTaskGetAllInstalledApp(MenuContextType crrMenuContext) {
+    public static void execTaskGetAllInstalledApp(MenuContextType menuContext) {
         if(!checkCallBackSetListAppToRecycleViewInitialed())return;
         AsyncTaskBuilder<Void, Void, Void> taskGetAllInstalledApp = new AsyncTaskBuilder<>();
         ProgressDialog progressDialog = new ProgressDialog(activity);
-        this.crrMenuContext = crrMenuContext;
+        crrMenuContext = menuContext;
 
         taskGetAllInstalledApp.setDoInBackgroundFunc(ts -> {
             listApp = appManagerFacade.GetAllInstalledApp();
             final List<AppInfo>newListApp;
-            switch (this.crrMenuContext){
+            switch (crrMenuContext){
                 case FREEZE_MENU:
                     List<AppInfoDB> listFreezeApp =
                             AppInfoDB.find(AppInfoDB.class,
@@ -202,7 +204,7 @@ public class TaskingHandler {
         taskGetAllInstalledApp.execute();
     }
 
-    private List<AppInfo> getListAppHasPackageNameInBothList(List<AppInfo> listApp, List<AppInfoDB> listFreezeApp) {
+    private static List<AppInfo> getListAppHasPackageNameInBothList(List<AppInfo> listApp, List<AppInfoDB> listFreezeApp) {
         List<AppInfo> newListApp = new ArrayList<>();
         for (AppInfo appInfo : listApp) {
             for (AppInfoDB appInfoDB : listFreezeApp) {
@@ -215,7 +217,34 @@ public class TaskingHandler {
         return newListApp;
     }
 
-    public void handleSelectAllItemInRecycleView(){
+    public static void handleForSelectedApp(List<AppInfo> listApp, ActionForSelectedApp action){
+        AsyncTaskBuilder<Void, Void, Void> taskGetAllInstalledApp = new AsyncTaskBuilder<>();
+        ProgressDialog progressDialog = new ProgressDialog(activity);
 
+        taskGetAllInstalledApp.setDoInBackgroundFunc(ts -> {
+            for (AppInfo appInfo:listApp) {
+                action.callback(appInfo);
+            }
+            return null;
+        });
+        taskGetAllInstalledApp.setOnPreExecuteFunc(() -> {
+            Handler handler = new Handler(Looper.getMainLooper());
+            handler.post(() -> {
+                progressDialog.setMessage("Loading...");
+                progressDialog.setCancelable(false);
+                progressDialog.show();
+            });
+        });
+        taskGetAllInstalledApp.setOnPostExecuteFunc(
+                result -> {
+                    Handler handler = new Handler(Looper.getMainLooper());
+                    handler.post(() -> {
+                        if (progressDialog.isShowing()) {
+                            progressDialog.dismiss();
+                        }
+                    });
+                }
+        );
+        taskGetAllInstalledApp.execute();
     }
 }

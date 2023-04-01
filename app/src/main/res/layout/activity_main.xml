@@ -104,9 +104,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="4dp"
-                android:background="@color/cardview_dark_background"
+                android:background="?attr/colorSecondaryVariant"
                 android:text="@string/group_app_description_default_0"
-                android:textColor="#eeeeee" />
+             />
         </com.google.android.material.appbar.AppBarLayout>
         <FrameLayout
             android:id="@+id/frame_container"
@@ -132,6 +132,7 @@
                 android:src="@drawable/ic_freeze"
                 android:layout_margin="16dp"
                 android:elevation="4dp"
+                android:visibility="gone"
                 android:outlineSpotShadowColor="@color/white"
                 android:backgroundTint="@color/design_default_color_secondary"
             />

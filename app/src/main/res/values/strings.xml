@@ -90,4 +90,6 @@
     <string name="select_option">Select option</string>
     <string name="applications">applications</string>
     <string name="action">Action</string>
+    <string name="accessibility_service_description">Turn this on let you automatically freeze apps</string>
+    <string name="disable_multiple_select">Disable multiple select</string>
 </resources>

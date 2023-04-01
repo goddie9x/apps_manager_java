@@ -1,5 +1,6 @@
 package com.god.ApplicationManager.DB;
 
+import com.god.ApplicationManager.Enum.MenuContextType;
 import com.orm.SugarRecord;
 
 import java.util.List;
@@ -21,9 +22,9 @@ public class AppInfoDB extends SugarRecord {
         defaultDataIfNotFound.save();
         return defaultDataIfNotFound;
     }
-    public static AppInfoDB updateOrCreate(AppInfoDB appInfoDB){
+    public static AppInfoDB updateOrCreateByPackageName(String packageName,AppInfoDB appInfoDB){
         List<AppInfoDB> listAppInfoDD = AppInfoDB.find(AppInfoDB.class,
-                "package_name=?",appInfoDB.packageName);
+                "package_name=?",packageName);
         if(!listAppInfoDD.isEmpty()){
             appInfoDB = listAppInfoDD.get(0);
             appInfoDB.CloneJustDefinedFields(appInfoDB);
@@ -50,5 +51,17 @@ public class AppInfoDB extends SugarRecord {
         if(appInfoDB.isHaveToTurnOffNotif!=this.isHaveToTurnOffNotif){
             this.isHaveToTurnOffNotif = appInfoDB.isHaveToTurnOffNotif;
         }
+    }
+
+
+    public static void removeAppFromList(String packageName, MenuContextType crrMenuContext) {
+        AppInfoDB appInfoUpdate = new AppInfoDB();
+        if(crrMenuContext==MenuContextType.FREEZE_MENU){
+            appInfoUpdate.isHaveToBeFreeze=false;
+        }
+        else{
+            appInfoUpdate.isHaveToTurnOffNotif = false;
+        }
+        AppInfoDB.updateOrCreateByPackageName(packageName,appInfoUpdate);
     }
 }
