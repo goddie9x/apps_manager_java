@@ -24,6 +24,7 @@
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
+                android:background="?attr/colorSecondaryVariant"
                 android:elevation="4dp">
                 <TextView
                     android:id="@+id/app_name_title"
@@ -133,7 +134,6 @@
                 android:layout_margin="16dp"
                 android:elevation="4dp"
                 android:visibility="gone"
-                android:outlineSpotShadowColor="@color/white"
                 android:backgroundTint="@color/design_default_color_secondary"
             />
         </FrameLayout>
@@ -145,5 +145,6 @@
         android:layout_gravity="start"
         android:layout_marginTop="80dp"
         app:headerLayout="@layout/nav_header"
+        android:background="?attr/colorSecondary"
         app:menu="@menu/menu_drawer" />
 </androidx.drawerlayout.widget.DrawerLayout>

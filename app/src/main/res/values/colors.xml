@@ -13,5 +13,8 @@
     <color name="red">#FF0000</color>
     <color name="text_default_color_dark_mode">#fff</color>
     <color name="text_default_color">#000</color>
+    <color name="color_secondary">#CECECE</color>
+    <color name="color_secondary_darkmode">#5B467F</color>
     <color name="background_darkmode">#372653</color>
+    <color name="pupup_background_darkmode">#2A1A37</color>
 </resources>

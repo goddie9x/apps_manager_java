@@ -1,13 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:background="?attr/colorSecondaryVariant"
     tools:showIn="@layout/activity_main">
     <item
         android:id="@+id/refresh_list_app"
         android:title="@string/refresh"
         android:icon="@drawable/ic_refresh"/>
     <group
+        android:id="@+id/select_zone"
         android:checkableBehavior="single"
+        android:background="@drawable/bg_with_bottom_stroke"
         >
         <item
             android:id="@+id/all_app_zone"

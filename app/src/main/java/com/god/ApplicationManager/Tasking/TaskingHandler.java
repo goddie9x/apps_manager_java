@@ -156,6 +156,7 @@ public class TaskingHandler {
 
     public static void execTaskGetAllInstalledApp(MenuContextType menuContext) {
         if(!checkCallBackSetListAppToRecycleViewInitialed())return;
+        if(menuContext==null)menuContext = MenuContextType.MAIN_MENU;
         AsyncTaskBuilder<Void, Void, Void> taskGetAllInstalledApp = new AsyncTaskBuilder<>();
         ProgressDialog progressDialog = new ProgressDialog(activity);
         crrMenuContext = menuContext;
