@@ -34,7 +34,6 @@ public class TaskingHandler {
     private static  MenuContextType crrMenuContext;
 
     public static AppCompatActivity activity;
-    private static AppManagerFacade appManagerFacade;
     public static  List<AppInfo> getListApp() {
         return listApp;
     }
@@ -100,7 +99,7 @@ public class TaskingHandler {
         if (listServiceLayout != null) {
             AsyncTaskBuilder<String, Void, Void> taskHandleGetListService = new AsyncTaskBuilder<>();
             taskHandleGetListService.setDoInBackgroundFunc(packageName -> {
-                ActivityInfo[] listService = appManagerFacade
+                ActivityInfo[] listService = AppManagerFacade
                         .getServices((String) packageName[0]);
                 if (listService != null) {
                     Handler handler = new Handler(Looper.getMainLooper());
@@ -136,7 +135,7 @@ public class TaskingHandler {
                 progressDialog.show();
             });
         });
-        taskUninstallApp.setDoInBackgroundFunc(ts -> appManagerFacade.uninstallApp(appInfo));
+        taskUninstallApp.setDoInBackgroundFunc(ts -> AppManagerFacade.uninstallApp(appInfo));
         taskUninstallApp.setOnPostExecuteFunc(
                 result -> {
                     Handler handler = new Handler(Looper.getMainLooper());
@@ -162,7 +161,7 @@ public class TaskingHandler {
         crrMenuContext = menuContext;
 
         taskGetAllInstalledApp.setDoInBackgroundFunc(ts -> {
-            listApp = appManagerFacade.GetAllInstalledApp();
+            listApp = AppManagerFacade.GetAllInstalledApp();
             final List<AppInfo>newListApp;
             switch (crrMenuContext){
                 case FREEZE_MENU:
@@ -218,17 +217,18 @@ public class TaskingHandler {
         return newListApp;
     }
 
-    public static void handleForSelectedApp(List<AppInfo> listApp, ActionForSelectedApp action){
-        AsyncTaskBuilder<Void, Void, Void> taskGetAllInstalledApp = new AsyncTaskBuilder<>();
+    public static void handleForSelectedApp(List<AppInfo> listApp, ActionForSelectedApp action,
+                                            AppManagerFacade.EventVoid onDone){
+        AsyncTaskBuilder<Void, Void, Void> taskDoActionEachSelectedApp = new AsyncTaskBuilder<>();
         ProgressDialog progressDialog = new ProgressDialog(activity);
 
-        taskGetAllInstalledApp.setDoInBackgroundFunc(ts -> {
+        taskDoActionEachSelectedApp.setDoInBackgroundFunc(ts -> {
             for (AppInfo appInfo:listApp) {
                 action.callback(appInfo);
             }
             return null;
         });
-        taskGetAllInstalledApp.setOnPreExecuteFunc(() -> {
+        taskDoActionEachSelectedApp.setOnPreExecuteFunc(() -> {
             Handler handler = new Handler(Looper.getMainLooper());
             handler.post(() -> {
                 progressDialog.setMessage("Loading...");
@@ -236,16 +236,17 @@ public class TaskingHandler {
                 progressDialog.show();
             });
         });
-        taskGetAllInstalledApp.setOnPostExecuteFunc(
+        taskDoActionEachSelectedApp.setOnPostExecuteFunc(
                 result -> {
                     Handler handler = new Handler(Looper.getMainLooper());
                     handler.post(() -> {
                         if (progressDialog.isShowing()) {
                             progressDialog.dismiss();
                         }
+                        onDone.callback();
                     });
                 }
         );
-        taskGetAllInstalledApp.execute();
+        taskDoActionEachSelectedApp.execute();
     }
 }

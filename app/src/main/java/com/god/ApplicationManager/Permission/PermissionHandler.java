@@ -9,22 +9,31 @@ import android.provider.Settings;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationManagerCompat;
 
 import com.god.ApplicationManager.R;
 import com.god.ApplicationManager.Util.DialogUtils;
 
 public class PermissionHandler {
+    private static final String TAG = "PermissionHandler";
     private final AppCompatActivity activity;
+    private final PackageManager packageManager;
+    private final String crrPackageName;
     private static final int PERMISSION_QUERY_ALL_PACKAGES_CODE = 69;
-    public PermissionHandler(AppCompatActivity activity){
+
+    public PermissionHandler(AppCompatActivity activity) {
         this.activity = activity;
+        packageManager = activity.getPackageManager();
+        crrPackageName = activity.getPackageName();
     }
+
     public void getPermissions() {
         getQueryAllPackagePermission();
         getManagerNotificationPermission();
     }
+
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
-                                           @NonNull int[] grantResults){
+                                           @NonNull int[] grantResults) {
         if (requestCode == PERMISSION_QUERY_ALL_PACKAGES_CODE) {
             if (grantResults.length < 1
                     || grantResults[0] != PackageManager.PERMISSION_GRANTED) {
@@ -38,11 +47,18 @@ public class PermissionHandler {
             }
         }
     }
+
     public void getManagerNotificationPermission() {
         if (activity.checkSelfPermission(Manifest.permission.ACCESS_NOTIFICATION_POLICY)
                 == PackageManager.PERMISSION_DENIED) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 activity.requestPermissions(new String[]{android.Manifest.permission.ACCESS_NOTIFICATION_POLICY}, 1);
+            }
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (!NotificationManagerCompat.getEnabledListenerPackages(activity).contains(activity.getPackageName())) {
+                Intent intent = new Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS");
+                activity.startActivity(intent);
             }
         }
     }
@@ -57,12 +73,12 @@ public class PermissionHandler {
         }
     }
 
-    public static void getUseAccessibilityService(Context context){
+    public static void getUseAccessibilityService(Context context) {
         DialogUtils.showAlertDialog(
                 context,
                 context.getString(R.string.warning_accessibility_require),
                 context.getString(R.string.assessibility_reqire_message),
-                (dialog,which)->{
+                (dialog, which) -> {
                     Intent intent = new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS);
                     context.startActivity(intent);
                 });

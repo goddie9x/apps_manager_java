@@ -12,7 +12,11 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.Build;
+import android.os.Handler;
 import android.os.IBinder;
+import android.os.Looper;
+import android.os.Process;
 import android.service.notification.StatusBarNotification;
 import android.util.Log;
 import android.view.accessibility.AccessibilityManager;
@@ -22,6 +26,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.god.ApplicationManager.DB.AppInfoDB;
 import com.god.ApplicationManager.Entity.AppInfo;
+import com.god.ApplicationManager.Enum.MenuContextType;
+import com.god.ApplicationManager.UI.FreezeShortcutActivity;
 import com.god.ApplicationManager.Util.DialogUtils;
 
 import java.io.IOException;
@@ -30,30 +36,32 @@ import java.util.ArrayList;
 import java.util.List;
 
 import eu.chainfire.libsuperuser.Shell;
+
 public class AppManagerFacade {
 
-    public interface EventVoid{
+    public interface EventVoid {
         void callback();
     }
+
     private static PackageManager packageManager;
     private static ActivityManager activityManager;
     private static AppCompatActivity activity;
-    private static AppManagerFacade instance;
     private static NotificationManager notificationManager;
     private static StatusBarNotification[] activeNotifications;
     public static final int SDK_VERSION = android.os.Build.VERSION.SDK_INT;
     private static final String TAG = "app manager facade";
-    public static boolean hasRootPermission=false;
-    private static Shell.Threaded shell;
-    public static void setActivity(AppCompatActivity activ){
+    public static boolean hasRootPermission = false;
+
+    public static void setActivity(AppCompatActivity activ) {
         activity = activ;
         packageManager = activity.getPackageManager();
         activityManager = (ActivityManager) activity.getSystemService(Context.ACTIVITY_SERVICE);
-        notificationManager = (NotificationManager)activity
-            .getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager = (NotificationManager) activity
+                .getSystemService(Context.NOTIFICATION_SERVICE);
         activeNotifications = notificationManager.getActiveNotifications();
     }
-    public static List<AppInfo> GetAllInstalledApp(){
+
+    public static List<AppInfo> GetAllInstalledApp() {
         List<AppInfo> appList = new ArrayList<>();
         List<ApplicationInfo> installedApplications = packageManager.getInstalledApplications(PackageManager.GET_META_DATA);
         for (ApplicationInfo applicationInfo : installedApplications) {
@@ -69,26 +77,29 @@ public class AppManagerFacade {
         }
         return appList;
     }
-    public static List<ActivityManager.RunningAppProcessInfo> GetAllRunningApp(){
+
+    public static List<ActivityManager.RunningAppProcessInfo> GetAllRunningApp() {
         return activityManager.getRunningAppProcesses();
     }
-    public static void getRootPermission(){
-        if(!hasRootAccess()){
+
+    public static void getRootPermission() {
+        if (!hasRootAccess()) {
             try {
-                shell = Shell.Pool.SU.get();
                 Runtime.getRuntime().exec("su");
-            }
-            catch (IOException e){
-                Toast.makeText(activity,e.getMessage(),Toast.LENGTH_LONG).show();
-            } catch (Shell.ShellDiedException e) {
-                Toast.makeText(activity,e.getMessage(),Toast.LENGTH_LONG).show();
+            } catch (IOException e) {
+                Handler handler = new Handler(Looper.getMainLooper());
+
+                handler.post(() -> {
+                    Toast.makeText(activity, e.getMessage(), Toast.LENGTH_LONG).show();
+                });
             }
         }
     }
+
     public static boolean hasRootAccess() {
         try {
             java.util.Scanner s = new java.util.Scanner(Runtime.getRuntime()
-                    .exec(new String[]{"/system/bin/su","-c","cd / && ls"})
+                    .exec(new String[]{"/system/bin/su", "-c", "cd / && ls"})
                     .getInputStream()).useDelimiter("\\A");
             hasRootPermission = !(s.hasNext() ? s.next() : "").equals("");
             return AppManagerFacade.hasRootPermission;
@@ -97,69 +108,75 @@ public class AppManagerFacade {
         }
         return false;
     }
-    public static void uninstallAppWithRoot(String packageName){
-        executeCommandWithSuShell("pm uninstall  --user 0 "+packageName,
-                "Uninstall "+packageName+" success",
-                "Uninstall "+packageName+" failed");
+
+    public static void uninstallAppWithRoot(String packageName) {
+        executeCommandWithSuShell("pm uninstall  --user 0 " + packageName,
+                "Uninstall " + packageName + " success",
+                "Uninstall " + packageName + " failed");
     }
-    public static boolean uninstallApp(AppInfo appInfo){
-        if(appInfo.isSystemApp){
-            if(hasRootPermission) {
+
+    public static boolean uninstallApp(AppInfo appInfo) {
+        if (appInfo.isSystemApp) {
+            if (hasRootPermission) {
                 uninstallAppWithRoot(appInfo.packageName);
                 return true;
-            }
-            else{
-                Toast.makeText(activity,
-                        "You cannot uninstall system app without root",Toast.LENGTH_LONG).show();
+            } else {
+                Handler handler = new Handler(Looper.getMainLooper());
+
+                handler.post(() -> {
+                    Toast.makeText(activity,
+                            "You cannot uninstall system app without root", Toast.LENGTH_LONG).show();
+                });
                 return false;
             }
-        }
-        else{
-            Intent intent = new Intent(Intent.ACTION_DELETE);
+        } else {
+            Intent intent = new Intent(Intent.ACTION_UNINSTALL_PACKAGE);
             intent.setData(Uri.parse("package:" + appInfo.packageName));
             activity.startActivity(intent);
             return true;
         }
     }
-    public static void forceStopAppWithRootPermission(String packageName){
-        executeCommandWithSuShell("am force-stop "+packageName,
-                "Kill "+packageName+" success",
-                "Kill "+packageName+" failed");
+
+    public static void forceStopAppWithRootPermission(String packageName) {
+        executeCommandWithSuShell("am force-stop " + packageName,
+                "Kill " + packageName + " success",
+                "Kill " + packageName + " failed");
     }
+
     public static void forceStopApp(AppInfo appInfo) {
         Log.i(TAG, "forceStopApp");
-        if(hasRootPermission){
+        if (hasRootPermission) {
             forceStopAppWithRootPermission(appInfo.packageName);
-        }
-        else{
+        } else {
             //since android 10 (sdk 19) we cannot force stop app, then we open setting of this app
             //so we let users do it by their own
-            if(SDK_VERSION<29){
+            if (SDK_VERSION < 29) {
                 activityManager.killBackgroundProcesses(appInfo.packageName);
-            }
-            else{
-                DialogUtils.showAlertDialog(activity,"Manual",
+            } else {
+                DialogUtils.showAlertDialog(activity, "Manual",
                         "Your android version not support or you do not have root permission" +
-                                "\n must force stop app as manual",(d,w)->{
+                                "\n must force stop app as manual", (d, w) -> {
                             openAppSetting(appInfo);
                         });
             }
         }
     }
-    public static void freezeAppWithRootPermission(String packageName){
-        executeCommandWithSuShell("pm disable "+packageName,
-                "Freeze "+packageName+" success",
-                "Freeze "+packageName+" failed");
+
+    public static void freezeAppWithRootPermission(String packageName) {
+        executeCommandWithSuShell("pm disable " + packageName,
+                "Freeze " + packageName + " success",
+                "Freeze " + packageName + " failed");
     }
-    public static void freezeApp(AppInfo appInfo){
-        if(hasRootPermission){
+
+    public static void freezeApp(AppInfo appInfo) {
+        if (hasRootPermission) {
             freezeAppWithRootPermission(appInfo.packageName);
-        }
-        else{
-            forceStopApp(appInfo);
+        } else {
+            FreezeShortcutActivity.freezeApp(appInfo.packageName, activity);
         }
     }
-    public static List<Integer> getAllNotifIdOfPackage(String packageName){
+
+    public static List<Integer> getAllNotifIdOfPackage(String packageName) {
         List<Integer> appNotificationIds = new ArrayList<>();
         for (StatusBarNotification notification : activeNotifications) {
             if (notification.getPackageName().equals(packageName)) {
@@ -168,35 +185,35 @@ public class AppManagerFacade {
         }
         return appNotificationIds;
     }
-    public static void turnOffNotifPermanenly(AppInfo appInfo)  {
-        turnOffNotif(getAllNotifIdOfPackage(appInfo.packageName));
+
+    public static void setNotificationStateForApp(AppInfo appInfo,boolean isEnable) {
+        if(!isEnable){
+            turnOffNotif(getAllNotifIdOfPackage(appInfo.packageName),appInfo.packageName);
+        }
         NotificationManager crrAppNotifManager = null;
+        Handler handler = new Handler(Looper.getMainLooper());
         try {
             crrAppNotifManager = (NotificationManager) activity
                     .createPackageContext(appInfo.packageName, 0)
                     .getSystemService(Context.NOTIFICATION_SERVICE);
-            Toast.makeText(activity,
-                    "Turn off notification "+appInfo.packageName+" success",Toast.LENGTH_SHORT).show();
         } catch (PackageManager.NameNotFoundException e) {
-            Toast.makeText(activity,
-                    "Turn off notification "+appInfo.packageName+" success",Toast.LENGTH_SHORT).show();
-            Log.e(TAG,e.getMessage());
+            handler.post(() -> {
+                Toast.makeText(activity,
+                        "Get notification chanel" + appInfo.packageName + " failed", Toast.LENGTH_SHORT).show();
+            });
+            Log.e(TAG, e.getMessage());
+            return;
         }
 
         // Get a list of all the notification channels
-        List<NotificationChannel> channels = null;
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+        List<NotificationChannel> channels = new ArrayList<>();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             try {
                 channels = crrAppNotifManager.getNotificationChannels();
-                for (NotificationChannel channel : channels) {
-                    crrAppNotifManager.deleteNotificationChannel(channel.getId());
-                }
+            } catch (Exception e) {
+                Log.e(TAG, e.getMessage());
             }
-            catch (Exception e){
-                Log.e(TAG,e.getMessage());
-            }
-        }
-        else{
+        } else {
             try {
                 // Get the INotificationManager service
                 Class<?> serviceManager = Class.forName("android.os.ServiceManager");
@@ -210,49 +227,101 @@ public class AppManagerFacade {
                 Method getNotificationChannelsForPackage = iNotificationManager.getClass()
                         .getDeclaredMethod("getNotificationChannelsForPackage", String.class, int.class);
                 channels = (List<NotificationChannel>) getNotificationChannelsForPackage.invoke(iNotificationManager,
-                        appInfo.packageName, android.os.Process.myUid() / 100000);
+                        appInfo.packageName, Process.myUid() / 100000);
+            } catch (Exception e) {
+                Log.e(TAG, e.getMessage());
+            }
+        }
 
-            } catch (Exception e) {
-                Log.e(TAG,e.getMessage());
+        if(isEnable){
+            for (NotificationChannel channel : channels) {
+                crrAppNotifManager.setInterruptionFilter(NotificationManager.INTERRUPTION_FILTER_NONE);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    crrAppNotifManager.createNotificationChannel(channel);
+                }
             }
         }
-        AppInfoDB appInfoDB = new AppInfoDB();
-        appInfoDB.appName = appInfo.appName;
-        appInfoDB.packageName = appInfo.packageName;
-        appInfoDB.isHaveToTurnOffNotif = true;
-        AppInfoDB.updateOrCreateByPackageName(appInfoDB.appName,appInfoDB);
+        else{
+            for (NotificationChannel channel : channels) {
+                crrAppNotifManager.setInterruptionFilter(NotificationManager.INTERRUPTION_FILTER_NONE);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    crrAppNotifManager.deleteNotificationChannel(channel.getId());
+                }
+            }
+        }
+
+        AppInfoDB appInfoUpdate = AppInfoDB.find(appInfo.packageName);
+        if (appInfoUpdate == null) {
+            appInfoUpdate = new AppInfoDB();
+            appInfoUpdate.getAppInfoDbFromAppInfo(appInfo);
+        }
+        appInfoUpdate.isHaveToTurnOffNotif = !isEnable;
+        appInfoUpdate.save();
+        handler.post(() -> {
+            Toast.makeText(activity, "Turn "+(isEnable?"on":"off")
+                    + "notification of "+appInfo.packageName+" success", Toast.LENGTH_SHORT).show();
+        });
+
     }
-    public static void turnOffNotif(List<Integer> notifIds){
-        for (int notifId:notifIds) {
-            notificationManager.cancel(notifId);
+
+    public static List<String> getListPackageNameHaveToTurnOffNotif() {
+        List<AppInfoDB> listAppTurnOffNotif = AppInfoDB.find(AppInfoDB.class,
+                "is_have_to_be_freeze =1");
+        List<String> listPackageName = new ArrayList<>();
+        for (AppInfoDB app :
+                listAppTurnOffNotif
+        ) {
+            listPackageName.add(app.packageName);
+        }
+        return listPackageName;
+    }
+
+    public static void turnOffNotif(List<Integer> notifIds,String packageName) {
+        for (int notifId : notifIds) {
+            notificationManager.cancel(packageName,notifId);
         }
     }
-    public static void executeCommandWithSuShell(String command){
+
+    public static boolean executeCommandWithSuShell(String command) {
+        Log.i(TAG, "exec command");
+        Handler handler = new Handler(Looper.getMainLooper());
+
         try {
-            Log.i(TAG, "exec command");
-            try {
-                shell.run(command);
-                Toast.makeText (activity,"Done ",Toast.LENGTH_SHORT).show();
-            } catch (Exception e) {
-                Toast.makeText (activity,"Failed",Toast.LENGTH_SHORT).show();
-            }
+            Shell.Threaded shell = Shell.Pool.SU.get();
+            shell.run(command);
+            handler.post(() -> {
+                Toast.makeText(activity, "Done ", Toast.LENGTH_SHORT).show();
+            });
+            return true;
         } catch (Exception e) {
-            e.printStackTrace();
-            Toast.makeText (activity,"Failed",Toast.LENGTH_SHORT).show();
+            handler.post(() -> {
+                Toast.makeText(activity, "Failed", Toast.LENGTH_SHORT).show();
+            });
+            return false;
         }
     }
-    public static void executeCommandWithSuShell(String command,String textSuccess,String textFail){
+
+    public static boolean executeCommandWithSuShell(String command, String textSuccess, String textFail) {
+        Handler handler = new Handler(Looper.getMainLooper());
         try {
-                shell.run(command);
-                Toast.makeText (activity,textSuccess,Toast.LENGTH_SHORT).show();
+            Shell.Threaded shell = Shell.Pool.SU.get();
+            shell.run(command);
+            handler.post(() -> {
+                Toast.makeText(activity, textSuccess, Toast.LENGTH_SHORT).show();
+            });
+            return true;
         } catch (Exception e) {
             Log.e(TAG, "ShellDiedException, probably we did not have root access. (???)");
-            Toast.makeText (activity,textFail,Toast.LENGTH_SHORT).show();
+            handler.post(() -> {
+                Toast.makeText(activity, textFail, Toast.LENGTH_SHORT).show();
+            });
+            return false;
         }
     }
-    public static void freezeAppUsingRoot(String packageName,
-                                           Context context,
-                                           boolean putScreenOffAfterFreezing) {
+
+    public static boolean freezeAppUsingRoot(String packageName,
+                                             Context context,
+                                             boolean putScreenOffAfterFreezing) {
         String crrPackageName = context.getPackageName();
         try {
             Shell.Threaded shell = Shell.Pool.SU.get();
@@ -260,79 +329,90 @@ public class AppManagerFacade {
                 if (putScreenOffAfterFreezing) {
                     shell.run("input keyevent 26");
                 }
+            } else {
+                shell.run("am set-inactive " + packageName + " true");
+                shell.run("am force-stop " + packageName);
+                shell.run("am kill " + packageName);
             }
-            else{
-                shell.run("am set-inactive "+packageName+" true");
-                shell.run("am force-stop "+packageName);
-                shell.run("am kill "+packageName);
-            }
+            return true;
         } catch (Shell.ShellDiedException e) {
             Log.e(TAG, "ShellDiedException, probably we did not have root access. (???)");
+            return false;
         }
     }
-    public static void freezeAppsUsingRoot(List<String>packages,
-                                           Context context,
-                                           boolean putScreenOffAfterFreezing) {
+
+    public static boolean freezeListAppUsingRoot(List<String> packages,
+                                                 Context context,
+                                                 boolean putScreenOffAfterFreezing) {
         try {
             Shell.Threaded shell = Shell.Pool.SU.get();
-            packages.forEach(it->{
+            packages.forEach(it -> {
                 if (it == context.getPackageName()) {
                     if (putScreenOffAfterFreezing) {
                         try {
                             shell.run("input keyevent 26");
                         } catch (Shell.ShellDiedException e) {
-                            Log.e(TAG,e.getMessage());
+                            Log.e(TAG, e.getMessage());
                         }
                     }
-                }
-                else {
+                } else {
                     try {
-                        shell.run("am set-inactive "+it+" true");
-                        shell.run("am force-stop "+it);
-                        shell.run("am kill "+it);
+                        shell.run("am set-inactive " + it + " true");
+                        shell.run("am force-stop " + it);
+                        shell.run("am kill " + it);
                     } catch (Shell.ShellDiedException e) {
-                        Log.e(TAG,e.getMessage());
+                        Log.e(TAG, e.getMessage());
                     }
                 }
             });
             if (putScreenOffAfterFreezing) shell.run("input keyevent 26");
+            return true;
         } catch (Shell.ShellDiedException e) {
             Log.e(TAG, "ShellDiedException, probably we did not have root access. (???)");
+            return false;
         }
     }
-    public static void executeCommandWithSuShell(String command,
-                                          EventVoid onSuccess,
-                                          EventVoid onFailed){
+
+    public static boolean executeCommandWithSuShell(String command,
+                                                    EventVoid onSuccess,
+                                                    EventVoid onFailed) {
+        Log.i(TAG, "exec command");
         try {
-            Log.i(TAG, "exec command");
-            try {
-                shell.run(command);
-                onSuccess.callback();
-            } catch (Exception e) {
-                onFailed.callback();
-                Toast.makeText (activity,"Failed",Toast.LENGTH_SHORT).show();
-            }
+            Shell.Threaded shell = Shell.Pool.SU.get();
+            shell.run(command);
+            onSuccess.callback();
+            return true;
         } catch (Exception e) {
             onFailed.callback();
-            e.printStackTrace();
+            Handler handler = new Handler(Looper.getMainLooper());
+
+            handler.post(() -> {
+                Toast.makeText(activity, "Failed", Toast.LENGTH_SHORT).show();
+            });
+            return false;
         }
     }
-    public static void openAppSetting(AppInfo appInfo){
+
+    public static void openAppSetting(AppInfo appInfo) {
         Intent intent = new Intent(android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
         intent.setData(Uri.parse("package:" + appInfo.packageName));
         activity.startActivity(intent);
     }
+
     public static AppCompatActivity getActivity() {
         return activity;
     }
-    public static List<ActivityManager.RunningServiceInfo> getRunningServices(){
+
+    public static List<ActivityManager.RunningServiceInfo> getRunningServices() {
         return activityManager
                 .getRunningServices(Integer.MAX_VALUE);
     }
-    public static List<AppInfoDB>getListAppFromDB(){
+
+    public static List<AppInfoDB> getListAppFromDB() {
         return AppInfoDB.listAll(AppInfoDB.class);
     }
-    public static ActivityInfo[]getServices(String packageName) {
+
+    public static ActivityInfo[] getServices(String packageName) {
         try {
             PackageInfo packageInfo = packageManager.getPackageInfo(
                     packageName, PackageManager.GET_ACTIVITIES);
@@ -342,6 +422,7 @@ public class AppManagerFacade {
         }
         return null;
     }
+
     public static boolean hasUseAccessibilityServicePermission(Context context) {
         try {
             PackageManager packageManager = context.getPackageManager();
@@ -369,9 +450,21 @@ public class AppManagerFacade {
             }
 
         } catch (PackageManager.NameNotFoundException e) {
-            Log.e(TAG,e.getMessage());
+            Log.e(TAG, e.getMessage());
         }
 
         return false;
+    }
+
+    public static void removeAppFromList(String packageName, MenuContextType crrMenuContext) {
+        AppInfoDB appInfoUpdate = AppInfoDB.find(packageName);
+        if (appInfoUpdate != null) {
+            if (crrMenuContext == MenuContextType.FREEZE_MENU) {
+                appInfoUpdate.isHaveToBeFreeze = false;
+            } else {
+                appInfoUpdate.isHaveToTurnOffNotif = false;
+            }
+            appInfoUpdate.save();
+        }
     }
 }

@@ -30,11 +30,15 @@
         <item name="android:popupMenuStyle">@style/Theme.ApplicationManager.PopupMenuStyle</item>
         <item name="navigationViewStyle">@style/Theme.ApplicationManager.NavigationViewStyle</item>
         <item name="drawerArrowStyle">@style/Theme.ApplicationManager.DrawerArrowStyle</item>
+        <item name="autoCompleteTextViewStyle">@style/Theme.ApplicationManager.SearchAutoCompleteTextView</item>
     </style>
     <style name="Theme.ApplicationManager.DrawerArrowStyle" parent="Widget.AppCompat.DrawerArrowToggle">
         <item name="color">@color/black</item>
     </style>
-
+    <style name="Theme.ApplicationManager.SearchAutoCompleteTextView" parent="Widget.AppCompat.Light.AutoCompleteTextView">
+        <item name="android:textColor">?attr/itemTextColor</item>
+        <item name="android:textColorHint">?attr/itemTextColor</item>
+    </style>
     <style name="Theme.ApplicationManager.NavigationViewStyle" parent="Widget.Design.NavigationView">
         <item name="android:itemTextAppearance">@color/black</item>
     </style>
@@ -101,9 +105,14 @@
         <item name="popupTheme">@style/Theme.ApplicationManager.DarkMode.PopupMenuStyle</item>
         <item name="navigationViewStyle">@style/Theme.ApplicationManager.DarkMode.NavigationViewStyle</item>
         <item name="drawerArrowStyle">@style/Theme.ApplicationManager.DarkMode.DrawerArrowStyle</item>
+        <item name="autoCompleteTextViewStyle">@style/Theme.ApplicationManager.DarkMode.SearchAutoCompleteTextView</item>
     </style>
     <style name="Theme.ApplicationManager.DarkMode.DrawerArrowStyle" parent="Widget.AppCompat.DrawerArrowToggle">
         <item name="color">@color/white</item>
+    </style>
+    <style name="Theme.ApplicationManager.DarkMode.SearchAutoCompleteTextView" parent="Widget.AppCompat.AutoCompleteTextView">
+        <item name="android:textColor">?attr/itemTextColor</item>
+        <item name="android:textColorHint">?attr/itemTextColor</item>
     </style>
     <style name="Theme.ApplicationManager.DarkMode.NavigationViewStyle" parent="Widget.Design.NavigationView">
         <item name="android:itemTextAppearance">@color/white</item>

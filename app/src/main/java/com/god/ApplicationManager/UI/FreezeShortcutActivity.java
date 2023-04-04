@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.provider.Settings;
 import android.util.Log;
 import android.widget.Toast;
@@ -30,7 +32,7 @@ public class FreezeShortcutActivity extends AppCompatActivity {
     private boolean screenOff = false;
     public static FreezeShortcutActivity activity;
     private KeyguardManager keyguardManager;
-    private final String TAG="God freeze app shortcut";
+    private static final String TAG="God freeze app shortcut";
 
     private interface OnFreezeFinishedListener{
         void callback(Context context);
@@ -99,17 +101,10 @@ public class FreezeShortcutActivity extends AppCompatActivity {
             }
         }
 
-        if (AppManagerFacade.hasRootPermission) {
-            AppManagerFacade.freezeAppsUsingRoot(listPackageNameToBeFreeze, this, screenOff);
-            finish();
-            return;
-        }
-
         if (listPackageNameToBeFreeze.isEmpty()) {
             Toast.makeText(this,R.string.nothingToFreeze,Toast.LENGTH_SHORT).show();
             return;
         }
-
         if (FreezeService.isEnabled) {
             Toast.makeText(this,(R.string.power_button_hint), Toast.LENGTH_LONG).show();
         }
@@ -172,16 +167,6 @@ public class FreezeShortcutActivity extends AppCompatActivity {
         );
     }
     private Intent createShortcutResultIntent( AppCompatActivity activity){
-        /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            // There is a nice new api for shortcuts from Android O on, which we use here:
-            val shortcutManager = activity.getSystemService(ShortcutManager::class.java)
-            return shortcutManager.createShortcutResultIntent(
-                    ShortcutInfo.Builder(activity.applicationContext, "FreezeShortcut").build()
-            )
-        }*/
-
-        // ...but for older versions we need to do everything manually :-(,
-        // so actually using the new api does not have any benefits:
         Intent shortcutIntent = createShortcutIntent(activity);
 
         Intent intent = new Intent();
@@ -191,7 +176,7 @@ public class FreezeShortcutActivity extends AppCompatActivity {
                 activity.getString(R.string.freeze_all_app)
         );
         Intent.ShortcutIconResource iconResource = Intent.ShortcutIconResource.fromContext(
-                activity, R.drawable.ic_free_breakfast
+                activity, R.drawable.ic_freeze
         );
         intent.putExtra(Intent.EXTRA_SHORTCUT_ICON_RESOURCE, iconResource);
         return intent;
@@ -219,7 +204,7 @@ public class FreezeShortcutActivity extends AppCompatActivity {
                     listPackageNameToBeFreeze.add(app.packageName);
                 }
             }
-            AppManagerFacade.freezeAppsUsingRoot(
+            AppManagerFacade.freezeListAppUsingRoot(
                     listPackageNameToBeFreeze
                     , context,false);
         }
@@ -232,7 +217,7 @@ public class FreezeShortcutActivity extends AppCompatActivity {
      * @param packageName The name of the package to freeze
      * @return true if the settings intent ths been launched and you have to wait with freezing the next app.
      */
-    public boolean freezeApp(String packageName,Context context){
+    public static boolean freezeApp(String packageName,Context context){
         if (AppManagerFacade.hasRootPermission) {
             AppManagerFacade.freezeAppUsingRoot(packageName, context,false);
             return false;
@@ -256,7 +241,10 @@ public class FreezeShortcutActivity extends AppCompatActivity {
             context.startActivity(intent);
             return true;
         } catch (SecurityException e) {
-            Toast.makeText(this,getString(R.string.cant_freeze,packageName),Toast.LENGTH_LONG).show();
+            Handler handler = new Handler(Looper.getMainLooper());
+            handler.post(() -> {
+                Toast.makeText(context,context.getString(R.string.cant_freeze,packageName),Toast.LENGTH_LONG).show();
+            });
             return false;
         }
     }

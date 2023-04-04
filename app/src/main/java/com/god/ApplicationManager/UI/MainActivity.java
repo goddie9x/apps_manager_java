@@ -23,7 +23,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.god.ApplicationManager.Adapeter.ListAppAdapter;
-import com.god.ApplicationManager.DB.AppInfoDB;
 import com.god.ApplicationManager.DB.SettingsDB;
 import com.god.ApplicationManager.Entity.AppInfo;
 import com.god.ApplicationManager.Enum.BackStackState;
@@ -58,6 +57,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView amountTextLabel;
     private LinearLayout selectOptionBar;
     private Menu optionsMenu;
+    private SearchView searchApp;
     private FloatingActionButton freezeBtn;
     private boolean isOpenSearchBar = false;
     private DrawerLayout mainDrawer;
@@ -91,7 +91,7 @@ public class MainActivity extends AppCompatActivity {
         initSelectEvent();
         initFreezeFloatingBtn();
         if(savedInstanceState==null||savedInstanceState.isEmpty()){
-            setMenuContextType(MenuContextType.MAIN_MENU);
+            handleChangeMenuContextType(MenuContextType.MAIN_MENU);
             TaskingHandler.execTaskGetAllInstalledApp(crrMenuContext);
         }else {
             List<AppInfo> listApp = savedInstanceState.getParcelableArrayList("listApp");
@@ -119,7 +119,15 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void setMenuContextType(MenuContextType menuContextType) {
+    private void handleChangeMenuContextType(MenuContextType menuContextType) {
+        backStack.empty();
+        if(isOpenSearchBar) {
+            setOpenSearchBar(false);
+        }
+        if(crrListListAppAdapter.getSelectionState()) {
+            toggleMultipleSelect();
+            crrListListAppAdapter.clearSelect();
+        }
         crrMenuContext = menuContextType;
         freezeBtn.setVisibility(menuContextType==MenuContextType.FREEZE_MENU?View.VISIBLE:View.GONE);
         crrListListAppAdapter.setMenuContextType(menuContextType);
@@ -169,16 +177,22 @@ public class MainActivity extends AppCompatActivity {
                     break;
                 }
                 case R.id.all_app_zone:
-                    setMenuContextType(MenuContextType.MAIN_MENU);
-                    TaskingHandler.execTaskGetAllInstalledApp(crrMenuContext);
+                    if(crrMenuContext!=MenuContextType.MAIN_MENU) {
+                        handleChangeMenuContextType(MenuContextType.MAIN_MENU);
+                        TaskingHandler.execTaskGetAllInstalledApp(crrMenuContext);
+                    }
                     break;
                 case R.id.freeze_zone:
-                    setMenuContextType(MenuContextType.FREEZE_MENU);
-                    TaskingHandler.execTaskGetAllInstalledApp(crrMenuContext);
+                    if(crrMenuContext!=MenuContextType.FREEZE_MENU) {
+                        handleChangeMenuContextType(MenuContextType.FREEZE_MENU);
+                        TaskingHandler.execTaskGetAllInstalledApp(crrMenuContext);
+                    }
                     break;
                 case R.id.notification_zone:
-                    setMenuContextType(MenuContextType.NOTIFICATION_MENU);
-                    TaskingHandler.execTaskGetAllInstalledApp(crrMenuContext);
+                    if(crrMenuContext!=MenuContextType.NOTIFICATION_MENU) {
+                        handleChangeMenuContextType(MenuContextType.NOTIFICATION_MENU);
+                        TaskingHandler.execTaskGetAllInstalledApp(crrMenuContext);
+                    }
                     break;
                 case R.id.action_dark_mode:
                     item.setChecked(true);
@@ -233,21 +247,25 @@ public class MainActivity extends AppCompatActivity {
                     );
                     return true;
                 case R.id.freeze:
-                    //TODO: make freeze app
+                    AppManagerFacade.freezeApp(selectedAppInfo);
                     return true;
                 case R.id.turn_off_notification:
-                    startActionForSelectedApp(selectedAppInfo,AppManagerFacade::turnOffNotifPermanenly);
+                    startActionForSelectedApp(selectedAppInfo,(appInfo)->{
+                        AppManagerFacade.setNotificationStateForApp(appInfo,false);
+                    });
                     return true;
                 case R.id.uninstall:
                     startActionForSelectedApp(selectedAppInfo,TaskingHandler::execTaskUninstallApp);
+                    TaskingHandler.execTaskGetAllInstalledApp(crrMenuContext);
                     return true;
                 case R.id.open_in_setting:
                     AppManagerFacade.openAppSetting(selectedAppInfo);
                     return true;
                 case R.id.remove_from_list:
                     startActionForSelectedApp(selectedAppInfo,(appInfo)->{
-                        AppInfoDB.removeAppFromList(appInfo.packageName,crrMenuContext);
+                        AppManagerFacade.removeAppFromList(appInfo.packageName,crrMenuContext);
                     });
+                    TaskingHandler.execTaskGetAllInstalledApp(crrMenuContext);
                     return true;
                 default:
                     return super.onContextItemSelected(item);
@@ -281,7 +299,7 @@ public class MainActivity extends AppCompatActivity {
                         setOpenSearchBar(true);
                         break;
                     case SELECT:
-                        crrListListAppAdapter.toggleEnableSelect();
+                        toggleMultipleSelect();
                         break;
                 }
             }
@@ -348,15 +366,13 @@ public class MainActivity extends AppCompatActivity {
             selectOptionBar.setVisibility(View.VISIBLE);
             appTitleLabel.setVisibility(View.GONE);
             if (isOpenSearchBar) {
-                backStack.push(BackStackState.SELECT);
+                backStack.push(BackStackState.SEARCH);
             }
+            backStack.push(BackStackState.SELECT);
         } else {
-            if (isOpenSearchBar) {
-                handleBackStack();
-            } else {
-                selectOptionBar.setVisibility(View.GONE);
-                appTitleLabel.setVisibility(View.VISIBLE);
-            }
+            handleBackStack();
+            selectOptionBar.setVisibility(View.GONE);
+            appTitleLabel.setVisibility(View.VISIBLE);
         }
     }
 
@@ -515,7 +531,7 @@ public class MainActivity extends AppCompatActivity {
             setOpenSearchBar(false);
             appTitleLabel.setVisibility(View.VISIBLE);
         });
-        SearchView searchApp = findViewById(R.id.search_app);
+        searchApp = findViewById(R.id.search_app);
         searchApp.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -542,12 +558,11 @@ public class MainActivity extends AppCompatActivity {
         }
         findViewById(R.id.search_bar).setVisibility(isOpenSearchBar ? View.VISIBLE : View.GONE);
         if (isOpenSearchBar) {
-            SearchView searchView = findViewById(R.id.search_app);
-            searchView.requestFocus();
-            searchView.setIconified(false);
-            searchView.postDelayed(() -> {
+            searchApp.requestFocus();
+            searchApp.setIconified(false);
+            searchApp.postDelayed(() -> {
                 InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.showSoftInput(searchView, InputMethodManager.SHOW_IMPLICIT);
+                imm.showSoftInput(searchApp, InputMethodManager.SHOW_IMPLICIT);
             }, 200);
         }
     }
@@ -572,7 +587,9 @@ public class MainActivity extends AppCompatActivity {
     private void startActionForSelectedApp(AppInfo selectedApp, TaskingHandler.ActionForSelectedApp action){
         if(crrListListAppAdapter.getSelectionState()){
             TaskingHandler.handleForSelectedApp(crrListListAppAdapter.getListSelectedApp(),
-                    action);
+                    action,()->{
+                        crrListListAppAdapter.clearSelectedAppInfo();
+                    });
         }
         else{
             action.callback(selectedApp);
