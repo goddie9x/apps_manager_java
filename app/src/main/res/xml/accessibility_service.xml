@@ -6,4 +6,5 @@
     android:packageNames="com.android.settings"
     android:accessibilityEventTypes="typeWindowStateChanged"
     android:description="@string/accessibility_service_description"
+    android:settingsActivity="com.god.ApplicationManager.Service.FreezeService"
     />

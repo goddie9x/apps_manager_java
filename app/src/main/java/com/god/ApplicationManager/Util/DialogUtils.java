@@ -5,6 +5,9 @@ import android.content.DialogInterface;
 
 import androidx.appcompat.app.AlertDialog;
 
+import com.god.ApplicationManager.DB.SettingsDB;
+import com.god.ApplicationManager.R;
+
 public class DialogUtils {
     public interface SetMoreOptions{
         void callback(AlertDialog.Builder builder);
@@ -28,7 +31,9 @@ public class DialogUtils {
     public static void showAlertDialog(Context context, String title, String message,
                                        DialogInterface.OnClickListener positiveListener) {
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        AlertDialog.Builder builder = new AlertDialog.Builder(context, SettingsDB.getInstance().isEnableDarkMode ?
+                R.style.Theme_ApplicationManager_DarkMode_PopupMenuStyle
+                : R.style.Theme_ApplicationManager_PopupMenuStyle);
         builder.setTitle(title);
         builder.setMessage(message);
 

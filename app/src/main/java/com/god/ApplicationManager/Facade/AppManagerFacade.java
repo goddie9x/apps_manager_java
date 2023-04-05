@@ -26,9 +26,10 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.god.ApplicationManager.DB.AppInfoDB;
 import com.god.ApplicationManager.Entity.AppInfo;
+import com.god.ApplicationManager.Enum.FreezeServiceNextAction;
 import com.god.ApplicationManager.Enum.MenuContextType;
+import com.god.ApplicationManager.Service.FreezeService;
 import com.god.ApplicationManager.UI.FreezeShortcutActivity;
-import com.god.ApplicationManager.Util.DialogUtils;
 
 import java.io.IOException;
 import java.lang.reflect.Method;
@@ -149,15 +150,10 @@ public class AppManagerFacade {
             forceStopAppWithRootPermission(appInfo.packageName);
         } else {
             //since android 10 (sdk 19) we cannot force stop app, then we open setting of this app
-            //so we let users do it by their own
             if (SDK_VERSION < 29) {
                 activityManager.killBackgroundProcesses(appInfo.packageName);
             } else {
-                DialogUtils.showAlertDialog(activity, "Manual",
-                        "Your android version not support or you do not have root permission" +
-                                "\n must force stop app as manual", (d, w) -> {
-                            openAppSetting(appInfo);
-                        });
+                FreezeService.setNextAction(FreezeServiceNextAction.PRESS_FORCE_STOP);
             }
         }
     }
@@ -466,5 +462,14 @@ public class AppManagerFacade {
             }
             appInfoUpdate.save();
         }
+    }
+    public static boolean isMyServiceRunning(Class<?> serviceClass) {
+        ActivityManager manager = (ActivityManager) activity.getSystemService(Context.ACTIVITY_SERVICE);
+        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+            if (serviceClass.getName().equals(service.service.getClassName())) {
+                return true;
+            }
+        }
+        return false;
     }
 }

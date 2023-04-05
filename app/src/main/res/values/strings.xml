@@ -92,4 +92,6 @@
     <string name="action">Action</string>
     <string name="accessibility_service_description">Turn this on let you automatically freeze apps</string>
     <string name="disable_multiple_select">Disable multiple select</string>
+    <string name="freeze_service_name">God freeze service</string>
+    <string name="service">service</string>
 </resources>

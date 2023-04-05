@@ -1,6 +1,8 @@
 package com.god.ApplicationManager.Tasking;
 
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Handler;
 import android.os.Looper;
@@ -11,9 +13,13 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.god.ApplicationManager.DB.AppInfoDB;
+import com.god.ApplicationManager.DB.SettingsDB;
 import com.god.ApplicationManager.Entity.AppInfo;
 import com.god.ApplicationManager.Enum.MenuContextType;
 import com.god.ApplicationManager.Facade.AppManagerFacade;
+import com.god.ApplicationManager.R;
+import com.god.ApplicationManager.Service.FreezeService;
+import com.god.ApplicationManager.Service.NotificationService;
 import com.god.ApplicationManager.Util.AsyncTaskBuilder;
 
 import java.util.ArrayList;
@@ -92,6 +98,7 @@ public class TaskingHandler {
         taskSetListAppToRecycleView.execute();
     }
 
+    @SuppressLint("ResourceAsColor")
     public static void execTaskHandleGetListService(
             LinearLayout listServiceLayout,
             String crrPackageName
@@ -105,10 +112,12 @@ public class TaskingHandler {
                     Handler handler = new Handler(Looper.getMainLooper());
                     handler.post(() -> {
                         listServiceLayout.removeAllViews();
-
+                        int textColorCode = SettingsDB.getInstance().isEnableDarkMode?
+                                R.color.white:R.color.black;
                         for (ActivityInfo crrService : listService) {
                             CheckBox crrServiceCheckBox = new CheckBox(activity);
                             crrServiceCheckBox.setText(crrService.processName);
+                            crrServiceCheckBox.setTextColor(textColorCode);
                             crrServiceCheckBox.setChecked(crrService.enabled);
                             crrServiceCheckBox.setOnCheckedChangeListener((v, isChecked) -> {
 
@@ -248,5 +257,28 @@ public class TaskingHandler {
                 }
         );
         taskDoActionEachSelectedApp.execute();
+    }
+    public static void handleRunServices(){
+        AsyncTaskBuilder<Void, Void, Void> taskDoActionEachSelectedApp = new AsyncTaskBuilder<>();
+
+        taskDoActionEachSelectedApp.setDoInBackgroundFunc(ts -> {
+            startNotificationService();
+            startFreezeService();
+            return null;
+        });
+
+        taskDoActionEachSelectedApp.execute();
+    }
+    public static void startNotificationService(){
+        if(!AppManagerFacade.isMyServiceRunning(NotificationService.class)){
+            Intent serviceIntent = new Intent(activity, NotificationService.class);
+            activity.startService(serviceIntent);
+        }
+    }
+    public static void startFreezeService(){
+        if(!AppManagerFacade.isMyServiceRunning(FreezeService.class)){
+            Intent serviceIntent = new Intent(activity, FreezeService.class);
+            activity.startService(serviceIntent);
+        }
     }
 }

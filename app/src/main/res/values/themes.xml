@@ -4,7 +4,7 @@
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/purple_500</item>
         <item name="colorPrimaryVariant">@color/purple_700</item>
-        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorOnPrimary">@color/black</item>
         <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/color_secondary</item>
         <item name="colorSecondaryVariant">@color/white</item>
@@ -16,8 +16,6 @@
         <item name="itemFillColor">@color/white</item>
         <item name="buttonIconTint">@color/black</item>
         <item name="android:textColor">@color/black</item>
-        <item name="android:popupBackground">@color/white</item>
-        <item name="android:panelBackground">@color/white</item>
         <item name="colorBackgroundFloating">@color/white</item>
         <item name="android:background">@color/white</item>
         <item name="android:windowBackground">@color/white</item>
@@ -64,6 +62,8 @@
     <style name="Theme.ApplicationManager.PopupMenuStyle" parent="@style/Widget.MaterialComponents.PopupMenu">
         <item name="itemTextColor">@color/black</item>
         <item name="itemFillColor">@color/white</item>
+        <item name="android:overScrollHeader">@color/transparent</item>
+        <item name="android:overScrollFooter">@color/transparent</item>
         <item name="android:background">@color/white</item>
         <item name="android:windowBackground">@color/white</item>
         <item name="itemBackground">@color/white</item>
@@ -72,6 +72,7 @@
         <item name="android:popupBackground">@color/white</item>
         <item name="android:panelBackground">@color/white</item>
         <item name="android:textColor">@color/black</item>
+        <item name="android:textColorPrimary">@color/black</item>
         <item name="iconTint">@color/black</item>
     </style>
     <!-- Darkmode -->
@@ -82,7 +83,7 @@
         <item name="colorOnPrimary">@color/white</item>
         <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/color_secondary_darkmode</item>
-        <item name="colorSecondaryVariant">@color/pupup_background_darkmode</item>
+        <item name="colorSecondaryVariant">@color/popup_background_darkmode</item>
         <item name="colorOnSecondary">@color/yellow_green</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor">@color/transparent</item>
@@ -90,12 +91,10 @@
         <item name="itemTextColor">@color/white</item>
         <item name="itemFillColor">@color/black</item>
         <item name="buttonIconTint">@color/white</item>
-        <item name="android:windowBackground">@color/pupup_background_darkmode</item>
+        <item name="android:windowBackground">@color/popup_background_darkmode</item>
         <item name="android:itemBackground">@color/background_darkmode</item>
-        <item name="android:popupBackground">@color/pupup_background_darkmode</item>
-        <item name="android:background">@color/pupup_background_darkmode</item>
-        <item name="android:panelBackground">@color/pupup_background_darkmode</item>
-        <item name="colorBackgroundFloating">@color/pupup_background_darkmode</item>
+        <item name="android:background">@color/popup_background_darkmode</item>
+        <item name="colorBackgroundFloating">@color/popup_background_darkmode</item>
         <item name="imageButtonStyle">@style/Theme.ApplicationManager.DarkMode.ImageButtonStyle</item>
         <item name="drawableTint">@color/white</item>
         <item name="android:textColor">@color/white</item>
@@ -121,7 +120,7 @@
         <item name="tint">@color/white</item>
     </style>
     <style name="Theme.ApplicationManager.DarkMode.Toolbar">
-        <item name="backgroundColor">@color/pupup_background_darkmode</item>
+        <item name="backgroundColor">@color/popup_background_darkmode</item>
         <item name="subtitleTextColor">@color/white</item>
         <item name="iconTint">@color/white</item>
         <item name="drawableTint">@color/white</item>
@@ -134,6 +133,8 @@
     <style name="Theme.ApplicationManager.DarkMode.PopupMenuStyle" parent="@style/Widget.MaterialComponents.PopupMenu">
         <item name="itemTextColor">@color/white</item>
         <item name="itemFillColor">@color/black</item>
+        <item name="android:overScrollHeader">@color/transparent</item>
+        <item name="android:overScrollFooter">@color/transparent</item>
         <item name="itemBackground">@color/background_darkmode</item>
         <item name="android:itemBackground">@color/background_darkmode</item>
         <item name="android:windowBackground">@color/background_darkmode</item>
@@ -142,6 +143,7 @@
         <item name="android:popupBackground">?attr/colorSecondaryVariant</item>
         <item name="android:panelBackground">?attr/colorSecondaryVariant</item>
         <item name="android:textColor">@color/white</item>
+        <item name="android:textColorPrimary">@color/white</item>
         <item name="iconTint">@color/white</item>
     </style>
     <style name="Theme.ApplicationManager.NoActionBar">

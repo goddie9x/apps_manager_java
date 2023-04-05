@@ -56,9 +56,7 @@ public class FreezeShortcutActivity extends AppCompatActivity {
             finish();
         } else {
             FreezeService.stopAnyCurrentFreezing(); // Might be that there still was a previous (failed) freeze process, in this case stop it
-            if (keyguardManager.isKeyguardLocked() &&
-                    SettingsDB.getInstance().isFreezeWhileScreenOff
-			) {
+            if (keyguardManager.isKeyguardLocked()) {
                 if(onFreezeFinishedListener!=null){
                     onFreezeFinishedListener.callback(this);
                     onFreezeFinishedListener = null;
@@ -160,7 +158,6 @@ public class FreezeShortcutActivity extends AppCompatActivity {
                 },
                 (dialog,whitch)->{
                     SettingsDB.getInstance().doNotShowFreezeWarning = false;
-                    SettingsDB.getInstance().isFreezeWhileScreenOff = false;
                     SettingsDB.saveSettings();
                     finish();
                 }

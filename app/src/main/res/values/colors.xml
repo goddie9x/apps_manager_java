@@ -16,5 +16,5 @@
     <color name="color_secondary">#CECECE</color>
     <color name="color_secondary_darkmode">#5B467F</color>
     <color name="background_darkmode">#372653</color>
-    <color name="pupup_background_darkmode">#2A1A37</color>
+    <color name="popup_background_darkmode">#2A1A37</color>
 </resources>

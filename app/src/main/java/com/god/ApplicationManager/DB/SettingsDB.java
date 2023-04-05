@@ -6,8 +6,6 @@ import java.util.List;
 
 public class SettingsDB extends SugarRecord {
     public boolean isEnableDarkMode;
-    public boolean isFreezeWhileScreenOff;
-    //    0 NEVER, 1  ALWAYS, 2 WHEN INACTIVE
     public int freezeMode;
     public boolean doNotShowTermOfUse;
     public boolean doShowRootWarning;

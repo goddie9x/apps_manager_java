@@ -90,6 +90,7 @@ public class MainActivity extends AppCompatActivity {
         initSearchEvent();
         initSelectEvent();
         initFreezeFloatingBtn();
+        TaskingHandler.handleRunServices();
         if(savedInstanceState==null||savedInstanceState.isEmpty()){
             handleChangeMenuContextType(MenuContextType.MAIN_MENU);
             TaskingHandler.execTaskGetAllInstalledApp(crrMenuContext);
@@ -276,6 +277,9 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        setTheme(SettingsDB.getInstance().isEnableDarkMode?
+        R.style.Theme_ApplicationManager_DarkMode_PopupMenuStyle:
+        R.style.Theme_ApplicationManager_PopupMenuStyle);
         getMenuInflater().inflate(R.menu.menu_main, menu);
         optionsMenu = menu;
         return true;
