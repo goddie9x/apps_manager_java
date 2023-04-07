@@ -2,6 +2,7 @@ package com.god.ApplicationManager.Service;
 
 import android.accessibilityservice.AccessibilityService;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.os.Handler;
@@ -9,20 +10,20 @@ import android.util.Log;
 import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityNodeInfo;
 import android.widget.Toast;
-
 import com.god.ApplicationManager.Enum.FreezeServiceNextAction;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class FreezeService extends AccessibilityService {
     private static final String TAG = "FreezeService";
     public static boolean isEnabled;
+    private Thread backgroundThread;
     private final String SETTINGS_PACKAGE_NAME = "com.android.settings";
     private Resources settingsResource;
-    private PackageManager packageManager;
-    private static FreezeServiceNextAction nextAction;
+    private static FreezeServiceNextAction nextAction = FreezeServiceNextAction.DO_NOTHING;
     private static final Handler timeoutHandler = new Handler();
     private static long lastActionTimestamp = 0L;
     private String forceStopButtonName;
@@ -59,13 +60,11 @@ public class FreezeService extends AccessibilityService {
 
     @Override
     public void onAccessibilityEvent(AccessibilityEvent event) {
-        //We are only interested in WINDOW_STATE_CHANGED events
         Log.i(TAG,"onAccessibilityEvent");
-        if (event.getEventType() != AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED) return;
         String className  = (String) event.getClassName();
         switch (nextAction) {
             case PRESS_FORCE_STOP:
-                if (className == "com.android.settings.applications.InstalledAppDetailsTop") {
+                if (Objects.equals(className, "com.android.settings.applications.InstalledAppDetailsTop")) {
                     pressForceStopButton(event);
                 } else {
                     Log.w(TAG, "awaited InstalledAppDetailsTop to be the next screen but it was ${event.className}");
@@ -95,9 +94,9 @@ public class FreezeService extends AccessibilityService {
     public void onCreate() {
         super.onCreate();
         Context baseContext = getBaseContext();
-        packageManager = baseContext.getPackageManager();
+        PackageManager packageManager = baseContext.getPackageManager();
         try {
-            settingsResource =packageManager
+            settingsResource = packageManager
                     .getResourcesForApplication(SETTINGS_PACKAGE_NAME);
         } catch (PackageManager.NameNotFoundException e) {
             Toast.makeText(baseContext,"Get app settings failed",Toast.LENGTH_SHORT).show();
@@ -105,8 +104,16 @@ public class FreezeService extends AccessibilityService {
         }
     }
     @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        if (!isEnabled) {
+            isEnabled = true;
+            startBackgroundThread();
+        }
+        return START_STICKY;
+    }
+    @Override
     public void onInterrupt() {
-
+        isEnabled = false;
     }
     @Override
     public void onServiceConnected() {
@@ -115,27 +122,24 @@ public class FreezeService extends AccessibilityService {
         // From now on, expect that the service works:
         prefUseAccessibilityService = true;
     }
-
+    private void startBackgroundThread() {
+        backgroundThread = new Thread(()->{if(isEnabled) {
+            try {
+                Thread.sleep(120000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }});
+        backgroundThread.start();
+    }
     @Override
     public void onDestroy() {
         Log.i(TAG, "FreezerService was destroyed.");
         isEnabled = false;
         stopAnyCurrentFreezing();
-    }
-
-    private String getButtonName(String name){
-        String buttonName;
-        // Try to find out what it says on the Force Stop button (different in different languages)
-
-        int resourceId = settingsResource.getIdentifier(name, "string",
-                SETTINGS_PACKAGE_NAME);
-        if (resourceId > 0) {
-            buttonName= settingsResource.getString(resourceId);
-        } else {
-            Log.e(TAG, "Label for the force stop button in settings could not be found");
-            buttonName= null;
+        if (backgroundThread != null) {
+            backgroundThread.interrupt();
         }
-        return buttonName;
     }
     public void pressForceStopButton(AccessibilityEvent event) {
         pressButton(event,"FORCE STOP",FreezeServiceNextAction.PRESS_OK,(node,nodesToClick)->{
@@ -235,7 +239,7 @@ public class FreezeService extends AccessibilityService {
     private void getButtons(AccessibilityNodeInfo parentNode,
                                              List<AccessibilityNodeInfo> l) {
         String[]parentNodeNameSplitted = parentNode.getClassName().toString()
-                .split(".");
+                .split("\\.");
         if (parentNode.isClickable() &&  parentNodeNameSplitted[parentNodeNameSplitted.length-1].equals("Button")) {
             l.add(parentNode);
         }
@@ -259,7 +263,6 @@ public class FreezeService extends AccessibilityService {
             );
             stopAnyCurrentFreezing(); // Stop everything, it is to late to do anything :-(
         }
-        // else do nothing and simply wait for the next screen to show up.
     }
 
     private void pressOkButton(AccessibilityEvent event) {

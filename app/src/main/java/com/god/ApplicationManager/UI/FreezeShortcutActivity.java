@@ -5,8 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.provider.Settings;
 import android.util.Log;
 import android.widget.Toast;
@@ -15,8 +13,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.god.ApplicationManager.DB.AppInfoDB;
 import com.god.ApplicationManager.DB.SettingsDB;
+import com.god.ApplicationManager.Enum.FreezeServiceNextAction;
 import com.god.ApplicationManager.Facade.AppManagerFacade;
-import com.god.ApplicationManager.Permission.PermissionHandler;
 import com.god.ApplicationManager.R;
 import com.god.ApplicationManager.Service.FreezeService;
 import com.god.ApplicationManager.Util.DialogUtils;
@@ -24,14 +22,13 @@ import com.god.ApplicationManager.Util.DialogUtils;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.Objects;
 
 public class FreezeShortcutActivity extends AppCompatActivity {
-    private boolean isBeingNewlyCreated = true;
-    private ListIterator<String> appsToBeFrozenIter= null;
+    private ListIterator<String> appsToBeFrozenIterator= null;
     public boolean isWorking = false;
     private boolean screenOff = false;
     public static FreezeShortcutActivity activity;
-    private KeyguardManager keyguardManager;
     private static final String TAG="God freeze app shortcut";
 
     private interface OnFreezeFinishedListener{
@@ -46,12 +43,11 @@ public class FreezeShortcutActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         activity = this;
-        isBeingNewlyCreated = true;
         Intent intent = getIntent();
-        screenOff = (intent.getStringExtra("extraID") == "dyn_screenOff");
-        keyguardManager = (KeyguardManager) getSystemService(Context.KEYGUARD_SERVICE);
+        screenOff = (Objects.equals(intent.getStringExtra("extraID"), "dyn_screenOff"));
+        KeyguardManager keyguardManager = (KeyguardManager) getSystemService(Context.KEYGUARD_SERVICE);
 
-        if (Intent.ACTION_CREATE_SHORTCUT == intent.getAction()) {
+        if (Intent.ACTION_CREATE_SHORTCUT.equals(intent.getAction())) {
             setResult(RESULT_OK, createShortcutResultIntent(this));
             finish();
         } else {
@@ -108,15 +104,13 @@ public class FreezeShortcutActivity extends AppCompatActivity {
         }
 
         // The actual freezing work will be done in onResume(). Here we just create this iterator.
-        appsToBeFrozenIter = listPackageNameToBeFreeze.listIterator();
+        appsToBeFrozenIterator = listPackageNameToBeFreeze.listIterator();
     }
 
 
     @Override
     public void onResume() {
         super.onResume();
-
-        //Companion.onResume(this)
 
         doNextFreezingStep();
     }
@@ -125,15 +119,12 @@ public class FreezeShortcutActivity extends AppCompatActivity {
         if (!FreezeService.isEnabled) {
             // Sometimes the accessibility service is disabled for some reason.
             // In this case, tell the user to re-enable it:
-            if (!AppManagerFacade.hasUseAccessibilityServicePermission(this)) {
-                PermissionHandler.getUseAccessibilityService(this);
-                return;
-            }
+            return;
         }
 
-        if (appsToBeFrozenIter != null) {
-            if(appsToBeFrozenIter.hasNext()){
-                if(freezeApp(appsToBeFrozenIter.next(), this));
+        if (appsToBeFrozenIterator != null) {
+            if(appsToBeFrozenIterator.hasNext()){
+                if(freezeApp(appsToBeFrozenIterator.next(), this));
             }
             else{
                 if(onFreezeFinishedListener!=null){
@@ -150,13 +141,13 @@ public class FreezeShortcutActivity extends AppCompatActivity {
                 this,
                 getString(R.string.freeze_screen_off_failed),
                 getString(R.string.disable_power_btn_instantly_locks_warning),
-                (dialog,whitch)->{
+                (dialog,which)->{
                     Intent intent = new Intent(Settings.ACTION_SECURITY_SETTINGS);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(intent);
                     finish();
                 },
-                (dialog,whitch)->{
+                (dialog,which)->{
                     SettingsDB.getInstance().doNotShowFreezeWarning = false;
                     SettingsDB.saveSettings();
                     finish();
@@ -216,34 +207,24 @@ public class FreezeShortcutActivity extends AppCompatActivity {
      */
     public static boolean freezeApp(String packageName,Context context){
         if (AppManagerFacade.hasRootPermission) {
-            AppManagerFacade.freezeAppUsingRoot(packageName, context,false);
-            return false;
+            return AppManagerFacade.freezeAppUsingRoot(packageName, context,false);
         }
 
         if (FreezeService.isEnabled) {
             // clickFreezeButtons will wait for the Force stop button to appear and then click Force stop, Ok, Back.
             try {
-                FreezeService.clickFreezeButtons(context);
+                FreezeService.setNextAction(FreezeServiceNextAction.PRESS_FORCE_STOP);
+                Intent intent = new Intent();
+                intent.setAction("android.settings.APPLICATION_DETAILS_SETTINGS");
+                intent.setData(Uri.fromParts("package", packageName, null));
+                context.startActivity(intent);
             } catch (IllegalStateException e) {
                 Log.e(TAG, e.toString());
                 e.printStackTrace();
                 return false;
             }
         }
-
-        Intent intent = new Intent();
-        intent.setAction("android.settings.APPLICATION_DETAILS_SETTINGS");
-        intent.setData(Uri.fromParts("package", packageName, null));
-        try {
-            context.startActivity(intent);
-            return true;
-        } catch (SecurityException e) {
-            Handler handler = new Handler(Looper.getMainLooper());
-            handler.post(() -> {
-                Toast.makeText(context,context.getString(R.string.cant_freeze,packageName),Toast.LENGTH_LONG).show();
-            });
-            return false;
-        }
+        return true;
     }
 
 

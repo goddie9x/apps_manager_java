@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<accessibility-service
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:accessibilityEventTypes="typeWindowsChanged|typeWindowStateChanged"
+    android:packageNames="com.android.settings"
+    android:accessibilityFeedbackType="feedbackSpoken"
+    android:description="@string/accessibility_service_description"
+    android:accessibilityFlags="flagDefault"
+    android:notificationTimeout="100"
+    android:canRetrieveWindowContent="true"
+    />

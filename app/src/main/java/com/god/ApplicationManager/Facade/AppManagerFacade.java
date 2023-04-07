@@ -1,6 +1,5 @@
 package com.god.ApplicationManager.Facade;
 
-import android.accessibilityservice.AccessibilityServiceInfo;
 import android.app.ActivityManager;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -19,7 +18,6 @@ import android.os.Looper;
 import android.os.Process;
 import android.service.notification.StatusBarNotification;
 import android.util.Log;
-import android.view.accessibility.AccessibilityManager;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -154,6 +152,7 @@ public class AppManagerFacade {
                 activityManager.killBackgroundProcesses(appInfo.packageName);
             } else {
                 FreezeService.setNextAction(FreezeServiceNextAction.PRESS_FORCE_STOP);
+                openAppSetting(appInfo);
             }
         }
     }
@@ -165,10 +164,40 @@ public class AppManagerFacade {
     }
 
     public static void freezeApp(AppInfo appInfo) {
+        Handler handler = new Handler(Looper.getMainLooper());
+        if(checkWhetherAppAlreadyInFreezeList(appInfo,handler))return;
         if (hasRootPermission) {
             freezeAppWithRootPermission(appInfo.packageName);
         } else {
             FreezeShortcutActivity.freezeApp(appInfo.packageName, activity);
+        }
+        handleSaveAppToFreezeListInDb(appInfo,handler);
+    }
+
+    private static void handleSaveAppToFreezeListInDb(AppInfo appInfo, Handler handler) {
+        AppInfoDB appInfoUpdate = AppInfoDB.find(appInfo.packageName);
+        if (appInfoUpdate == null) {
+            appInfoUpdate = new AppInfoDB();
+            appInfoUpdate.getAppInfoDbFromAppInfo(appInfo);
+        }
+        appInfoUpdate.isHaveToBeFreeze = true;
+        appInfoUpdate.save();
+        handler.post(() -> {
+            Toast.makeText(activity, "Freeze "+appInfo.packageName+" success", Toast.LENGTH_SHORT).show();
+        });
+    }
+
+    private static boolean checkWhetherAppAlreadyInFreezeList(AppInfo appInfo, Handler handler) {
+        List<AppInfoDB> listAppCheck = AppInfoDB.find(AppInfoDB.class,
+                "package_name=? and is_have_to_be_freeze = 1",appInfo.packageName);
+        if(listAppCheck.size()>0){
+            handler.post(() -> {
+                Toast.makeText(activity, appInfo.packageName+" already in freeze list", Toast.LENGTH_SHORT).show();
+            });
+            return true;
+        }
+        else{
+            return false;
         }
     }
 
@@ -183,67 +212,28 @@ public class AppManagerFacade {
     }
 
     public static void setNotificationStateForApp(AppInfo appInfo,boolean isEnable) {
+        Handler handler = new Handler(Looper.getMainLooper());
         if(!isEnable){
+            List<AppInfoDB> listAppCheck = AppInfoDB.find(AppInfoDB.class,
+                    "package_name=? and is_have_to_turn_off_notif = 1",appInfo.packageName);
+            if(listAppCheck.size()>0){
+                handler.post(() -> {
+                    Toast.makeText(activity, appInfo.packageName+" already in turn off notification list", Toast.LENGTH_SHORT).show();
+                });
+                return;
+            }
             turnOffNotif(getAllNotifIdOfPackage(appInfo.packageName),appInfo.packageName);
         }
-        NotificationManager crrAppNotifManager = null;
-        Handler handler = new Handler(Looper.getMainLooper());
-        try {
-            crrAppNotifManager = (NotificationManager) activity
-                    .createPackageContext(appInfo.packageName, 0)
-                    .getSystemService(Context.NOTIFICATION_SERVICE);
-        } catch (PackageManager.NameNotFoundException e) {
-            handler.post(() -> {
-                Toast.makeText(activity,
-                        "Get notification chanel" + appInfo.packageName + " failed", Toast.LENGTH_SHORT).show();
-            });
-            Log.e(TAG, e.getMessage());
-            return;
-        }
+        NotificationManager crrAppNotifManager = handleGetNotificationManager(appInfo,handler);
+        if(crrAppNotifManager==null)return;
 
-        // Get a list of all the notification channels
-        List<NotificationChannel> channels = new ArrayList<>();
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            try {
-                channels = crrAppNotifManager.getNotificationChannels();
-            } catch (Exception e) {
-                Log.e(TAG, e.getMessage());
-            }
-        } else {
-            try {
-                // Get the INotificationManager service
-                Class<?> serviceManager = Class.forName("android.os.ServiceManager");
-                Method getService = serviceManager.getDeclaredMethod("getService", String.class);
-                IBinder binder = (IBinder) getService.invoke(null, "notification");
-                Class<?> notificationManagerStub = Class.forName("android.app.INotificationManager$Stub");
-                Method asInterface = notificationManagerStub.getDeclaredMethod("asInterface", IBinder.class);
-                Object iNotificationManager = asInterface.invoke(null, binder);
-
-                // Call the INotificationManager.getNotificationChannelsForPackage method
-                Method getNotificationChannelsForPackage = iNotificationManager.getClass()
-                        .getDeclaredMethod("getNotificationChannelsForPackage", String.class, int.class);
-                channels = (List<NotificationChannel>) getNotificationChannelsForPackage.invoke(iNotificationManager,
-                        appInfo.packageName, Process.myUid() / 100000);
-            } catch (Exception e) {
-                Log.e(TAG, e.getMessage());
-            }
-        }
+        List<NotificationChannel> channels = getListChanel(crrAppNotifManager,appInfo);
 
         if(isEnable){
-            for (NotificationChannel channel : channels) {
-                crrAppNotifManager.setInterruptionFilter(NotificationManager.INTERRUPTION_FILTER_NONE);
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    crrAppNotifManager.createNotificationChannel(channel);
-                }
-            }
+            enableNotificationChannelsOfAnApp(channels,crrAppNotifManager);
         }
         else{
-            for (NotificationChannel channel : channels) {
-                crrAppNotifManager.setInterruptionFilter(NotificationManager.INTERRUPTION_FILTER_NONE);
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    crrAppNotifManager.deleteNotificationChannel(channel.getId());
-                }
-            }
+            disableNotificationChannelsOfAnApp(channels,crrAppNotifManager);
         }
 
         AppInfoDB appInfoUpdate = AppInfoDB.find(appInfo.packageName);
@@ -258,6 +248,69 @@ public class AppManagerFacade {
                     + "notification of "+appInfo.packageName+" success", Toast.LENGTH_SHORT).show();
         });
 
+    }
+
+    private static void disableNotificationChannelsOfAnApp(List<NotificationChannel> channels, NotificationManager crrAppNotifManager) {
+        for (NotificationChannel channel : channels) {
+            crrAppNotifManager.setInterruptionFilter(NotificationManager.INTERRUPTION_FILTER_NONE);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                crrAppNotifManager.deleteNotificationChannel(channel.getId());
+            }
+        }
+    }
+
+    private static void enableNotificationChannelsOfAnApp(List<NotificationChannel> channels, NotificationManager crrAppNotifManager) {
+        for (NotificationChannel channel : channels) {
+            crrAppNotifManager.setInterruptionFilter(NotificationManager.INTERRUPTION_FILTER_NONE);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                crrAppNotifManager.createNotificationChannel(channel);
+            }
+        }
+    }
+
+    private static List<NotificationChannel> getListChanel(NotificationManager crrAppNotifManager,AppInfo appInfo) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            try {
+                return crrAppNotifManager.getNotificationChannels();
+            } catch (Exception e) {
+                Log.e(TAG, e.getMessage());
+                return new ArrayList<>();
+            }
+        } else {
+            try {
+                // Get the INotificationManager service
+                Class<?> serviceManager = Class.forName("android.os.ServiceManager");
+                Method getService = serviceManager.getDeclaredMethod("getService", String.class);
+                IBinder binder = (IBinder) getService.invoke(null, "notification");
+                Class<?> notificationManagerStub = Class.forName("android.app.INotificationManager$Stub");
+                Method asInterface = notificationManagerStub.getDeclaredMethod("asInterface", IBinder.class);
+                Object iNotificationManager = asInterface.invoke(null, binder);
+
+                // Call the INotificationManager.getNotificationChannelsForPackage method
+                Method getNotificationChannelsForPackage = iNotificationManager.getClass()
+                        .getDeclaredMethod("getNotificationChannelsForPackage", String.class, int.class);
+                return (List<NotificationChannel>) getNotificationChannelsForPackage.invoke(iNotificationManager,
+                        appInfo.packageName, Process.myUid() / 100000);
+            } catch (Exception e) {
+                Log.e(TAG, e.getMessage());
+                return new ArrayList<>();
+            }
+        }
+    }
+
+    private static NotificationManager handleGetNotificationManager(AppInfo appInfo, Handler handler) {
+        try {
+            return (NotificationManager) activity
+                    .createPackageContext(appInfo.packageName, 0)
+                    .getSystemService(Context.NOTIFICATION_SERVICE);
+        } catch (PackageManager.NameNotFoundException e) {
+            handler.post(() -> {
+                Toast.makeText(activity,
+                        "Get notification chanel" + appInfo.packageName + " failed", Toast.LENGTH_SHORT).show();
+            });
+            Log.e(TAG, e.getMessage());
+            return null;
+        }
     }
 
     public static List<String> getListPackageNameHaveToTurnOffNotif() {
@@ -417,39 +470,6 @@ public class AppManagerFacade {
             e.printStackTrace();
         }
         return null;
-    }
-
-    public static boolean hasUseAccessibilityServicePermission(Context context) {
-        try {
-            PackageManager packageManager = context.getPackageManager();
-
-            AccessibilityManager accessibilityManager = (AccessibilityManager) context.getSystemService(Context.ACCESSIBILITY_SERVICE);
-            if (accessibilityManager == null) {
-                return false;
-            }
-
-            // Check if the package name is enabled in the Accessibility settings
-            for (AccessibilityServiceInfo serviceInfo : accessibilityManager.getEnabledAccessibilityServiceList(AccessibilityServiceInfo.FEEDBACK_ALL_MASK)) {
-                if (serviceInfo.getResolveInfo().serviceInfo.packageName.equals(context.getPackageName())) {
-                    return true;
-                }
-            }
-            // Check if the package has the UseAccessibilityService permission
-            String[] requestedPermissions = packageManager.getPackageInfo(context.getPackageName(),
-                    PackageManager.GET_PERMISSIONS).requestedPermissions;
-            if (requestedPermissions != null) {
-                for (String permission : requestedPermissions) {
-                    if (permission.equals(android.Manifest.permission.BIND_ACCESSIBILITY_SERVICE)) {
-                        return true;
-                    }
-                }
-            }
-
-        } catch (PackageManager.NameNotFoundException e) {
-            Log.e(TAG, e.getMessage());
-        }
-
-        return false;
     }
 
     public static void removeAppFromList(String packageName, MenuContextType crrMenuContext) {

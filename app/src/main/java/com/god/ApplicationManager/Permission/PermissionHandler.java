@@ -1,7 +1,6 @@
 package com.god.ApplicationManager.Permission;
 
 import android.Manifest;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
@@ -10,8 +9,9 @@ import android.provider.Settings;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationManagerCompat;
+import androidx.core.content.ContextCompat;
 
-import com.god.ApplicationManager.R;
+import com.god.ApplicationManager.Service.FreezeService;
 import com.god.ApplicationManager.Util.DialogUtils;
 
 public class PermissionHandler {
@@ -30,20 +30,33 @@ public class PermissionHandler {
     public void getPermissions() {
         getQueryAllPackagePermission();
         getManagerNotificationPermission();
+        getUseAccessibilityService();
+    }
+
+
+    public void getUseAccessibilityService() {
+        if (!FreezeService.isEnabled&&ContextCompat.checkSelfPermission(activity,
+                Manifest.permission.BIND_ACCESSIBILITY_SERVICE) == PackageManager.PERMISSION_DENIED) {
+            Intent intent = new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS);
+            activity.startActivity(intent);
+        }
     }
 
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
                                            @NonNull int[] grantResults) {
-        if (requestCode == PERMISSION_QUERY_ALL_PACKAGES_CODE) {
-            if (grantResults.length < 1
-                    || grantResults[0] != PackageManager.PERMISSION_GRANTED) {
-                DialogUtils.showAlertDialog(activity,
-                        "Permission require warning",
-                        "You should provide permission to get full power",
-                        (dialog, which) -> getQueryAllPackagePermission(),
-                        (dialog, which) -> {
-                        }
-                );
+        switch (requestCode) {
+            case PERMISSION_QUERY_ALL_PACKAGES_CODE: {
+                if (grantResults.length < 1
+                        || grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+                    DialogUtils.showAlertDialog(activity,
+                            "Permission require warning",
+                            "You should provide permission to get full power",
+                            (dialog, which) -> getQueryAllPackagePermission(),
+                            (dialog, which) -> {
+                            }
+                    );
+                }
+                break;
             }
         }
     }
@@ -71,16 +84,5 @@ public class PermissionHandler {
                         PERMISSION_QUERY_ALL_PACKAGES_CODE);
             }
         }
-    }
-
-    public static void getUseAccessibilityService(Context context) {
-        DialogUtils.showAlertDialog(
-                context,
-                context.getString(R.string.warning_accessibility_require),
-                context.getString(R.string.assessibility_reqire_message),
-                (dialog, which) -> {
-                    Intent intent = new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS);
-                    context.startActivity(intent);
-                });
     }
 }

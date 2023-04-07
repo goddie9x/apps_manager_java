@@ -82,6 +82,8 @@ public class MainActivity extends AppCompatActivity {
         initPermission();
         initAppManagerFacade();
         initTaskingHandler();
+        permissionHandler.getPermissions();
+        startServices();
         ActivityMainBinding binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         initProperty();
@@ -90,7 +92,6 @@ public class MainActivity extends AppCompatActivity {
         initSearchEvent();
         initSelectEvent();
         initFreezeFloatingBtn();
-        TaskingHandler.handleRunServices();
         if(savedInstanceState==null||savedInstanceState.isEmpty()){
             handleChangeMenuContextType(MenuContextType.MAIN_MENU);
             TaskingHandler.execTaskGetAllInstalledApp(crrMenuContext);
@@ -111,6 +112,10 @@ public class MainActivity extends AppCompatActivity {
                 backStack = (Stack<BackStackState>) savedInstanceState.getSerializable("backStack");
             }
         }
+    }
+
+    private void startServices() {
+        TaskingHandler.handleRunServices();
     }
 
     private void initFreezeFloatingBtn() {
@@ -141,7 +146,6 @@ public class MainActivity extends AppCompatActivity {
 
     private void initPermission() {
         permissionHandler = new PermissionHandler(this);
-        permissionHandler.getPermissions();
     }
 
     private void initTaskingHandler() {

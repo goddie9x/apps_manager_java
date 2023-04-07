@@ -13,4 +13,17 @@
             android:targetClass="com.god.ApplicationManager.UI.FreezeShortcutActivity"
             />
     </shortcut>
+    <shortcut
+        android:shortcutId="toggle_notification"
+        android:enabled="true"
+        android:icon="@drawable/ic_notification"
+        android:shortcutShortLabel="@string/turn_off_notification"
+        android:shortcutLongLabel="@string/turn_off_notification"
+        >
+        <intent
+            android:action="android.intent.action.MAIN"
+            android:targetPackage="com.god.ApplicationManager"
+            android:targetClass="com.god.ApplicationManager.UI.FreezeShortcutActivity"
+            />
+    </shortcut>
 </shortcuts>
