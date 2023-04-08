@@ -136,6 +136,9 @@ public class ListAppAdapter extends RecyclerView.Adapter<ListAppAdapter.AppItemH
                     item.setVisible(!isEnableSelect);
                 }
             }
+            if(menuId ==R.id.open_in_setting){
+                item.setVisible(!isEnableSelect);
+            }
         }
         if (holder != null) {
             int indexItemSelected = holder.getBindingAdapterPosition();

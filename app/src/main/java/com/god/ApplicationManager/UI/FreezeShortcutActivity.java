@@ -47,10 +47,7 @@ public class FreezeShortcutActivity extends AppCompatActivity {
         screenOff = (Objects.equals(intent.getStringExtra("extraID"), "dyn_screenOff"));
         KeyguardManager keyguardManager = (KeyguardManager) getSystemService(Context.KEYGUARD_SERVICE);
 
-        if (Intent.ACTION_CREATE_SHORTCUT.equals(intent.getAction())) {
-            setResult(RESULT_OK, createShortcutResultIntent(this));
-            finish();
-        } else {
+        if (!Intent.ACTION_CREATE_SHORTCUT.equals(intent.getAction())) {
             FreezeService.stopAnyCurrentFreezing(); // Might be that there still was a previous (failed) freeze process, in this case stop it
             if (keyguardManager.isKeyguardLocked()) {
                 if(onFreezeFinishedListener!=null){
@@ -153,21 +150,6 @@ public class FreezeShortcutActivity extends AppCompatActivity {
                     finish();
                 }
         );
-    }
-    private Intent createShortcutResultIntent( AppCompatActivity activity){
-        Intent shortcutIntent = createShortcutIntent(activity);
-
-        Intent intent = new Intent();
-        intent.putExtra(Intent.EXTRA_SHORTCUT_INTENT, shortcutIntent);
-        intent.putExtra(
-                Intent.EXTRA_SHORTCUT_NAME,
-                activity.getString(R.string.freeze_all_app)
-        );
-        Intent.ShortcutIconResource iconResource = Intent.ShortcutIconResource.fromContext(
-                activity, R.drawable.ic_freeze
-        );
-        intent.putExtra(Intent.EXTRA_SHORTCUT_ICON_RESOURCE, iconResource);
-        return intent;
     }
 
     private Intent createShortcutIntent(Context context) {

@@ -6,6 +6,7 @@
         android:icon="@drawable/ic_freeze"
         android:shortcutShortLabel="@string/freeze_all_app"
         android:shortcutLongLabel="@string/freeze_all_app"
+        android:background="@color/transparent"
         >
         <intent
             android:action="android.intent.action.MAIN"
@@ -19,11 +20,12 @@
         android:icon="@drawable/ic_notification"
         android:shortcutShortLabel="@string/turn_off_notification"
         android:shortcutLongLabel="@string/turn_off_notification"
+        android:background="@color/transparent"
         >
         <intent
             android:action="android.intent.action.MAIN"
             android:targetPackage="com.god.ApplicationManager"
-            android:targetClass="com.god.ApplicationManager.UI.FreezeShortcutActivity"
+            android:targetClass="com.god.ApplicationManager.UI.NotificationShortcutActivity"
             />
     </shortcut>
 </shortcuts>

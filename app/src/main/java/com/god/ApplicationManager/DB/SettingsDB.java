@@ -9,9 +9,11 @@ public class SettingsDB extends SugarRecord {
     public int freezeMode;
     public boolean doNotShowTermOfUse;
     public boolean doShowRootWarning;
-    public boolean doShowAccessibilityWarning;
+    public boolean doNotShowAccessibilityWarning;
     public boolean doNotShowGuild;
+    public boolean doNotWarningSystemApp;
     public boolean doNotShowFreezeWarning;
+    public boolean isDisableTurnOffNotification;
     private static SettingsDB instance;
     private SettingsDB(){
 

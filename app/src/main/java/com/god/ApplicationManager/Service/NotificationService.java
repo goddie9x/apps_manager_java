@@ -9,12 +9,12 @@ import android.service.notification.StatusBarNotification;
 
 import androidx.annotation.Nullable;
 
+import com.god.ApplicationManager.DB.SettingsDB;
 import com.god.ApplicationManager.Facade.AppManagerFacade;
 
 import java.util.List;
 
 public class NotificationService extends NotificationListenerService {
-    //we need to run this service in background even the app closed
     private Thread backgroundThread;
     private boolean isRunning;
     private static List<String> listPackageNameHaveToTurnOffNotif;
@@ -43,6 +43,7 @@ public class NotificationService extends NotificationListenerService {
     }
     @Override
     public void onNotificationPosted(StatusBarNotification sbn) {
+        if(!SettingsDB.getInstance().isDisableTurnOffNotification) return;
         String packageName = sbn.getPackageName();
         List<String> listPackageName = getListPackageNameHaveToTurnOffNotif();
         if (listPackageName.contains(packageName)) {
@@ -70,11 +71,9 @@ public class NotificationService extends NotificationListenerService {
     }
     private void startBackgroundThread() {
         backgroundThread = new Thread(()->{if(isRunning) {
-            getListPkHaveToTurnOffFromDB();
-
             try {
-                // Wait for some time before updating the list again
-                Thread.sleep(60000); // 1 minute
+                getListPkHaveToTurnOffFromDB();
+                Thread.sleep(60000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

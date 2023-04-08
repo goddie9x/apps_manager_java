@@ -18,7 +18,9 @@ public class DialogUtils {
                                        DialogInterface.OnClickListener positiveListener,
                                        DialogInterface.OnClickListener negativeListener) {
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        AlertDialog.Builder builder = new AlertDialog.Builder(context, SettingsDB.getInstance().isEnableDarkMode ?
+                R.style.Theme_ApplicationManager_DarkMode_PopupMenuStyle
+                : R.style.Theme_ApplicationManager_PopupMenuStyle);
         builder.setTitle(title);
         builder.setMessage(message);
 
@@ -52,17 +54,18 @@ public class DialogUtils {
                                        DialogInterface.OnClickListener positiveListener,
                                        SetMoreOptions setMoreOptions) {
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        AlertDialog.Builder builder = new AlertDialog.Builder(context, SettingsDB.getInstance().isEnableDarkMode ?
+                R.style.Theme_ApplicationManager_DarkMode_PopupMenuStyle
+                : R.style.Theme_ApplicationManager_PopupMenuStyle);
         builder.setTitle(title);
         builder.setMessage(message);
 
         if (positiveListener != null) {
             builder.setPositiveButton(android.R.string.ok, positiveListener);
         }
-        if(setMoreOptions!=null){
-            setMoreOptions.callback(builder);
-        }
+        setMoreOptions.callback(builder);
         builder.show();
     }
+    
 }
 

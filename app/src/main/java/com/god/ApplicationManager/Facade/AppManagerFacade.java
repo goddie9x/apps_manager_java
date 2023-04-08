@@ -1,15 +1,19 @@
 package com.god.ApplicationManager.Facade;
 
+import android.annotation.SuppressLint;
 import android.app.ActivityManager;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.StateListDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Handler;
@@ -18,16 +22,22 @@ import android.os.Looper;
 import android.os.Process;
 import android.service.notification.StatusBarNotification;
 import android.util.Log;
+import android.widget.CheckBox;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.god.ApplicationManager.DB.AppInfoDB;
+import com.god.ApplicationManager.DB.SettingsDB;
 import com.god.ApplicationManager.Entity.AppInfo;
 import com.god.ApplicationManager.Enum.FreezeServiceNextAction;
 import com.god.ApplicationManager.Enum.MenuContextType;
+import com.god.ApplicationManager.R;
 import com.god.ApplicationManager.Service.FreezeService;
+import com.god.ApplicationManager.Tasking.TaskingHandler;
 import com.god.ApplicationManager.UI.FreezeShortcutActivity;
+import com.god.ApplicationManager.Util.DialogUtils;
 
 import java.io.IOException;
 import java.lang.reflect.Method;
@@ -38,7 +48,7 @@ import eu.chainfire.libsuperuser.Shell;
 
 public class AppManagerFacade {
 
-    public interface EventVoid {
+    public interface CallbackVoid {
         void callback();
     }
 
@@ -49,6 +59,9 @@ public class AppManagerFacade {
     private static StatusBarNotification[] activeNotifications;
     public static final int SDK_VERSION = android.os.Build.VERSION.SDK_INT;
     private static final String TAG = "app manager facade";
+    public interface IEventToggle{
+        void callback(boolean state);
+    }
     public static boolean hasRootPermission = false;
 
     public static void setActivity(AppCompatActivity activ) {
@@ -226,7 +239,6 @@ public class AppManagerFacade {
         }
         NotificationManager crrAppNotifManager = handleGetNotificationManager(appInfo,handler);
         if(crrAppNotifManager==null)return;
-
         List<NotificationChannel> channels = getListChanel(crrAppNotifManager,appInfo);
 
         if(isEnable){
@@ -252,7 +264,7 @@ public class AppManagerFacade {
 
     private static void disableNotificationChannelsOfAnApp(List<NotificationChannel> channels, NotificationManager crrAppNotifManager) {
         for (NotificationChannel channel : channels) {
-            crrAppNotifManager.setInterruptionFilter(NotificationManager.INTERRUPTION_FILTER_NONE);
+            crrAppNotifManager.setInterruptionFilter(NotificationManager.INTERRUPTION_FILTER_ALL);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 crrAppNotifManager.deleteNotificationChannel(channel.getId());
             }
@@ -326,6 +338,11 @@ public class AppManagerFacade {
     }
 
     public static void turnOffNotif(List<Integer> notifIds,String packageName) {
+        for (int notifId : notifIds) {
+            notificationManager.cancel(packageName,notifId);
+        }
+    }
+    public static void turnOnNotif(List<Integer> notifIds,String packageName) {
         for (int notifId : notifIds) {
             notificationManager.cancel(packageName,notifId);
         }
@@ -423,8 +440,8 @@ public class AppManagerFacade {
     }
 
     public static boolean executeCommandWithSuShell(String command,
-                                                    EventVoid onSuccess,
-                                                    EventVoid onFailed) {
+                                                    CallbackVoid onSuccess,
+                                                    CallbackVoid onFailed) {
         Log.i(TAG, "exec command");
         try {
             Shell.Threaded shell = Shell.Pool.SU.get();
@@ -483,13 +500,51 @@ public class AppManagerFacade {
             appInfoUpdate.save();
         }
     }
-    public static boolean isMyServiceRunning(Class<?> serviceClass) {
-        ActivityManager manager = (ActivityManager) activity.getSystemService(Context.ACTIVITY_SERVICE);
-        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
-            if (serviceClass.getName().equals(service.service.getClassName())) {
-                return true;
-            }
+    public static void proxyHandleRunAction(AppInfo appInfo,TaskingHandler.ActionForSelectedApp action){
+        if(appInfo.isSystemApp&&!SettingsDB.getInstance().doNotWarningSystemApp){
+            showWarningDialog((dialog,which)->{
+                action.callback(appInfo);
+            }, (dialog,which)->{},(state)->{
+                SettingsDB.getInstance().doNotWarningSystemApp=state;
+                SettingsDB.getInstance().save();
+            });
         }
-        return false;
+        else{
+            action.callback(appInfo);
+        }
+    }
+    @SuppressLint("ResourceAsColor")
+    public static void showWarningDialog(DialogInterface.OnClickListener positiveListener,
+                                         DialogInterface.OnClickListener negativeListener,
+                                         IEventToggle onDonnotShowAgainCheckBoxChange){
+        DialogUtils.showAlertDialog(activity,"Warning",
+                "You are trying to do this action on system app\n" +
+                        "This can cause the System not working correctly\n"+
+                        "Do you really want to continue",
+                positiveListener,
+                builder->{
+                    CheckBox donnotShowAgainCheckBox = new CheckBox(getActivity());
+                    LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+                            LinearLayout.LayoutParams.WRAP_CONTENT,
+                            LinearLayout.LayoutParams.WRAP_CONTENT
+                    );
+
+                    layoutParams.topMargin = 10;
+                    layoutParams.leftMargin = 10;
+                    donnotShowAgainCheckBox.setLayoutParams(layoutParams);
+                    donnotShowAgainCheckBox.setText("Don't show this dialog again");
+                    StateListDrawable drawable = new StateListDrawable();
+                    drawable.addState(new int[] {android.R.attr.state_checked},
+                            new ColorDrawable(R.color.teal_700));
+                    drawable.addState(new int[] {-android.R.attr.state_checked},
+                            new ColorDrawable(R.color.teal_200));
+                    donnotShowAgainCheckBox.setButtonDrawable(drawable);
+                    donnotShowAgainCheckBox.setTextColor(R.color.teal_700);
+
+                    builder.setView(donnotShowAgainCheckBox);
+                    builder.setOnDismissListener(dialog ->
+                            onDonnotShowAgainCheckBoxChange.callback(donnotShowAgainCheckBox.isChecked()));
+                    builder.setNegativeButton("No",negativeListener);
+                });
     }
 }

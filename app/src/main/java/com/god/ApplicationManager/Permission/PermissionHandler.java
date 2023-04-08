@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationManagerCompat;
 import androidx.core.content.ContextCompat;
 
+import com.god.ApplicationManager.Facade.AppManagerFacade;
 import com.god.ApplicationManager.Service.FreezeService;
 import com.god.ApplicationManager.Util.DialogUtils;
 
@@ -37,8 +38,10 @@ public class PermissionHandler {
     public void getUseAccessibilityService() {
         if (!FreezeService.isEnabled&&ContextCompat.checkSelfPermission(activity,
                 Manifest.permission.BIND_ACCESSIBILITY_SERVICE) == PackageManager.PERMISSION_DENIED) {
-            Intent intent = new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS);
-            activity.startActivity(intent);
+            //showPermissionRequireDialog("Our app need accessibility to freeze app",()->{
+                Intent intent = new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS);
+                activity.startActivity(intent);
+            //},()->{});
         }
     }
 
@@ -62,20 +65,30 @@ public class PermissionHandler {
     }
 
     public void getManagerNotificationPermission() {
-        if (activity.checkSelfPermission(Manifest.permission.ACCESS_NOTIFICATION_POLICY)
-                == PackageManager.PERMISSION_DENIED) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                activity.requestPermissions(new String[]{android.Manifest.permission.ACCESS_NOTIFICATION_POLICY}, 1);
-            }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
+        &&!NotificationManagerCompat.getEnabledListenerPackages(activity).contains(activity.getPackageName())){
+            //if (!NotificationManagerCompat.getEnabledListenerPackages(activity).contains(activity.getPackageName())) {
+                //showPermissionRequireDialog("Our app need permission to manager notification",()->{
+                    Intent intent = new Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS");
+                    activity.startActivity(intent);
+                //},()->{});
+            //}
         }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (!NotificationManagerCompat.getEnabledListenerPackages(activity).contains(activity.getPackageName())) {
-                Intent intent = new Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS");
-                activity.startActivity(intent);
-            }
+        else if (activity.checkSelfPermission(Manifest.permission.ACCESS_NOTIFICATION_POLICY)
+                == PackageManager.PERMISSION_DENIED) {
+            //showPermissionRequireDialog("Our app need permission to manager notification",()->{
+                activity.requestPermissions(new String[]{android.Manifest.permission.ACCESS_NOTIFICATION_POLICY}, 1);
+            //},()->{});
         }
     }
-
+private void showPermissionRequireDialog(String permissionDes, AppManagerFacade.CallbackVoid grandPermissionAction,AppManagerFacade.CallbackVoid cancelAction){
+    DialogUtils.showAlertDialog(activity,
+            "Permission requirement!",
+            permissionDes,
+            (dialog, which) -> {grandPermissionAction.callback();},
+            (dialog, which) ->{cancelAction.callback();}
+    );
+}
     public void getQueryAllPackagePermission() {
         if (activity.checkSelfPermission(Manifest.permission.QUERY_ALL_PACKAGES)
                 != PackageManager.PERMISSION_GRANTED) {

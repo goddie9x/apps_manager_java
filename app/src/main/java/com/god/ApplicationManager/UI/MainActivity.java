@@ -1,9 +1,15 @@
 package com.god.ApplicationManager.UI;
 
+import static com.god.ApplicationManager.Facade.AppManagerFacade.proxyHandleRunAction;
+
+import android.annotation.SuppressLint;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.os.Parcelable;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -11,7 +17,6 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -31,10 +36,12 @@ import com.god.ApplicationManager.Enum.MenuContextType;
 import com.god.ApplicationManager.Enum.OrderAppType;
 import com.god.ApplicationManager.Enum.SortAppType;
 import com.god.ApplicationManager.Facade.AppManagerFacade;
+import com.god.ApplicationManager.Facade.ServiceHandlerFacade;
 import com.god.ApplicationManager.Permission.PermissionHandler;
 import com.god.ApplicationManager.R;
+import com.god.ApplicationManager.Service.FreezeService;
+import com.god.ApplicationManager.Service.NotificationService;
 import com.god.ApplicationManager.Tasking.TaskingHandler;
-import com.god.ApplicationManager.Util.DialogUtils;
 import com.god.ApplicationManager.databinding.ActivityMainBinding;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
@@ -67,6 +74,16 @@ public class MainActivity extends AppCompatActivity {
     private MenuItem darkModeItem;
     private MenuItem lightModeItem;
     private MenuContextType crrMenuContext;
+
+    private final ServiceConnection serviceConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+        }
+    };
     @Override
     public Resources.Theme getTheme() {
         Resources.Theme theme = super.getTheme();
@@ -83,7 +100,7 @@ public class MainActivity extends AppCompatActivity {
         initAppManagerFacade();
         initTaskingHandler();
         permissionHandler.getPermissions();
-        startServices();
+        ServiceHandlerFacade.startService(this);
         ActivityMainBinding binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         initProperty();
@@ -113,16 +130,9 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
-
-    private void startServices() {
-        TaskingHandler.handleRunServices();
-    }
-
     private void initFreezeFloatingBtn() {
         freezeBtn = findViewById(R.id.freeze_float_btn);
-        freezeBtn.setOnClickListener((btn) -> {
-            startActivity(new Intent(this, FreezeShortcutActivity.class));
-        });
+        freezeBtn.setOnClickListener((btn) -> startActivity(new Intent(this, FreezeShortcutActivity.class)));
     }
 
     private void handleChangeMenuContextType(MenuContextType menuContextType) {
@@ -164,6 +174,7 @@ public class MainActivity extends AppCompatActivity {
         initDrawableLayoutEvent();
     }
 
+    @SuppressLint("NonConstantResourceId")
     private void initDrawableLayoutEvent() {
         NavigationView navView = findViewById(R.id.nav_view);
         Menu menu = navView.getMenu();
@@ -212,7 +223,7 @@ public class MainActivity extends AppCompatActivity {
             return true;
         });
     }
-    private void setEnableDarkMode(boolean isEnableDarkMode, boolean isHaveToRerender,boolean isHaveToUpdateDB) {
+    private void setEnableDarkMode(boolean isEnableDarkMode, boolean isHaveToReRender,boolean isHaveToUpdateDB) {
         if (darkModeItem != null && lightModeItem != null) {
             darkModeItem.setVisible(!isEnableDarkMode);
             lightModeItem.setVisible(isEnableDarkMode);
@@ -221,7 +232,7 @@ public class MainActivity extends AppCompatActivity {
             SettingsDB.getInstance().isEnableDarkMode = isEnableDarkMode;
             SettingsDB.saveSettings();
         }
-        if(isHaveToRerender) {
+        if(isHaveToReRender) {
             recreate();
         }
     }
@@ -240,37 +251,22 @@ public class MainActivity extends AppCompatActivity {
         if (selectedAppInfo != null) {
             switch (item.getItemId()) {
                 case R.id.force_stop:
-                    DialogUtils.showAlertDialog(this,
-                            "Confirmation",
-                            "Do you want to force stop app: " + selectedAppInfo.packageName,
-                            (dialog, which) -> {
-                                Toast.makeText(this,
-                                        "Force stopping " + selectedAppInfo.packageName,
-                                        Toast.LENGTH_SHORT).show();
-                                AppManagerFacade.forceStopApp(selectedAppInfo);
-                            }
-                    );
+                    startActionForSelectedApp(selectedAppInfo,(appInfo)-> AppManagerFacade.forceStopApp(selectedAppInfo));
                     return true;
                 case R.id.freeze:
-                    AppManagerFacade.freezeApp(selectedAppInfo);
+                    startActionForSelectedApp(selectedAppInfo,(appInfo)-> AppManagerFacade.freezeApp(selectedAppInfo));
                     return true;
                 case R.id.turn_off_notification:
-                    startActionForSelectedApp(selectedAppInfo,(appInfo)->{
-                        AppManagerFacade.setNotificationStateForApp(appInfo,false);
-                    });
+                    startActionForSelectedApp(selectedAppInfo,(appInfo)-> AppManagerFacade.setNotificationStateForApp(appInfo,false));
                     return true;
                 case R.id.uninstall:
-                    startActionForSelectedApp(selectedAppInfo,TaskingHandler::execTaskUninstallApp);
-                    TaskingHandler.execTaskGetAllInstalledApp(crrMenuContext);
+                    startActionForSelectedApp(selectedAppInfo,TaskingHandler::execTaskUninstallApp,()-> TaskingHandler.execTaskGetAllInstalledApp(crrMenuContext));
                     return true;
                 case R.id.open_in_setting:
                     AppManagerFacade.openAppSetting(selectedAppInfo);
                     return true;
                 case R.id.remove_from_list:
-                    startActionForSelectedApp(selectedAppInfo,(appInfo)->{
-                        AppManagerFacade.removeAppFromList(appInfo.packageName,crrMenuContext);
-                    });
-                    TaskingHandler.execTaskGetAllInstalledApp(crrMenuContext);
+                    startActionForSelectedAppWithoutWarningSystemApp(selectedAppInfo,(appInfo)-> AppManagerFacade.removeAppFromList(appInfo.packageName,crrMenuContext),()-> TaskingHandler.execTaskGetAllInstalledApp(crrMenuContext));
                     return true;
                 default:
                     return super.onContextItemSelected(item);
@@ -278,7 +274,11 @@ public class MainActivity extends AppCompatActivity {
         }
         return true;
     }
-
+    @Override
+    protected void onResume() {
+        super.onResume();
+        ServiceHandlerFacade.bindServices(this,serviceConnection);
+    }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         setTheme(SettingsDB.getInstance().isEnableDarkMode?
@@ -288,7 +288,6 @@ public class MainActivity extends AppCompatActivity {
         optionsMenu = menu;
         return true;
     }
-
     @Override
     public void onBackPressed() {
         handleBackStack();
@@ -354,7 +353,8 @@ public class MainActivity extends AppCompatActivity {
         sortAppDes = findViewById(R.id.app_group_description);
     }
 
-    private void handleMenuOther(MenuItem item,int id) {
+    @SuppressLint("NonConstantResourceId")
+    private void handleMenuOther(MenuItem item, int id) {
         switch (id) {
             case R.id.open_search_bar:
                 handleOpenSearchBar();
@@ -579,28 +579,47 @@ public class MainActivity extends AppCompatActivity {
     private void initSelectEvent() {
         amountTextLabel = selectOptionBar.findViewById(R.id.amount_selected);
 
-        crrListListAppAdapter.setOnChangeAmountSelectionEvent(listAppSelected -> {
-            amountTextLabel.setText(String.format("%d", listAppSelected.size()));
-        });
-        selectOptionBar.findViewById(R.id.close_select_options_bar).setOnClickListener(v -> {
-            toggleMultipleSelect();
-        });
-        selectOptionBar.findViewById(R.id.select_all).setOnClickListener(v -> {
-            crrListListAppAdapter.selectAll();
-        });
-        selectOptionBar.findViewById(R.id.deselect_all).setOnClickListener(v -> {
-            crrListListAppAdapter.clearSelect();
-        });
+        crrListListAppAdapter.setOnChangeAmountSelectionEvent(listAppSelected -> amountTextLabel.setText(String.format("%d", listAppSelected.size())));
+        selectOptionBar.findViewById(R.id.close_select_options_bar).setOnClickListener(v -> toggleMultipleSelect());
+        selectOptionBar.findViewById(R.id.select_all).setOnClickListener(v -> crrListListAppAdapter.selectAll());
+        selectOptionBar.findViewById(R.id.deselect_all).setOnClickListener(v -> crrListListAppAdapter.clearSelect());
     }
-    private void startActionForSelectedApp(AppInfo selectedApp, TaskingHandler.ActionForSelectedApp action){
+    private void startActionForSelectedApp(AppInfo selectedApp,
+                                           TaskingHandler.ActionForSelectedApp action){
+        if(crrListListAppAdapter.getSelectionState()){
+            TaskingHandler.handleForSelectedApp(crrListListAppAdapter.getListSelectedApp(),
+                    appInfo-> proxyHandleRunAction(appInfo,action),()-> crrListListAppAdapter.clearSelectedAppInfo());
+        }
+        else{
+            proxyHandleRunAction(selectedApp,action);
+        }
+    }
+    private void startActionForSelectedApp(AppInfo selectedApp, TaskingHandler.ActionForSelectedApp action,
+                                           AppManagerFacade.CallbackVoid onDone){
+        if(crrListListAppAdapter.getSelectionState()){
+            TaskingHandler.handleForSelectedApp(crrListListAppAdapter.getListSelectedApp(),
+                    appInfo-> proxyHandleRunAction(appInfo,action),()->{
+                        crrListListAppAdapter.clearSelectedAppInfo();
+                        onDone.callback();
+                    });
+        }
+        else{
+            proxyHandleRunAction(selectedApp,action);
+        }
+    }
+    private void startActionForSelectedAppWithoutWarningSystemApp(AppInfo selectedApp,
+                                           TaskingHandler.ActionForSelectedApp action,
+                                                                 AppManagerFacade.CallbackVoid onDone){
         if(crrListListAppAdapter.getSelectionState()){
             TaskingHandler.handleForSelectedApp(crrListListAppAdapter.getListSelectedApp(),
                     action,()->{
                         crrListListAppAdapter.clearSelectedAppInfo();
+                        onDone.callback();
                     });
         }
         else{
             action.callback(selectedApp);
+            onDone.callback();
         }
     }
 }

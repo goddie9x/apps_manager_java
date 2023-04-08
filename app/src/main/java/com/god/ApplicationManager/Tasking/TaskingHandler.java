@@ -227,7 +227,7 @@ public class TaskingHandler {
     }
 
     public static void handleForSelectedApp(List<AppInfo> listApp, ActionForSelectedApp action,
-                                            AppManagerFacade.EventVoid onDone){
+                                            AppManagerFacade.CallbackVoid onDone){
         AsyncTaskBuilder<Void, Void, Void> taskDoActionEachSelectedApp = new AsyncTaskBuilder<>();
         ProgressDialog progressDialog = new ProgressDialog(activity);
 
@@ -257,28 +257,5 @@ public class TaskingHandler {
                 }
         );
         taskDoActionEachSelectedApp.execute();
-    }
-    public static void handleRunServices(){
-        AsyncTaskBuilder<Void, Void, Void> taskDoActionEachSelectedApp = new AsyncTaskBuilder<>();
-
-        taskDoActionEachSelectedApp.setDoInBackgroundFunc(ts -> {
-            startNotificationService();
-            startFreezeService();
-            return null;
-        });
-
-        taskDoActionEachSelectedApp.execute();
-    }
-    public static void startNotificationService(){
-        if(!AppManagerFacade.isMyServiceRunning(NotificationService.class)){
-            Intent serviceIntent = new Intent(activity, NotificationService.class);
-            activity.startService(serviceIntent);
-        }
-    }
-    public static void startFreezeService(){
-        if(!AppManagerFacade.isMyServiceRunning(FreezeService.class)){
-            Intent serviceIntent = new Intent(activity, FreezeService.class);
-            activity.startService(serviceIntent);
-        }
     }
 }
