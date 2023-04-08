@@ -36,7 +36,7 @@ public class PermissionHandler {
 
 
     public void getUseAccessibilityService() {
-        if (!FreezeService.isEnabled&&ContextCompat.checkSelfPermission(activity,
+        if (!FreezeService.isRunning&&ContextCompat.checkSelfPermission(activity,
                 Manifest.permission.BIND_ACCESSIBILITY_SERVICE) == PackageManager.PERMISSION_DENIED) {
             //showPermissionRequireDialog("Our app need accessibility to freeze app",()->{
                 Intent intent = new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS);

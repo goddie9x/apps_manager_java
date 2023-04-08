@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 
 public class FreezeService extends AccessibilityService {
     private static final String TAG = "FreezeService";
-    public static boolean isEnabled;
+    public static boolean isRunning;
     private Thread backgroundThread;
     private final String SETTINGS_PACKAGE_NAME = "com.android.settings";
     private Resources settingsResource;
@@ -115,8 +115,8 @@ public class FreezeService extends AccessibilityService {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        if (!isEnabled) {
-            isEnabled = true;
+        if (!isRunning) {
+            isRunning = true;
             startBackgroundThread();
         }
         return START_STICKY;
@@ -124,12 +124,11 @@ public class FreezeService extends AccessibilityService {
 
     @Override
     public void onInterrupt() {
-
     }
 
     @Override
     public void onServiceConnected() {
-        isEnabled = true;
+        isRunning = true;
 
         // From now on, expect that the service works:
         prefUseAccessibilityService = true;
@@ -137,7 +136,7 @@ public class FreezeService extends AccessibilityService {
 
     private void startBackgroundThread() {
         backgroundThread = new Thread(() -> {
-            if (isEnabled) {
+            if (isRunning) {
                 try {
                     Thread.sleep(60000);
                 } catch (InterruptedException e) {
@@ -151,7 +150,7 @@ public class FreezeService extends AccessibilityService {
     @Override
     public void onDestroy() {
         Log.i(TAG, "FreezerService was destroyed.");
-        isEnabled = false;
+        isRunning = false;
         stopAnyCurrentFreezing();
         if (backgroundThread != null) {
             backgroundThread.interrupt();

@@ -327,7 +327,7 @@ public class AppManagerFacade {
 
     public static List<String> getListPackageNameHaveToTurnOffNotif() {
         List<AppInfoDB> listAppTurnOffNotif = AppInfoDB.find(AppInfoDB.class,
-                "is_have_to_be_freeze =1");
+                "is_have_to_turn_off_notif =1");
         List<String> listPackageName = new ArrayList<>();
         for (AppInfoDB app :
                 listAppTurnOffNotif

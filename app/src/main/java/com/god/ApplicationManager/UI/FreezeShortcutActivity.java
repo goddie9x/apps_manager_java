@@ -96,7 +96,7 @@ public class FreezeShortcutActivity extends AppCompatActivity {
             Toast.makeText(this,R.string.nothingToFreeze,Toast.LENGTH_SHORT).show();
             return;
         }
-        if (FreezeService.isEnabled) {
+        if (FreezeService.isRunning) {
             Toast.makeText(this,(R.string.power_button_hint), Toast.LENGTH_LONG).show();
         }
 
@@ -113,7 +113,7 @@ public class FreezeShortcutActivity extends AppCompatActivity {
     }
 
     private void doNextFreezingStep() {
-        if (!FreezeService.isEnabled) {
+        if (!FreezeService.isRunning) {
             // Sometimes the accessibility service is disabled for some reason.
             // In this case, tell the user to re-enable it:
             return;
@@ -192,7 +192,7 @@ public class FreezeShortcutActivity extends AppCompatActivity {
             return AppManagerFacade.freezeAppUsingRoot(packageName, context,false);
         }
 
-        if (FreezeService.isEnabled) {
+        if (FreezeService.isRunning) {
             // clickFreezeButtons will wait for the Force stop button to appear and then click Force stop, Ok, Back.
             try {
                 FreezeService.setNextAction(FreezeServiceNextAction.PRESS_FORCE_STOP);

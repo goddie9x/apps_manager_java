@@ -3,6 +3,8 @@ package com.god.ApplicationManager.UI;
 import static com.god.ApplicationManager.Facade.AppManagerFacade.proxyHandleRunAction;
 
 import android.annotation.SuppressLint;
+import android.app.job.JobInfo;
+import android.app.job.JobScheduler;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -36,11 +38,9 @@ import com.god.ApplicationManager.Enum.MenuContextType;
 import com.god.ApplicationManager.Enum.OrderAppType;
 import com.god.ApplicationManager.Enum.SortAppType;
 import com.god.ApplicationManager.Facade.AppManagerFacade;
-import com.god.ApplicationManager.Facade.ServiceHandlerFacade;
 import com.god.ApplicationManager.Permission.PermissionHandler;
 import com.god.ApplicationManager.R;
-import com.god.ApplicationManager.Service.FreezeService;
-import com.god.ApplicationManager.Service.NotificationService;
+import com.god.ApplicationManager.Service.ScheduleForServices;
 import com.god.ApplicationManager.Tasking.TaskingHandler;
 import com.god.ApplicationManager.databinding.ActivityMainBinding;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -53,6 +53,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class MainActivity extends AppCompatActivity {
+    private static final int JOB_RUNSERVICES = 69;
     private ListAppAdapter crrListListAppAdapter;
     private GroupAppType selectedGroupAppType = GroupAppType.ALL;
     private OrderAppType selectedOrderAppType = OrderAppType.NAME;
@@ -74,16 +75,6 @@ public class MainActivity extends AppCompatActivity {
     private MenuItem darkModeItem;
     private MenuItem lightModeItem;
     private MenuContextType crrMenuContext;
-
-    private final ServiceConnection serviceConnection = new ServiceConnection() {
-        @Override
-        public void onServiceConnected(ComponentName name, IBinder service) {
-        }
-
-        @Override
-        public void onServiceDisconnected(ComponentName name) {
-        }
-    };
     @Override
     public Resources.Theme getTheme() {
         Resources.Theme theme = super.getTheme();
@@ -100,7 +91,7 @@ public class MainActivity extends AppCompatActivity {
         initAppManagerFacade();
         initTaskingHandler();
         permissionHandler.getPermissions();
-        ServiceHandlerFacade.startService(this);
+        handleStartServices();
         ActivityMainBinding binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         initProperty();
@@ -130,6 +121,20 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
+
+    private void handleStartServices() {
+        if(ScheduleForServices.isJobCalled){
+            ComponentName scheduleRunService =
+                    new ComponentName(this,ScheduleForServices.class);
+            JobInfo jobInfo = new JobInfo.Builder(JOB_RUNSERVICES,scheduleRunService)
+                    .setPersisted(true)
+                    .setPeriodic(900000)
+                    .build();
+            JobScheduler jobScheduler = (JobScheduler) getSystemService(JOB_SCHEDULER_SERVICE);
+            jobScheduler.schedule(jobInfo);
+        }
+    }
+
     private void initFreezeFloatingBtn() {
         freezeBtn = findViewById(R.id.freeze_float_btn);
         freezeBtn.setOnClickListener((btn) -> startActivity(new Intent(this, FreezeShortcutActivity.class)));
@@ -273,11 +278,6 @@ public class MainActivity extends AppCompatActivity {
             }
         }
         return true;
-    }
-    @Override
-    protected void onResume() {
-        super.onResume();
-        ServiceHandlerFacade.bindServices(this,serviceConnection);
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

@@ -12,26 +12,26 @@ import com.god.ApplicationManager.Service.FreezeService;
 import com.god.ApplicationManager.Service.NotificationService;
 
 public class ServiceHandlerFacade {
-    public static void startService(AppCompatActivity activity) {
-        startNotificationService(activity);
-        startFreezeService(activity);
+    public static void startServices(Context context) {
+            startNotificationService(context);
+            startFreezeService(context);
     }
-    public static void startNotificationService(AppCompatActivity activity) {
-        if (!isMyServiceRunning(NotificationService.class, activity)) {
-            Intent serviceIntent = new Intent(activity, NotificationService.class);
-            activity.startService(serviceIntent);
+    public static void startNotificationService(Context context) {
+        if (!isMyServiceRunning(NotificationService.class, context)) {
+            Intent serviceIntent = new Intent(context, NotificationService.class);
+            context.startService(serviceIntent);
         }
     }
 
-    public static void startFreezeService(AppCompatActivity activity) {
-        if (!isMyServiceRunning(FreezeService.class, activity)) {
-            Intent serviceIntent = new Intent(activity, FreezeService.class);
-            activity.startService(serviceIntent);
+    public static void startFreezeService(Context context) {
+        if (!isMyServiceRunning(FreezeService.class, context)) {
+            Intent serviceIntent = new Intent(context, FreezeService.class);
+            context.startService(serviceIntent);
         }
     }
 
-    public static boolean isMyServiceRunning(Class<?> serviceClass, AppCompatActivity activity) {
-        ActivityManager manager = (ActivityManager) activity.getSystemService(Context.ACTIVITY_SERVICE);
+    public static boolean isMyServiceRunning(Class<?> serviceClass, Context context) {
+        ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
         for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
             if (serviceClass.getName().equals(service.service.getClassName())) {
                 return true;
