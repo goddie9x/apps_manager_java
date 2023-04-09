@@ -3,7 +3,7 @@
     <shortcut
         android:shortcutId="freeze_apps"
         android:enabled="true"
-        android:icon="@drawable/ic_freeze"
+        android:icon="@drawable/ic_freeze_shortcut"
         android:shortcutShortLabel="@string/freeze_all_app"
         android:shortcutLongLabel="@string/freeze_all_app"
         android:background="@color/transparent"
@@ -17,7 +17,7 @@
     <shortcut
         android:shortcutId="toggle_notification"
         android:enabled="true"
-        android:icon="@drawable/ic_notification"
+        android:icon="@drawable/ic_notification_shortcut"
         android:shortcutShortLabel="@string/turn_off_notification"
         android:shortcutLongLabel="@string/turn_off_notification"
         android:background="@color/transparent"

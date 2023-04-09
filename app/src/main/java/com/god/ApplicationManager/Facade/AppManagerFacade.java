@@ -11,8 +11,11 @@ import android.content.pm.ActivityInfo;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.content.pm.ShortcutInfo;
+import android.content.pm.ShortcutManager;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.Icon;
 import android.graphics.drawable.StateListDrawable;
 import android.net.Uri;
 import android.os.Build;
@@ -42,6 +45,7 @@ import com.god.ApplicationManager.Util.DialogUtils;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import eu.chainfire.libsuperuser.Shell;
@@ -101,9 +105,7 @@ public class AppManagerFacade {
             } catch (IOException e) {
                 Handler handler = new Handler(Looper.getMainLooper());
 
-                handler.post(() -> {
-                    Toast.makeText(activity, e.getMessage(), Toast.LENGTH_LONG).show();
-                });
+                handler.post(() -> Toast.makeText(activity, e.getMessage(), Toast.LENGTH_LONG).show());
             }
         }
     }
@@ -135,10 +137,8 @@ public class AppManagerFacade {
             } else {
                 Handler handler = new Handler(Looper.getMainLooper());
 
-                handler.post(() -> {
-                    Toast.makeText(activity,
-                            "You cannot uninstall system app without root", Toast.LENGTH_LONG).show();
-                });
+                handler.post(() -> Toast.makeText(activity,
+                        "You cannot uninstall system app without root", Toast.LENGTH_LONG).show());
                 return false;
             }
         } else {
@@ -195,18 +195,14 @@ public class AppManagerFacade {
         }
         appInfoUpdate.isHaveToBeFreeze = true;
         appInfoUpdate.save();
-        handler.post(() -> {
-            Toast.makeText(activity, "Freeze "+appInfo.packageName+" success", Toast.LENGTH_SHORT).show();
-        });
+        handler.post(() -> Toast.makeText(activity, "Freeze "+appInfo.packageName+" success", Toast.LENGTH_SHORT).show());
     }
 
     private static boolean checkWhetherAppAlreadyInFreezeList(AppInfo appInfo, Handler handler) {
         List<AppInfoDB> listAppCheck = AppInfoDB.find(AppInfoDB.class,
                 "package_name=? and is_have_to_be_freeze = 1",appInfo.packageName);
         if(listAppCheck.size()>0){
-            handler.post(() -> {
-                Toast.makeText(activity, appInfo.packageName+" already in freeze list", Toast.LENGTH_SHORT).show();
-            });
+            handler.post(() -> Toast.makeText(activity, appInfo.packageName+" already in freeze list", Toast.LENGTH_SHORT).show());
             return true;
         }
         else{
@@ -230,9 +226,7 @@ public class AppManagerFacade {
             List<AppInfoDB> listAppCheck = AppInfoDB.find(AppInfoDB.class,
                     "package_name=? and is_have_to_turn_off_notif = 1",appInfo.packageName);
             if(listAppCheck.size()>0){
-                handler.post(() -> {
-                    Toast.makeText(activity, appInfo.packageName+" already in turn off notification list", Toast.LENGTH_SHORT).show();
-                });
+                handler.post(() -> Toast.makeText(activity, appInfo.packageName+" already in turn off notification list", Toast.LENGTH_SHORT).show());
                 return;
             }
             turnOffNotif(getAllNotifIdOfPackage(appInfo.packageName),appInfo.packageName);
@@ -255,10 +249,8 @@ public class AppManagerFacade {
         }
         appInfoUpdate.isHaveToTurnOffNotif = !isEnable;
         appInfoUpdate.save();
-        handler.post(() -> {
-            Toast.makeText(activity, "Turn "+(isEnable?"on":"off")
-                    + "notification of "+appInfo.packageName+" success", Toast.LENGTH_SHORT).show();
-        });
+        handler.post(() -> Toast.makeText(activity, "Turn "+(isEnable?"on":"off")
+                + "notification of "+appInfo.packageName+" success", Toast.LENGTH_SHORT).show());
 
     }
 
@@ -324,7 +316,6 @@ public class AppManagerFacade {
             return null;
         }
     }
-
     public static List<String> getListPackageNameHaveToTurnOffNotif() {
         List<AppInfoDB> listAppTurnOffNotif = AppInfoDB.find(AppInfoDB.class,
                 "is_have_to_turn_off_notif =1");
@@ -336,7 +327,34 @@ public class AppManagerFacade {
         }
         return listPackageName;
     }
+    public static boolean toggleChangeStateAutoTurnOffNotification(Context context,CallbackVoid onDone){
+        SettingsDB settingsDB = SettingsDB.getInstance();
+        settingsDB.isDisableTurnOffNotification =!settingsDB.isDisableTurnOffNotification;
+        boolean newState = settingsDB.isDisableTurnOffNotification;
+        settingsDB.save();
+        new Thread(() -> {
+            if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                ShortcutManager shortcutManager = context.getSystemService(ShortcutManager.class);
+                ShortcutInfo shortcut = shortcutManager.getDynamicShortcuts().stream()
+                        .filter(s -> s.getId().equals("toggle_notification"))
+                        .findFirst()
+                        .orElse(null);
+                if (shortcut != null) {
+                    ShortcutInfo.Builder builder = new ShortcutInfo.Builder(context, shortcut.getId())
+                            .setShortLabel(newState ? "Enable turn off notif" : "Disable turn off notif")
+                            .setIcon(Icon.createWithResource(context, newState ? R.drawable.ic_notification_shortcut :
+                                    R.drawable.ic_notification_off_shortcut));
 
+                    shortcutManager.updateShortcuts(Collections.singletonList(builder.build()));
+                }
+                onDone.callback();
+            }
+        }).start();
+        Toast.makeText(
+                context, newState ? "Turn off notif" :
+                        "Turn on notif", Toast.LENGTH_LONG).show();
+        return newState;
+    }
     public static void turnOffNotif(List<Integer> notifIds,String packageName) {
         for (int notifId : notifIds) {
             notificationManager.cancel(packageName,notifId);

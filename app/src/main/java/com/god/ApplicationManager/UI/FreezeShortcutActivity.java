@@ -22,35 +22,35 @@ import com.god.ApplicationManager.Util.DialogUtils;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
-import java.util.Objects;
 
 public class FreezeShortcutActivity extends AppCompatActivity {
-    private ListIterator<String> appsToBeFrozenIterator= null;
+    private ListIterator<String> appsToBeFrozenIterator = null;
     public boolean isWorking = false;
-    private boolean screenOff = false;
     public static FreezeShortcutActivity activity;
-    private static final String TAG="God freeze app shortcut";
+    private static final String TAG = "God freeze app shortcut";
 
-    private interface OnFreezeFinishedListener{
+    private interface OnFreezeFinishedListener {
         void callback(Context context);
     }
+
     private static OnFreezeFinishedListener onFreezeFinishedListener;
-    public static void setOnFreezeFinishedListener(OnFreezeFinishedListener handler){
+
+    public static void setOnFreezeFinishedListener(OnFreezeFinishedListener handler) {
         onFreezeFinishedListener = handler;
     }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         activity = this;
-        Intent intent = getIntent();
-        screenOff = (Objects.equals(intent.getStringExtra("extraID"), "dyn_screenOff"));
-        KeyguardManager keyguardManager = (KeyguardManager) getSystemService(Context.KEYGUARD_SERVICE);
 
+        Intent intent = getIntent();
         if (!Intent.ACTION_CREATE_SHORTCUT.equals(intent.getAction())) {
+            KeyguardManager keyguardManager = (KeyguardManager) getSystemService(Context.KEYGUARD_SERVICE);
             FreezeService.stopAnyCurrentFreezing(); // Might be that there still was a previous (failed) freeze process, in this case stop it
             if (keyguardManager.isKeyguardLocked()) {
-                if(onFreezeFinishedListener!=null){
+                if (onFreezeFinishedListener != null) {
                     onFreezeFinishedListener.callback(this);
                     onFreezeFinishedListener = null;
                     freezeOnScreenOffFailedDialog();
@@ -64,6 +64,7 @@ public class FreezeShortcutActivity extends AppCompatActivity {
             performFreeze();
         }
     }
+
     @Override
     public void onDestroy() {
         super.onDestroy();
@@ -84,20 +85,20 @@ public class FreezeShortcutActivity extends AppCompatActivity {
     private void performFreeze() {
         List<AppInfoDB> listApp = AppManagerFacade
                 .getListAppFromDB();
-        List<String>listPackageNameToBeFreeze = new ArrayList<>();
-        for (AppInfoDB app:
-             listApp) {
-            if(app.isHaveToBeFreeze){
+        List<String> listPackageNameToBeFreeze = new ArrayList<>();
+        for (AppInfoDB app :
+                listApp) {
+            if (app.isHaveToBeFreeze) {
                 listPackageNameToBeFreeze.add(app.packageName);
             }
         }
 
         if (listPackageNameToBeFreeze.isEmpty()) {
-            Toast.makeText(this,R.string.nothingToFreeze,Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.nothingToFreeze, Toast.LENGTH_SHORT).show();
             return;
         }
         if (FreezeService.isRunning) {
-            Toast.makeText(this,(R.string.power_button_hint), Toast.LENGTH_LONG).show();
+            Toast.makeText(this, (R.string.power_button_hint), Toast.LENGTH_LONG).show();
         }
 
         // The actual freezing work will be done in onResume(). Here we just create this iterator.
@@ -120,11 +121,10 @@ public class FreezeShortcutActivity extends AppCompatActivity {
         }
 
         if (appsToBeFrozenIterator != null) {
-            if(appsToBeFrozenIterator.hasNext()){
-                if(freezeApp(appsToBeFrozenIterator.next(), this));
-            }
-            else{
-                if(onFreezeFinishedListener!=null){
+            if (appsToBeFrozenIterator.hasNext()) {
+                if (freezeApp(appsToBeFrozenIterator.next(), this)) ;
+            } else {
+                if (onFreezeFinishedListener != null) {
                     onFreezeFinishedListener.callback(this);
                 }
                 onFreezeFinishedListener = null;
@@ -133,18 +133,19 @@ public class FreezeShortcutActivity extends AppCompatActivity {
             }
         }
     }
-    private void  freezeOnScreenOffFailedDialog() {
+
+    private void freezeOnScreenOffFailedDialog() {
         DialogUtils.showAlertDialog(
                 this,
                 getString(R.string.freeze_screen_off_failed),
                 getString(R.string.disable_power_btn_instantly_locks_warning),
-                (dialog,which)->{
+                (dialog, which) -> {
                     Intent intent = new Intent(Settings.ACTION_SECURITY_SETTINGS);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(intent);
                     finish();
                 },
-                (dialog,which)->{
+                (dialog, which) -> {
                     SettingsDB.getInstance().doNotShowFreezeWarning = false;
                     SettingsDB.saveSettings();
                     finish();
@@ -157,39 +158,39 @@ public class FreezeShortcutActivity extends AppCompatActivity {
                 new Intent(context.getApplicationContext(), FreezeShortcutActivity.class);
         shortcutIntent.addFlags(
                 Intent.FLAG_ACTIVITY_CLEAR_TASK
-                |Intent.FLAG_ACTIVITY_NEW_TASK
-                |Intent.FLAG_ACTIVITY_NO_ANIMATION
+                        | Intent.FLAG_ACTIVITY_NEW_TASK
+                        | Intent.FLAG_ACTIVITY_NO_ANIMATION
         );
         return shortcutIntent;
     }
 
     public void freezeAppsPendingFreeze(Context context) {
-        if (AppManagerFacade.hasRootPermission){
+        if (AppManagerFacade.hasRootPermission) {
             List<AppInfoDB> listApp = AppManagerFacade
                     .getListAppFromDB();
-            List<String>listPackageNameToBeFreeze = new ArrayList<>();
-            for (AppInfoDB app:
+            List<String> listPackageNameToBeFreeze = new ArrayList<>();
+            for (AppInfoDB app :
                     listApp) {
-                if(app.isHaveToBeFreeze){
+                if (app.isHaveToBeFreeze) {
                     listPackageNameToBeFreeze.add(app.packageName);
                 }
             }
             AppManagerFacade.freezeListAppUsingRoot(
                     listPackageNameToBeFreeze
-                    , context,false);
-        }
-        else
+                    , context, false);
+        } else
             context.startActivity(createShortcutIntent(context));
     }
 
     /**
      * Freeze a package.
+     *
      * @param packageName The name of the package to freeze
      * @return true if the settings intent ths been launched and you have to wait with freezing the next app.
      */
-    public static boolean freezeApp(String packageName,Context context){
+    public static boolean freezeApp(String packageName, Context context) {
         if (AppManagerFacade.hasRootPermission) {
-            return AppManagerFacade.freezeAppUsingRoot(packageName, context,false);
+            return AppManagerFacade.freezeAppUsingRoot(packageName, context, false);
         }
 
         if (FreezeService.isRunning) {

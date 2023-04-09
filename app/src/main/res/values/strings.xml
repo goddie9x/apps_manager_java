@@ -94,4 +94,7 @@
     <string name="disable_multiple_select">Disable multiple select</string>
     <string name="freeze_service_name">God freeze service</string>
     <string name="service">service</string>
+    <string name="turn_off_auto_disable_notification">Turn off auto disable notification</string>
+    <string name="enable_auto_turn_off_notification">Enable auto turn off notification</string>
+    <string name="turn_on_notification">Turn on notification</string>
 </resources>

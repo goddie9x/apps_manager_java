@@ -27,6 +27,10 @@
             android:title="@string/notification_zone" />
     </group>
     <item
+        android:id="@+id/toggle_auto_turn_off_notification"
+        android:title="@string/turn_on_notification"
+        android:icon="@drawable/ic_notification_off"/>
+    <item
         android:id="@+id/action_dark_mode"
         android:title="@string/dark_mode"
         android:icon="@drawable/ic_dark_mode"

@@ -8,10 +8,8 @@ import android.app.job.JobScheduler;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.content.ServiceConnection;
 import android.content.res.Resources;
 import android.os.Bundle;
-import android.os.IBinder;
 import android.os.Parcelable;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -185,6 +183,17 @@ public class MainActivity extends AppCompatActivity {
         Menu menu = navView.getMenu();
         darkModeItem = menu.findItem(R.id.action_dark_mode);
         lightModeItem = menu.findItem(R.id.action_light_mode);
+        MenuItem toggleAutoTurnOffNotif =
+        menu.findItem(R.id.toggle_auto_turn_off_notification);
+
+        setAutoTurnOffNotifMenuItem(toggleAutoTurnOffNotif,
+                SettingsDB.getInstance().isDisableTurnOffNotification);
+        toggleAutoTurnOffNotif.setOnMenuItemClickListener(item->{
+            boolean isDisableAutoTurnOffNotif = AppManagerFacade
+                    .toggleChangeStateAutoTurnOffNotification(this,()->{});
+            setAutoTurnOffNotifMenuItem(item,isDisableAutoTurnOffNotif);
+            return false;
+        });
 
         setEnableDarkMode(SettingsDB.getInstance().isEnableDarkMode,
                 false
@@ -228,6 +237,14 @@ public class MainActivity extends AppCompatActivity {
             return true;
         });
     }
+
+    private void setAutoTurnOffNotifMenuItem(MenuItem item, boolean isDisableTurnOffNotification) {
+        item.setIcon(isDisableTurnOffNotification?R.drawable.ic_notification:
+                R.drawable.ic_notification_off);
+        item.setTitle(isDisableTurnOffNotification?R.string.turn_off_notification:
+                R.string.turn_on_notification);
+    }
+
     private void setEnableDarkMode(boolean isEnableDarkMode, boolean isHaveToReRender,boolean isHaveToUpdateDB) {
         if (darkModeItem != null && lightModeItem != null) {
             darkModeItem.setVisible(!isEnableDarkMode);
