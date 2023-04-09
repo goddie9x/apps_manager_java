@@ -242,8 +242,4 @@ public class ListAppAdapter extends RecyclerView.Adapter<ListAppAdapter.AppItemH
     public List<AppInfo> getListSelectedApp() {
         return listSelectedApp;
     }
-
-    public List<AppInfo> getListApp() {
-        return listApp;
-    }
 }

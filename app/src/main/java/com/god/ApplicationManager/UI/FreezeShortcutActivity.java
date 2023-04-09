@@ -47,21 +47,34 @@ public class FreezeShortcutActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         if (!Intent.ACTION_CREATE_SHORTCUT.equals(intent.getAction())) {
-            KeyguardManager keyguardManager = (KeyguardManager) getSystemService(Context.KEYGUARD_SERVICE);
-            FreezeService.stopAnyCurrentFreezing(); // Might be that there still was a previous (failed) freeze process, in this case stop it
-            if (keyguardManager.isKeyguardLocked()) {
-                if (onFreezeFinishedListener != null) {
-                    onFreezeFinishedListener.callback(this);
-                    onFreezeFinishedListener = null;
-                    freezeOnScreenOffFailedDialog();
-                    Log.e(TAG, "Screen not unlocked.");
-                    return;
+            if(AppManagerFacade.hasRootPermission){
+                List<String>listPackageName = new ArrayList<>();
+                List<AppInfoDB> listAppFreeze =
+                        AppInfoDB.find(AppInfoDB.class,
+                        "is_have_to_be_freeze = 1");
+                for (AppInfoDB app:
+                        listAppFreeze) {
+                    listPackageName.add(app.packageName);
                 }
+                AppManagerFacade.freezeListAppUsingRoot(listPackageName,this,false);
             }
-            Log.i(TAG, "Performing Freeze.");
-            isWorking = true;
-            FreezeService.setOnAppCouldNotBeFrozen(this::handleOnAppCouldNotBeFrozen);
-            performFreeze();
+            else{
+                KeyguardManager keyguardManager = (KeyguardManager) getSystemService(Context.KEYGUARD_SERVICE);
+                FreezeService.stopAnyCurrentFreezing(); // Might be that there still was a previous (failed) freeze process, in this case stop it
+                if (keyguardManager.isKeyguardLocked()) {
+                    if (onFreezeFinishedListener != null) {
+                        onFreezeFinishedListener.callback(this);
+                        onFreezeFinishedListener = null;
+                        freezeOnScreenOffFailedDialog();
+                        Log.e(TAG, "Screen not unlocked.");
+                        return;
+                    }
+                }
+                Log.i(TAG, "Performing Freeze.");
+                isWorking = true;
+                FreezeService.setOnAppCouldNotBeFrozen(this::handleOnAppCouldNotBeFrozen);
+                performFreeze();
+            }
         }
     }
 

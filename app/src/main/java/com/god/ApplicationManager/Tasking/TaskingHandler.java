@@ -1,9 +1,8 @@
 package com.god.ApplicationManager.Tasking;
 
-import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
-import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.graphics.Color;
 import android.os.Handler;
 import android.os.Looper;
 import android.widget.CheckBox;
@@ -17,13 +16,11 @@ import com.god.ApplicationManager.DB.SettingsDB;
 import com.god.ApplicationManager.Entity.AppInfo;
 import com.god.ApplicationManager.Enum.MenuContextType;
 import com.god.ApplicationManager.Facade.AppManagerFacade;
-import com.god.ApplicationManager.R;
-import com.god.ApplicationManager.Service.FreezeService;
-import com.god.ApplicationManager.Service.NotificationService;
 import com.god.ApplicationManager.Util.AsyncTaskBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.stream.Collectors;
 
 public class TaskingHandler {
@@ -98,7 +95,6 @@ public class TaskingHandler {
         taskSetListAppToRecycleView.execute();
     }
 
-    @SuppressLint("ResourceAsColor")
     public static void execTaskHandleGetListService(
             LinearLayout listServiceLayout,
             String crrPackageName
@@ -113,7 +109,7 @@ public class TaskingHandler {
                     handler.post(() -> {
                         listServiceLayout.removeAllViews();
                         int textColorCode = SettingsDB.getInstance().isEnableDarkMode?
-                                R.color.white:R.color.black;
+                                Color.WHITE:Color.BLACK;
                         for (ActivityInfo crrService : listService) {
                             CheckBox crrServiceCheckBox = new CheckBox(activity);
                             crrServiceCheckBox.setText(crrService.processName);
@@ -232,8 +228,14 @@ public class TaskingHandler {
         ProgressDialog progressDialog = new ProgressDialog(activity);
 
         taskDoActionEachSelectedApp.setDoInBackgroundFunc(ts -> {
-            for (AppInfo appInfo:listApp) {
-                action.callback(appInfo);
+            ListIterator<AppInfo> listIteratorApp = listApp.listIterator();
+            while(listIteratorApp.hasNext()){
+                action.callback(listIteratorApp.next());
+                try {
+                    Thread.sleep(200);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
             }
             return null;
         });

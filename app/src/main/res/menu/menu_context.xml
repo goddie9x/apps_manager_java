@@ -9,9 +9,9 @@
         android:title="@string/freeze_app"
         android:tooltipText="@string/make_app_not_running_in_background" />
     <item
-        android:id="@+id/turn_off_notification"
-        android:title="@string/turn_off_notification"
-        android:tooltipText="@string/turn_off_notification" />
+        android:id="@+id/add_to_notification_zone"
+        android:title="@string/add_to_notification_zone"
+        android:tooltipText="@string/add_to_notification_zone" />
     <item
         android:id="@+id/uninstall"
         android:title="@string/uninstall"

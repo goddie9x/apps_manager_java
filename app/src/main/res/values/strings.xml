@@ -14,7 +14,6 @@
     <!-- Messages Preferences -->
     <string name="signature_title">Your signature</string>
     <string name="reply_title">Default reply action</string>
-
     <!-- Sync Preferences -->
     <string name="sync_title">Sync email periodically</string>
     <string name="attachment_title">Download incoming attachments</string>
@@ -42,7 +41,6 @@
     <string name="nav_header_title">Android Studio</string>
     <string name="nav_header_subtitle">android.studio@android.com</string>
     <string name="nav_header_desc">Navigation header</string>
-
     <string name="menu_home">Home</string>
     <string name="menu_gallery">Gallery</string>
     <string name="menu_slideshow">Slideshow</string>
@@ -94,7 +92,22 @@
     <string name="disable_multiple_select">Disable multiple select</string>
     <string name="freeze_service_name">God freeze service</string>
     <string name="service">service</string>
-    <string name="turn_off_auto_disable_notification">Turn off auto disable notification</string>
+    <string name="disable_auto_turn_off_notification">Disable auto turn off notification</string>
     <string name="enable_auto_turn_off_notification">Enable auto turn off notification</string>
     <string name="turn_on_notification">Turn on notification</string>
+    <string name="add_to_notification_zone">Add to notification zone</string>
+    <string name="permission_requirement">Permission requirement!</string>
+    <string name="permission_notification_description">Our app need permission to manager notification</string>
+    <string name="permission_require_to_full_power">You should provide permission to get full power</string>
+    <string name="warning">Warning</string>
+    <string name="do_with_action_app_waning">You are trying to do this action on system app\nThis can cause the System not working correctly\nDo you really want to continue</string>
+    <string name="do_not_show_dialog">Don\'t show this dialog again</string>
+    <string name="has_added_to_the_list_notification">\" has added to list turn off notification\"</string>
+    <string name="already_in_turn_off_notification">\" already in turn off notification list\"</string>
+    <string name="failed">Failed</string>
+    <string name="done">Done</string>
+    <string name="already_in_freeze_list">\" already in freeze list\"</string>
+    <string name="frezze">\"Freeze \"</string>
+    <string name="success">\" success\"</string>
+    <string name="require_accessibility_description">Our app need accessibility to freeze app</string>
 </resources>

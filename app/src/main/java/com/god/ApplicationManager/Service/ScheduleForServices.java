@@ -19,11 +19,11 @@ public class ScheduleForServices extends JobService {
     private void doInBackGround(JobParameters params) {
         new Thread(()->{
             int time = 0;
-            while (!isJobCalled&& time<17)
+            while (!isJobCalled&& time<21)
             {
                 ServiceHandlerFacade.startServices(this);
                 try{
-                    Thread.sleep(60000);
+                    Thread.sleep(45000);
                     time++;
                 }catch (InterruptedException e){
                     Log.e(TAG,e.getMessage());

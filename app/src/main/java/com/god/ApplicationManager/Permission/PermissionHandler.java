@@ -12,6 +12,7 @@ import androidx.core.app.NotificationManagerCompat;
 import androidx.core.content.ContextCompat;
 
 import com.god.ApplicationManager.Facade.AppManagerFacade;
+import com.god.ApplicationManager.R;
 import com.god.ApplicationManager.Service.FreezeService;
 import com.god.ApplicationManager.Util.DialogUtils;
 
@@ -38,10 +39,10 @@ public class PermissionHandler {
     public void getUseAccessibilityService() {
         if (!FreezeService.isRunning&&ContextCompat.checkSelfPermission(activity,
                 Manifest.permission.BIND_ACCESSIBILITY_SERVICE) == PackageManager.PERMISSION_DENIED) {
-            //showPermissionRequireDialog("Our app need accessibility to freeze app",()->{
+            showPermissionRequireDialog(activity.getString(R.string.require_accessibility_description),()->{
                 Intent intent = new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS);
                 activity.startActivity(intent);
-            //},()->{});
+            },()->{});
         }
     }
 
@@ -52,8 +53,8 @@ public class PermissionHandler {
                 if (grantResults.length < 1
                         || grantResults[0] != PackageManager.PERMISSION_GRANTED) {
                     DialogUtils.showAlertDialog(activity,
-                            "Permission require warning",
-                            "You should provide permission to get full power",
+                            activity.getString(R.string.permission_requirement),
+                            activity.getString(R.string.permission_require_to_full_power),
                             (dialog, which) -> getQueryAllPackagePermission(),
                             (dialog, which) -> {
                             }
@@ -67,23 +68,25 @@ public class PermissionHandler {
     public void getManagerNotificationPermission() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
         &&!NotificationManagerCompat.getEnabledListenerPackages(activity).contains(activity.getPackageName())){
-            //if (!NotificationManagerCompat.getEnabledListenerPackages(activity).contains(activity.getPackageName())) {
-                //showPermissionRequireDialog("Our app need permission to manager notification",()->{
+            if (!NotificationManagerCompat.getEnabledListenerPackages(activity).contains(activity.getPackageName())) {
+                showPermissionRequireDialog(activity.getString(R.string.permission_notification_description),()->{
                     Intent intent = new Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS");
                     activity.startActivity(intent);
-                //},()->{});
-            //}
+                    Intent intentO = new Intent(android.provider.Settings.ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS);
+                    activity.startActivity(intentO);
+                },()->{});
+            }
         }
         else if (activity.checkSelfPermission(Manifest.permission.ACCESS_NOTIFICATION_POLICY)
                 == PackageManager.PERMISSION_DENIED) {
-            //showPermissionRequireDialog("Our app need permission to manager notification",()->{
+            showPermissionRequireDialog(activity.getString(R.string.permission_notification_description),()->{
                 activity.requestPermissions(new String[]{android.Manifest.permission.ACCESS_NOTIFICATION_POLICY}, 1);
-            //},()->{});
+            },()->{});
         }
     }
 private void showPermissionRequireDialog(String permissionDes, AppManagerFacade.CallbackVoid grandPermissionAction,AppManagerFacade.CallbackVoid cancelAction){
     DialogUtils.showAlertDialog(activity,
-            "Permission requirement!",
+            activity.getString(R.string.permission_requirement),
             permissionDes,
             (dialog, which) -> {grandPermissionAction.callback();},
             (dialog, which) ->{cancelAction.callback();}

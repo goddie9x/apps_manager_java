@@ -138,7 +138,7 @@ public class FreezeService extends AccessibilityService {
         backgroundThread = new Thread(() -> {
             if (isRunning) {
                 try {
-                    Thread.sleep(60000);
+                    Thread.sleep(15000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
