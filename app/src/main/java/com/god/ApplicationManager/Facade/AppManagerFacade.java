@@ -1,6 +1,5 @@
 package com.god.ApplicationManager.Facade;
 
-import android.annotation.SuppressLint;
 import android.app.ActivityManager;
 import android.app.NotificationManager;
 import android.content.Context;
@@ -12,16 +11,16 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ShortcutInfo;
 import android.content.pm.ShortcutManager;
-import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.Icon;
-import android.graphics.drawable.StateListDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
 import android.service.notification.StatusBarNotification;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.CheckBox;
 import android.widget.Toast;
 
@@ -424,6 +423,16 @@ public class AppManagerFacade {
     }
 
     public static void proxyHandleRunAction(AppInfo appInfo, TaskingHandler.ActionForSelectedApp action) {
+        Looper mainLooper = Looper.getMainLooper();
+        if (Looper.myLooper() == mainLooper) {
+            proxyCheckSystemAppForAnAction(appInfo,action);
+        } else {
+            new Handler(mainLooper)
+                    .post(()->proxyCheckSystemAppForAnAction(appInfo,action));
+        }
+
+    }
+    public static void proxyCheckSystemAppForAnAction(AppInfo appInfo, TaskingHandler.ActionForSelectedApp action){
         if (appInfo.isSystemApp && !SettingsDB.getInstance().doNotWarningSystemApp) {
             showWarningDialog((dialog, which) -> {
                 action.callback(appInfo);
@@ -437,28 +446,22 @@ public class AppManagerFacade {
         }
     }
 
-    @SuppressLint("ResourceAsColor")
     public static void showWarningDialog(DialogInterface.OnClickListener positiveListener,
                                          DialogInterface.OnClickListener negativeListener,
                                          IEventToggle onDonnotShowAgainCheckBoxChange) {
+        LayoutInflater inflater = LayoutInflater.from(activity);
+        View customView = inflater.inflate(R.layout.dialog_custom_layout, null);
+        CheckBox donnotShowAgainCheckBox = customView.findViewById(R.id.donnot_show_checkbox);
+
         DialogUtils.showAlertDialog(activity, activity.getString(R.string.warning),
                 activity.getString(R.string.do_with_action_app_waning),
                 positiveListener,
                 builder -> {
-                    CheckBox donnotShowAgainCheckBox = new CheckBox(getActivity());
-                    donnotShowAgainCheckBox.setText(R.string.do_not_show_dialog);
-                    StateListDrawable drawable = new StateListDrawable();
-                    drawable.addState(new int[]{android.R.attr.state_checked},
-                            new ColorDrawable(R.color.teal_700));
-                    drawable.addState(new int[]{-android.R.attr.state_checked},
-                            new ColorDrawable(R.color.teal_200));
-                    donnotShowAgainCheckBox.setButtonDrawable(drawable);
-                    donnotShowAgainCheckBox.setTextColor(R.color.teal_700);
-
-                    builder.setView(donnotShowAgainCheckBox);
+                    builder.setView(customView);
                     builder.setOnDismissListener(dialog ->
                             onDonnotShowAgainCheckBoxChange.callback(donnotShowAgainCheckBox.isChecked()));
                     builder.setNegativeButton("No", negativeListener);
                 });
     }
+
 }

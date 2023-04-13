@@ -110,4 +110,8 @@
     <string name="frezze">\"Freeze \"</string>
     <string name="success">\" success\"</string>
     <string name="require_accessibility_description">Our app need accessibility to freeze app</string>
+    <string name="title">Title</string>
+    <string name="message">Message</string>
+    <string name="do_not_show_again">Do not show again</string>
+    <string name="frezze_all_app_success">Freeze all app success</string>
 </resources>

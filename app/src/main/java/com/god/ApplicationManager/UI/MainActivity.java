@@ -277,10 +277,10 @@ public class MainActivity extends AppCompatActivity {
         if (selectedAppInfo != null) {
             switch (item.getItemId()) {
                 case R.id.force_stop:
-                    startActionForSelectedApp(selectedAppInfo, (appInfo) -> AppManagerFacade.forceStopApp(selectedAppInfo));
+                    startActionForSelectedApp(selectedAppInfo, (appInfo) -> AppManagerFacade.forceStopApp(appInfo));
                     return true;
                 case R.id.freeze:
-                    startActionForSelectedApp(selectedAppInfo, (appInfo) -> AppManagerFacade.freezeApp(selectedAppInfo));
+                    startActionForSelectedApp(selectedAppInfo, (appInfo) -> AppManagerFacade.freezeApp(appInfo));
                     return true;
                 case R.id.add_to_notification_zone:
                     startActionForSelectedApp(selectedAppInfo, (appInfo) -> AppManagerFacade.setNotificationStateForApp(appInfo, false));

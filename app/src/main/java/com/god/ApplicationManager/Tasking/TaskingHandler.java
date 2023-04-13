@@ -229,12 +229,15 @@ public class TaskingHandler {
 
         taskDoActionEachSelectedApp.setDoInBackgroundFunc(ts -> {
             ListIterator<AppInfo> listIteratorApp = listApp.listIterator();
+            boolean hasRoot = AppManagerFacade.hasRootPermission;
             while(listIteratorApp.hasNext()){
                 action.callback(listIteratorApp.next());
-                try {
-                    Thread.sleep(200);
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
+                if(!hasRoot){
+                    try {
+                        Thread.sleep(200);
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
                 }
             }
             return null;

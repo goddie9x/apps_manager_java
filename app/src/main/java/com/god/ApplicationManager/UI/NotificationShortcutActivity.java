@@ -14,6 +14,7 @@ public class NotificationShortcutActivity extends AppCompatActivity {
         Intent intent = getIntent();
 
         if (!Intent.ACTION_CREATE_SHORTCUT.equals(intent.getAction())) {
+            AppManagerFacade.setActivity(this);
             AppManagerFacade.toggleStateAutoTurnOffNotification(this,()->finish());
         }
     }

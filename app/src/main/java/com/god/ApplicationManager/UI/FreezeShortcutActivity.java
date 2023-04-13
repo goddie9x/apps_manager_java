@@ -47,6 +47,7 @@ public class FreezeShortcutActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         if (!Intent.ACTION_CREATE_SHORTCUT.equals(intent.getAction())) {
+            AppManagerFacade.setActivity(this);
             if(AppManagerFacade.hasRootPermission){
                 List<String>listPackageName = new ArrayList<>();
                 List<AppInfoDB> listAppFreeze =
@@ -57,6 +58,8 @@ public class FreezeShortcutActivity extends AppCompatActivity {
                     listPackageName.add(app.packageName);
                 }
                 AppManagerFacade.freezeListAppUsingRoot(listPackageName,this,false);
+                Toast.makeText(this, R.string.frezze_all_app_success,Toast.LENGTH_SHORT).show();
+                finish();
             }
             else{
                 KeyguardManager keyguardManager = (KeyguardManager) getSystemService(Context.KEYGUARD_SERVICE);
@@ -135,7 +138,7 @@ public class FreezeShortcutActivity extends AppCompatActivity {
 
         if (appsToBeFrozenIterator != null) {
             if (appsToBeFrozenIterator.hasNext()) {
-                if (freezeApp(appsToBeFrozenIterator.next(), this)) ;
+                freezeApp(appsToBeFrozenIterator.next(), this);
             } else {
                 if (onFreezeFinishedListener != null) {
                     onFreezeFinishedListener.callback(this);
