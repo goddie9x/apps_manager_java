@@ -109,7 +109,8 @@
     <string name="already_in_freeze_list">\" already in freeze list\"</string>
     <string name="frezze">\"Freeze \"</string>
     <string name="success">\" success\"</string>
-    <string name="require_accessibility_description">Our app need accessibility to freeze app</string>
+    <string name="require_accessibility_description">Our app need accessibility to freeze app\n
+        *Note: If you already allowed this permission but still get this message\nThat means the service has been stopped for some reason. So please disable and enable accessibility for the app again</string>
     <string name="title">Title</string>
     <string name="message">Message</string>
     <string name="do_not_show_again">Do not show again</string>

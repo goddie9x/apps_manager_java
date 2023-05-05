@@ -239,10 +239,7 @@ public class AppManagerFacade {
     }
 
     public static boolean toggleStateAutoTurnOffNotification(Context context, CallbackVoid onDone) {
-        SettingsDB settingsDB = SettingsDB.getInstance();
-        settingsDB.isDisableTurnOffNotification = !settingsDB.isDisableTurnOffNotification;
-        boolean newState = settingsDB.isDisableTurnOffNotification;
-        settingsDB.save();
+        boolean newState = SettingsDB.toggleDisableAutoTurnOffNotificationState();
         new Thread(() -> {
             if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 ShortcutManager shortcutManager = context.getSystemService(ShortcutManager.class);

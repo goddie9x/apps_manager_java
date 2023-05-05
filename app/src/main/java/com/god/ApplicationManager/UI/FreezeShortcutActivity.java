@@ -111,6 +111,7 @@ public class FreezeShortcutActivity extends AppCompatActivity {
 
         if (listPackageNameToBeFreeze.isEmpty()) {
             Toast.makeText(this, R.string.nothingToFreeze, Toast.LENGTH_SHORT).show();
+            finish();
             return;
         }
         if (FreezeService.isRunning) {

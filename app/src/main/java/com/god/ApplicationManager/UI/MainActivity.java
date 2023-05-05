@@ -15,6 +15,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -38,6 +39,7 @@ import com.god.ApplicationManager.Enum.SortAppType;
 import com.god.ApplicationManager.Facade.AppManagerFacade;
 import com.god.ApplicationManager.Permission.PermissionHandler;
 import com.god.ApplicationManager.R;
+import com.god.ApplicationManager.Service.NotificationService;
 import com.god.ApplicationManager.Service.ScheduleForServices;
 import com.god.ApplicationManager.Tasking.TaskingHandler;
 import com.god.ApplicationManager.databinding.ActivityMainBinding;
@@ -51,7 +53,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class MainActivity extends AppCompatActivity {
-    private static final int JOB_RUNSERVICES = 69;
+    private static final int JOB_RUN_SERVICES = 69;
     private ListAppAdapter crrListListAppAdapter;
     private GroupAppType selectedGroupAppType = GroupAppType.ALL;
     private OrderAppType selectedOrderAppType = OrderAppType.NAME;
@@ -62,6 +64,10 @@ public class MainActivity extends AppCompatActivity {
     private TextView appTitleLabel;
     private TextView amountTextLabel;
     private LinearLayout selectOptionBar;
+    private LinearLayout searchBar;
+    private ImageButton closeMultipleSelectionBtn;
+    private ImageButton closeSearchBarBtn;
+
     private Menu optionsMenu;
     private SearchView searchApp;
     private FloatingActionButton freezeBtn;
@@ -103,7 +109,7 @@ public class MainActivity extends AppCompatActivity {
             handleChangeMenuContextType(MenuContextType.MAIN_MENU);
             TaskingHandler.execTaskGetAllInstalledApp(crrMenuContext);
         } else {
-           restorePreviousState(savedInstanceState);
+            restorePreviousState(savedInstanceState);
         }
     }
 
@@ -129,7 +135,7 @@ public class MainActivity extends AppCompatActivity {
         if (ScheduleForServices.isJobCalled) {
             ComponentName scheduleRunService =
                     new ComponentName(this, ScheduleForServices.class);
-            JobInfo jobInfo = new JobInfo.Builder(JOB_RUNSERVICES, scheduleRunService)
+            JobInfo jobInfo = new JobInfo.Builder(JOB_RUN_SERVICES, scheduleRunService)
                     .setPersisted(true)
                     .setPeriodic(900000)
                     .build();
@@ -144,7 +150,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void handleChangeMenuContextType(MenuContextType menuContextType) {
-        backStack.empty();
         if (isOpenSearchBar) {
             setOpenSearchBar(false);
         }
@@ -155,6 +160,7 @@ public class MainActivity extends AppCompatActivity {
         crrMenuContext = menuContextType;
         freezeBtn.setVisibility(menuContextType == MenuContextType.FREEZE_MENU ? View.VISIBLE : View.GONE);
         crrListListAppAdapter.setMenuContextType(menuContextType);
+        backStack.empty();
     }
 
     private void initAppManagerFacade() {
@@ -188,16 +194,15 @@ public class MainActivity extends AppCompatActivity {
         Menu menu = navView.getMenu();
         darkModeItem = menu.findItem(R.id.action_dark_mode);
         lightModeItem = menu.findItem(R.id.action_light_mode);
-        MenuItem toggleAutoTurnOffNotif =
+        MenuItem toggleAutoTurnOffNotification =
                 menu.findItem(R.id.toggle_auto_turn_off_notification);
 
-        setAutoTurnOffNotifMenuItem(toggleAutoTurnOffNotif,
-                SettingsDB.getInstance().isDisableTurnOffNotification);
-        toggleAutoTurnOffNotif.setOnMenuItemClickListener(item -> {
-            boolean isDisableAutoTurnOffNotif = AppManagerFacade
-                    .toggleStateAutoTurnOffNotification(this, () -> {
-                    });
-            setAutoTurnOffNotifMenuItem(item, isDisableAutoTurnOffNotif);
+        handleToggleTurnOffNotificationState(toggleAutoTurnOffNotification);
+        toggleAutoTurnOffNotification.setOnMenuItemClickListener(item -> {
+            AppManagerFacade
+                    .toggleStateAutoTurnOffNotification(this,
+                            () ->NotificationService.getDisableNotificationStatus());
+            handleToggleTurnOffNotificationState(item);
             return false;
         });
 
@@ -244,9 +249,10 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void setAutoTurnOffNotifMenuItem(MenuItem item, boolean isDisableTurnOffNotification) {
-        item.setIcon(isDisableTurnOffNotification ?R.drawable.ic_notification_off:R.drawable.ic_notification);
-        item.setTitle(isDisableTurnOffNotification ? R.string.turn_off_notification:R.string.turn_on_notification);
+    private void handleToggleTurnOffNotificationState(MenuItem item) {
+        boolean isDisableTurnOffNotification = SettingsDB.getInstance().isDisableTurnOffNotification;
+        item.setIcon(isDisableTurnOffNotification ? R.drawable.ic_notification_off : R.drawable.ic_notification);
+        item.setTitle(isDisableTurnOffNotification ? R.string.turn_off_notification : R.string.turn_on_notification);
     }
 
     private void setEnableDarkMode(boolean isEnableDarkMode, boolean isHaveToReRender, boolean isHaveToUpdateDB) {
@@ -283,16 +289,27 @@ public class MainActivity extends AppCompatActivity {
                     startActionForSelectedApp(selectedAppInfo, (appInfo) -> AppManagerFacade.freezeApp(appInfo));
                     return true;
                 case R.id.add_to_notification_zone:
-                    startActionForSelectedApp(selectedAppInfo, (appInfo) -> AppManagerFacade.setNotificationStateForApp(appInfo, false));
+                    startActionForSelectedApp(selectedAppInfo,
+                            (appInfo) -> AppManagerFacade.setNotificationStateForApp(appInfo, false),
+                            () -> NotificationService.getListTurnOffNotificationFromDB());
                     return true;
                 case R.id.uninstall:
-                    startActionForSelectedApp(selectedAppInfo, TaskingHandler::execTaskUninstallApp, () -> TaskingHandler.execTaskGetAllInstalledApp(crrMenuContext));
+                    startActionForSelectedApp(selectedAppInfo, TaskingHandler::execTaskUninstallApp,
+                            () -> TaskingHandler.execTaskGetAllInstalledApp(crrMenuContext));
                     return true;
                 case R.id.open_in_setting:
                     AppManagerFacade.openAppSetting(selectedAppInfo);
                     return true;
                 case R.id.remove_from_list:
-                    startActionForSelectedAppWithoutWarningSystemApp(selectedAppInfo, (appInfo) -> AppManagerFacade.removeAppFromList(appInfo.packageName, crrMenuContext), () -> TaskingHandler.execTaskGetAllInstalledApp(crrMenuContext));
+                    startActionForSelectedAppWithoutWarningSystemApp(selectedAppInfo,
+                            (appInfo) -> AppManagerFacade.removeAppFromList(appInfo.packageName, crrMenuContext),
+                            () -> {
+                                TaskingHandler.execTaskGetAllInstalledApp(crrMenuContext);
+                                if (crrMenuContext == MenuContextType.NOTIFICATION_MENU) {
+                                    NotificationService.getListTurnOffNotificationFromDB();
+                                }
+                            }
+                    );
                     return true;
                 default:
                     return super.onContextItemSelected(item);
@@ -313,26 +330,26 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        handleBackStack();
-    }
-
-    private void handleBackStack() {
         if (mainDrawer.isDrawerOpen(GravityCompat.START)) {
             mainDrawer.closeDrawer(GravityCompat.START);
         } else {
             if (backStack.empty()) {
                 super.onBackPressed();
             } else {
-                BackStackState prevBackStack = backStack.pop();
-                switch (prevBackStack) {
-                    case SEARCH:
-                        setOpenSearchBar(true);
-                        break;
-                    case SELECT:
-                        toggleMultipleSelect();
-                        break;
-                }
+                handleBackStack();
             }
+        }
+    }
+
+    private void handleBackStack() {
+        BackStackState prevBackStack = backStack.pop();
+        switch (prevBackStack) {
+            case SEARCH:
+                setOpenSearchBar(false);
+                break;
+            case SELECT:
+                toggleMultipleSelect();
+                break;
         }
     }
 
@@ -374,19 +391,22 @@ public class MainActivity extends AppCompatActivity {
         appTitleLabel = findViewById(R.id.app_name_title);
         selectOptionBar = findViewById(R.id.select_options_bar);
         sortAppDes = findViewById(R.id.app_group_description);
+        searchBar = findViewById(R.id.search_bar);
+        closeSearchBarBtn = findViewById(R.id.close_search_bar_btn);
+        closeMultipleSelectionBtn = findViewById(R.id.close_select_options_bar);
     }
 
     @SuppressLint("NonConstantResourceId")
     private void handleMenuOther(MenuItem item, int id) {
         switch (id) {
             case R.id.open_search_bar:
-                handleOpenSearchBar();
+                setOpenSearchBar(true);
                 break;
             case R.id.select_multiple:
                 boolean isEnableMultipleSelect = crrListListAppAdapter.getSelectionState();
+                item.setIcon(isEnableMultipleSelect ? R.drawable.ic_add_to_photos : R.drawable.ic_deselect);
+                item.setTitle(isEnableMultipleSelect ? R.string.multiple_select : R.string.disable_multiple_select);
                 toggleMultipleSelect();
-                item.setIcon(isEnableMultipleSelect ? R.drawable.ic_deselect : R.drawable.ic_add_to_photos);
-                item.setTitle(isEnableMultipleSelect ? R.string.disable_multiple_select : R.string.multiple_select);
                 break;
         }
     }
@@ -394,23 +414,31 @@ public class MainActivity extends AppCompatActivity {
     private void toggleMultipleSelect() {
         crrListListAppAdapter.toggleEnableSelect();
         if (crrListListAppAdapter.getSelectionState()) {
-            selectOptionBar.setVisibility(View.VISIBLE);
-            appTitleLabel.setVisibility(View.GONE);
-            if (isOpenSearchBar) {
-                backStack.push(BackStackState.SEARCH);
-            }
             backStack.push(BackStackState.SELECT);
         } else {
-            handleBackStack();
-            selectOptionBar.setVisibility(View.GONE);
-            appTitleLabel.setVisibility(View.VISIBLE);
+            removeTargetStateFromBackStack(BackStackState.SELECT);
         }
+        toggleVisibleItemsInActionBar();
     }
 
-    private void handleOpenSearchBar() {
-        setOpenSearchBar(true);
-        appTitleLabel.setVisibility(View.GONE);
-        selectOptionBar.setVisibility(View.GONE);
+    private void toggleVisibleItemsInActionBar() {
+        if (backStack.isEmpty()) {
+            appTitleLabel.setVisibility(View.VISIBLE);
+            selectOptionBar.setVisibility(View.GONE);
+            searchBar.setVisibility(View.GONE);
+        } else {
+            appTitleLabel.setVisibility(View.GONE);
+            BackStackState crrBackStack = backStack.peek();
+            boolean isOpeningMultipleSelection = crrBackStack == BackStackState.SELECT;
+            if(isOpeningMultipleSelection){
+                selectOptionBar.setVisibility(View.VISIBLE);
+                searchBar.setVisibility(View.GONE);
+            }
+            else{
+                selectOptionBar.setVisibility(View.GONE);
+                searchBar.setVisibility(View.VISIBLE);
+            }
+        }
     }
 
     private void handleCheckEdMenuFilter(MenuItem item, GroupAppType selectedGroupApp) {
@@ -560,7 +588,6 @@ public class MainActivity extends AppCompatActivity {
     private void initSearchEvent() {
         (findViewById(R.id.close_search_bar_btn)).setOnClickListener((v) -> {
             setOpenSearchBar(false);
-            appTitleLabel.setVisibility(View.VISIBLE);
         });
         searchApp = findViewById(R.id.search_app);
         searchApp.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -587,7 +614,6 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         }
-        findViewById(R.id.search_bar).setVisibility(isOpenSearchBar ? View.VISIBLE : View.GONE);
         if (isOpenSearchBar) {
             searchApp.requestFocus();
             searchApp.setIconified(false);
@@ -595,15 +621,27 @@ public class MainActivity extends AppCompatActivity {
                 InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.showSoftInput(searchApp, InputMethodManager.SHOW_IMPLICIT);
             }, 200);
+            backStack.push(BackStackState.SEARCH);
+        } else {
+            removeTargetStateFromBackStack(BackStackState.SEARCH);
+        }
+        toggleVisibleItemsInActionBar();
+    }
+
+    private void removeTargetStateFromBackStack(BackStackState targetState) {
+        if (backStack.isEmpty()) return;
+        BackStackState crrState = backStack.pop();
+        if (crrState != targetState) {
+            backStack.pop();
+            backStack.push(crrState);
         }
     }
 
-
     private void initSelectEvent() {
         amountTextLabel = selectOptionBar.findViewById(R.id.amount_selected);
-
         crrListListAppAdapter.setOnChangeAmountSelectionEvent(listAppSelected -> amountTextLabel.setText(String.format("%d", listAppSelected.size())));
-        selectOptionBar.findViewById(R.id.close_select_options_bar).setOnClickListener(v -> toggleMultipleSelect());
+        closeMultipleSelectionBtn.setOnClickListener(v ->
+                toggleMultipleSelect());
         selectOptionBar.findViewById(R.id.select_all).setOnClickListener(v -> crrListListAppAdapter.selectAll());
         selectOptionBar.findViewById(R.id.deselect_all).setOnClickListener(v -> crrListListAppAdapter.clearSelect());
     }
@@ -628,6 +666,7 @@ public class MainActivity extends AppCompatActivity {
                     });
         } else {
             proxyHandleRunAction(selectedApp, action);
+            onDone.callback();
         }
     }
 

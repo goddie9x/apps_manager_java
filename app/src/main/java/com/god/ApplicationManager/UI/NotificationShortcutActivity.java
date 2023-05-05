@@ -6,6 +6,7 @@ import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.god.ApplicationManager.Facade.AppManagerFacade;
+import com.god.ApplicationManager.Service.NotificationService;
 
 public class NotificationShortcutActivity extends AppCompatActivity {
     @Override
@@ -15,7 +16,10 @@ public class NotificationShortcutActivity extends AppCompatActivity {
 
         if (!Intent.ACTION_CREATE_SHORTCUT.equals(intent.getAction())) {
             AppManagerFacade.setActivity(this);
-            AppManagerFacade.toggleStateAutoTurnOffNotification(this,()->finish());
+            AppManagerFacade.toggleStateAutoTurnOffNotification(this, ()->{
+                NotificationService.getDisableNotificationStatus();
+                this.finish();
+            });
         }
     }
 }

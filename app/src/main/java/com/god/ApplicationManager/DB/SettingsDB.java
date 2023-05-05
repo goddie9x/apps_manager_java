@@ -1,9 +1,13 @@
 package com.god.ApplicationManager.DB;
 
+import androidx.annotation.Keep;
+
+import com.god.ApplicationManager.Service.NotificationService;
 import com.orm.SugarRecord;
 
 import java.util.List;
 
+@Keep
 public class SettingsDB extends SugarRecord {
     public boolean isEnableDarkMode;
     public int freezeMode;
@@ -33,5 +37,11 @@ public class SettingsDB extends SugarRecord {
     }
     public static void saveSettings(){
         instance.save();
+    }
+    public static boolean toggleDisableAutoTurnOffNotificationState(){
+        instance.isDisableTurnOffNotification = !instance.isDisableTurnOffNotification;
+        NotificationService.getDisableNotificationStatus();
+        instance.save();
+        return  instance.isDisableTurnOffNotification;
     }
 }

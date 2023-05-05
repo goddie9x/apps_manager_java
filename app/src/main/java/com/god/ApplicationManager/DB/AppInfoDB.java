@@ -1,10 +1,12 @@
 package com.god.ApplicationManager.DB;
 
+import androidx.annotation.Keep;
+
 import com.god.ApplicationManager.Entity.AppInfo;
 import com.orm.SugarRecord;
 
 import java.util.List;
-
+@Keep
 public class AppInfoDB extends SugarRecord {
     public String appName;
     public String packageName;
