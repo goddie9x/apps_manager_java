@@ -300,7 +300,7 @@
                                 <PersistentState>
                                   <option name="values">
                                     <map>
-                                      <entry key="url" value="file:/$PROJECT_DIR$/../../../SDK/icons/material/materialicons/notifications_off/baseline_notifications_off_24.xml" />
+                                      <entry key="url" value="file:/$PROJECT_DIR$/../../../SDK/icons/material/materialicons/check_box_outline_blank/baseline_check_box_outline_blank_24.xml" />
                                     </map>
                                   </option>
                                 </PersistentState>
@@ -311,7 +311,7 @@
                         <option name="values">
                           <map>
                             <entry key="color" value="ffffff" />
-                            <entry key="outputName" value="ic_notification_off" />
+                            <entry key="outputName" value="ic_checkbox_unchecked" />
                             <entry key="sourceFile" value="E:\hoc\android\BackgroundManager" />
                           </map>
                         </option>

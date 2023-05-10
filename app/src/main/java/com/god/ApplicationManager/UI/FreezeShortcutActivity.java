@@ -15,6 +15,7 @@ import com.god.ApplicationManager.DB.AppInfoDB;
 import com.god.ApplicationManager.DB.SettingsDB;
 import com.god.ApplicationManager.Enum.FreezeServiceNextAction;
 import com.god.ApplicationManager.Facade.AppManagerFacade;
+import com.god.ApplicationManager.Interface.ICallbackContext;
 import com.god.ApplicationManager.R;
 import com.god.ApplicationManager.Service.FreezeService;
 import com.god.ApplicationManager.Util.DialogUtils;
@@ -29,14 +30,10 @@ public class FreezeShortcutActivity extends AppCompatActivity {
     public static FreezeShortcutActivity activity;
     private static final String TAG = "God freeze app shortcut";
 
-    private interface OnFreezeFinishedListener {
-        void callback(Context context);
-    }
+    private static ICallbackContext ICallbackContext;
 
-    private static OnFreezeFinishedListener onFreezeFinishedListener;
-
-    public static void setOnFreezeFinishedListener(OnFreezeFinishedListener handler) {
-        onFreezeFinishedListener = handler;
+    public static void setICallbackContext(ICallbackContext handler) {
+        ICallbackContext = handler;
     }
 
     @Override
@@ -58,16 +55,16 @@ public class FreezeShortcutActivity extends AppCompatActivity {
                     listPackageName.add(app.packageName);
                 }
                 AppManagerFacade.freezeListAppUsingRoot(listPackageName,this,false);
-                Toast.makeText(this, R.string.frezze_all_app_success,Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, R.string.freeze_all_app_success,Toast.LENGTH_SHORT).show();
                 finish();
             }
             else{
                 KeyguardManager keyguardManager = (KeyguardManager) getSystemService(Context.KEYGUARD_SERVICE);
                 FreezeService.stopAnyCurrentFreezing(); // Might be that there still was a previous (failed) freeze process, in this case stop it
                 if (keyguardManager.isKeyguardLocked()) {
-                    if (onFreezeFinishedListener != null) {
-                        onFreezeFinishedListener.callback(this);
-                        onFreezeFinishedListener = null;
+                    if (ICallbackContext != null) {
+                        ICallbackContext.callback(this);
+                        ICallbackContext = null;
                         freezeOnScreenOffFailedDialog();
                         Log.e(TAG, "Screen not unlocked.");
                         return;
@@ -141,10 +138,10 @@ public class FreezeShortcutActivity extends AppCompatActivity {
             if (appsToBeFrozenIterator.hasNext()) {
                 freezeApp(appsToBeFrozenIterator.next(), this);
             } else {
-                if (onFreezeFinishedListener != null) {
-                    onFreezeFinishedListener.callback(this);
+                if (ICallbackContext != null) {
+                    ICallbackContext.callback(this);
                 }
-                onFreezeFinishedListener = null;
+                ICallbackContext = null;
                 finish();
                 Log.i(TAG, "Finished freezing");
             }

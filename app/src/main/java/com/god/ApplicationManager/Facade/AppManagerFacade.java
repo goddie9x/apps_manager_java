@@ -2,6 +2,7 @@ package com.god.ApplicationManager.Facade;
 
 import android.app.ActivityManager;
 import android.app.NotificationManager;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -31,9 +32,11 @@ import com.god.ApplicationManager.DB.SettingsDB;
 import com.god.ApplicationManager.Entity.AppInfo;
 import com.god.ApplicationManager.Enum.FreezeServiceNextAction;
 import com.god.ApplicationManager.Enum.MenuContextType;
+import com.god.ApplicationManager.Interface.IActionForSelectedApp;
+import com.god.ApplicationManager.Interface.IBooleanReciverCallback;
+import com.god.ApplicationManager.Interface.ICallbackVoid;
 import com.god.ApplicationManager.R;
 import com.god.ApplicationManager.Service.FreezeService;
-import com.god.ApplicationManager.Tasking.TaskingHandler;
 import com.god.ApplicationManager.UI.FreezeShortcutActivity;
 import com.god.ApplicationManager.Util.DialogUtils;
 
@@ -45,11 +48,6 @@ import java.util.List;
 import eu.chainfire.libsuperuser.Shell;
 
 public class AppManagerFacade {
-
-    public interface CallbackVoid {
-        void callback();
-    }
-
     private static PackageManager packageManager;
     private static ActivityManager activityManager;
     private static AppCompatActivity activity;
@@ -64,8 +62,8 @@ public class AppManagerFacade {
 
     public static boolean hasRootPermission = false;
 
-    public static void setActivity(AppCompatActivity activ) {
-        activity = activ;
+    public static void setActivity(AppCompatActivity currentActivity) {
+        activity = currentActivity;
         packageManager = activity.getPackageManager();
         activityManager = (ActivityManager) activity.getSystemService(Context.ACTIVITY_SERVICE);
         notificationManager = (NotificationManager) activity
@@ -121,8 +119,8 @@ public class AppManagerFacade {
 
     public static void uninstallAppWithRoot(String packageName) {
         executeCommandWithSuShell("pm uninstall  --user 0 " + packageName,
-                "Uninstall " + packageName + " success",
-                "Uninstall " + packageName + " failed");
+                String.format(activity.getString(R.string.uninstall_target_success), packageName),
+                String.format(activity.getString(R.string.uninstall_target_failed), packageName));
     }
 
     public static boolean uninstallApp(AppInfo appInfo) {
@@ -134,7 +132,8 @@ public class AppManagerFacade {
                 Handler handler = new Handler(Looper.getMainLooper());
 
                 handler.post(() -> Toast.makeText(activity,
-                        "You cannot uninstall system app without root", Toast.LENGTH_LONG).show());
+                        activity.getString(R.string.cannot_uninstall_system_app_without_root)
+                        , Toast.LENGTH_LONG).show());
                 return false;
             }
         } else {
@@ -168,8 +167,8 @@ public class AppManagerFacade {
 
     public static void freezeAppWithRootPermission(String packageName) {
         executeCommandWithSuShell("pm disable " + packageName,
-                "Freeze " + packageName + " success",
-                "Freeze " + packageName + " failed");
+                String.format(activity.getString(R.string.freeze_target_success),packageName),
+                String.format(activity.getString(R.string.freeze_target_failed),packageName));
     }
 
     public static void freezeApp(AppInfo appInfo) {
@@ -191,7 +190,7 @@ public class AppManagerFacade {
         }
         appInfoUpdate.isHaveToBeFreeze = true;
         appInfoUpdate.save();
-        handler.post(() -> Toast.makeText(activity, activity.getString(R.string.frezze) + appInfo.packageName + activity.getString(R.string.success), Toast.LENGTH_SHORT).show());
+        handler.post(() -> Toast.makeText(activity, activity.getString(R.string.freeze) + appInfo.packageName + activity.getString(R.string.success), Toast.LENGTH_SHORT).show());
     }
 
     private static boolean checkWhetherAppAlreadyInFreezeList(AppInfo appInfo, Handler handler) {
@@ -211,7 +210,9 @@ public class AppManagerFacade {
             List<AppInfoDB> listAppCheck = AppInfoDB.find(AppInfoDB.class,
                     "package_name=? and is_have_to_turn_off_notif = 1", appInfo.packageName);
             if (listAppCheck.size() > 0) {
-                handler.post(() -> Toast.makeText(activity, appInfo.packageName + activity.getString(R.string.already_in_turn_off_notification), Toast.LENGTH_SHORT).show());
+                handler.post(() -> Toast.makeText(activity, String.format(
+                        activity.getString(R.string.already_in_turn_off_notification),appInfo.packageName),
+                        Toast.LENGTH_SHORT).show());
                 return;
             }
         }
@@ -222,8 +223,10 @@ public class AppManagerFacade {
         }
         appInfoUpdate.isHaveToTurnOffNotif = !isEnable;
         appInfoUpdate.save();
-        handler.post(() -> Toast.makeText(activity, appInfo.packageName
-                + activity.getString(R.string.has_added_to_the_list_notification), Toast.LENGTH_SHORT).show());
+        handler.post(() -> Toast.makeText(activity,
+                String.format(
+                        activity.getString(R.string.has_added_to_the_list_notification),appInfo.packageName),
+                Toast.LENGTH_SHORT).show());
     }
 
     public static List<String> getListPackageNameHaveToTurnOffNotif() {
@@ -238,7 +241,7 @@ public class AppManagerFacade {
         return listPackageName;
     }
 
-    public static boolean toggleStateAutoTurnOffNotification(Context context, CallbackVoid onDone) {
+    public static boolean toggleStateAutoTurnOffNotification(Context context, ICallbackVoid onDone) {
         boolean newState = SettingsDB.toggleDisableAutoTurnOffNotificationState();
         new Thread(() -> {
             if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -358,8 +361,8 @@ public class AppManagerFacade {
     }
 
     public static boolean executeCommandWithSuShell(String command,
-                                                    CallbackVoid onSuccess,
-                                                    CallbackVoid onFailed) {
+                                                    ICallbackVoid onSuccess,
+                                                    ICallbackVoid onFailed) {
         Log.i(TAG, "exec command");
         try {
             Shell.Threaded shell = Shell.Pool.SU.get();
@@ -376,10 +379,25 @@ public class AppManagerFacade {
             return false;
         }
     }
+    public static void openApp(AppInfo appInfo) {
+        try {
+            Intent intent = packageManager.getLaunchIntentForPackage(appInfo.packageName);
 
+            if (intent != null) {
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                activity.startActivity(intent);
+            } else {
+                Toast.makeText(activity, activity.getString(R.string.target_not_install_or_not_have_ui),
+                        Toast.LENGTH_SHORT).show();
+            }
+        } catch (ActivityNotFoundException e) {
+            Toast.makeText(activity, activity.getString(R.string.target_not_install_or_not_have_ui),
+                    Toast.LENGTH_SHORT).show();
+        }
+    }
     public static void openAppSetting(AppInfo appInfo) {
         Intent intent = new Intent(android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-        intent.setData(Uri.parse("package:" + appInfo.packageName));
+        intent.setData(Uri.parse("package:"+ appInfo.packageName));
         activity.startActivity(intent);
     }
 
@@ -419,24 +437,27 @@ public class AppManagerFacade {
         }
     }
 
-    public static void proxyHandleRunAction(AppInfo appInfo, TaskingHandler.ActionForSelectedApp action) {
+    public static void proxyHandleRunAction(AppInfo appInfo, IActionForSelectedApp action,IBooleanReciverCallback changeDonotWarningCallback) {
         Looper mainLooper = Looper.getMainLooper();
         if (Looper.myLooper() == mainLooper) {
-            proxyCheckSystemAppForAnAction(appInfo,action);
+            proxyCheckSystemAppForAnAction(appInfo,action,changeDonotWarningCallback);
         } else {
             new Handler(mainLooper)
-                    .post(()->proxyCheckSystemAppForAnAction(appInfo,action));
+                    .post(()->proxyCheckSystemAppForAnAction(appInfo,action,changeDonotWarningCallback));
         }
 
     }
-    public static void proxyCheckSystemAppForAnAction(AppInfo appInfo, TaskingHandler.ActionForSelectedApp action){
+    public static void proxyCheckSystemAppForAnAction(AppInfo appInfo,
+                                                      IActionForSelectedApp action,
+                                                      IBooleanReciverCallback changeDonotWarningCallback){
         if (appInfo.isSystemApp && !SettingsDB.getInstance().doNotWarningSystemApp) {
             showWarningDialog((dialog, which) -> {
                 action.callback(appInfo);
             }, (dialog, which) -> {
             }, (state) -> {
                 SettingsDB.getInstance().doNotWarningSystemApp = state;
-                SettingsDB.getInstance().save();
+                SettingsDB.saveSettings();
+                changeDonotWarningCallback.callback(state);
             });
         } else {
             action.callback(appInfo);
@@ -445,7 +466,7 @@ public class AppManagerFacade {
 
     public static void showWarningDialog(DialogInterface.OnClickListener positiveListener,
                                          DialogInterface.OnClickListener negativeListener,
-                                         IEventToggle onDonnotShowAgainCheckBoxChange) {
+                                         IEventToggle onDonotShowAgainCheckBoxChange) {
         LayoutInflater inflater = LayoutInflater.from(activity);
         View customView = inflater.inflate(R.layout.dialog_custom_layout, null);
         CheckBox donnotShowAgainCheckBox = customView.findViewById(R.id.donnot_show_checkbox);
@@ -456,9 +477,8 @@ public class AppManagerFacade {
                 builder -> {
                     builder.setView(customView);
                     builder.setOnDismissListener(dialog ->
-                            onDonnotShowAgainCheckBoxChange.callback(donnotShowAgainCheckBox.isChecked()));
+                            onDonotShowAgainCheckBoxChange.callback(donnotShowAgainCheckBox.isChecked()));
                     builder.setNegativeButton("No", negativeListener);
                 });
     }
-
 }

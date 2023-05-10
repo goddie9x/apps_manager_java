@@ -7,13 +7,11 @@ import android.util.Log;
 import androidx.appcompat.app.AlertDialog;
 
 import com.god.ApplicationManager.DB.SettingsDB;
+import com.god.ApplicationManager.Interface.IDIalogOptionBulder;
 import com.god.ApplicationManager.R;
 
 public class DialogUtils {
     private static final String TAG = "DialogUtils";
-    public interface SetMoreOptions{
-        void callback(AlertDialog.Builder builder);
-    }
     public static void showAlertDialog(Context context, String title, String message,
                                        DialogInterface.OnClickListener positiveListener,
                                        DialogInterface.OnClickListener negativeListener) {
@@ -52,7 +50,7 @@ public class DialogUtils {
     }
     public static void showAlertDialog(Context context, String title, String message,
                                        DialogInterface.OnClickListener positiveListener,
-                                       SetMoreOptions setMoreOptions) {
+                                       IDIalogOptionBulder IDIalogOptionBulder) {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(context, SettingsDB.getInstance().isEnableDarkMode ?
                 R.style.Theme_ApplicationManager_DarkMode_PopupMenuStyle
@@ -63,7 +61,7 @@ public class DialogUtils {
         if (positiveListener != null) {
             builder.setPositiveButton(android.R.string.ok, positiveListener);
         }
-        setMoreOptions.callback(builder);
+        IDIalogOptionBulder.callback(builder);
         builder.show();
     }
     

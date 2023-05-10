@@ -41,4 +41,8 @@
         android:icon="@drawable/ic_light_mode"
         android:visible="false"
         android:orderInCategory="100"/>
+    <item
+        android:id="@+id/toggle_warning"
+        android:title="@string/disable_warning"
+        android:icon="@drawable/ic_disable_warning"/>
 </menu>

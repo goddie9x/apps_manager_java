@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
+        android:id="@+id/open_app"
+        android:title="@string/open_app"
+        android:tooltipText="@string/open_app" />
+    <item
         android:id="@+id/force_stop"
         android:title="@string/force_stop"
         android:tooltipText="@string/force_stop_this_app" />

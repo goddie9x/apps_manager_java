@@ -12,6 +12,8 @@ import android.view.accessibility.AccessibilityNodeInfo;
 import android.widget.Toast;
 
 import com.god.ApplicationManager.Enum.FreezeServiceNextAction;
+import com.god.ApplicationManager.Interface.HandleGetNodeToClick;
+import com.god.ApplicationManager.Interface.ICallbackContext;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,18 +54,10 @@ public class FreezeService extends AccessibilityService {
         return forceStopButtonName;
     }
 
-    public interface OnAppCouldNotBeFrozen {
-        void callback(Context context);
-    }
+    private static ICallbackContext doICallbackContext;
 
-    private static OnAppCouldNotBeFrozen doOnAppCouldNotBeFrozen;
-
-    public static void setOnAppCouldNotBeFrozen(OnAppCouldNotBeFrozen eventHandler) {
-        doOnAppCouldNotBeFrozen = eventHandler;
-    }
-
-    public interface HandleGetNodeToClick {
-        void callback(AccessibilityNodeInfo rootNode, List<AccessibilityNodeInfo> nodesToClick);
+    public static void setOnAppCouldNotBeFrozen(ICallbackContext eventHandler) {
+        doICallbackContext = eventHandler;
     }
 
     @Override
@@ -205,8 +199,8 @@ public class FreezeService extends AccessibilityService {
             Log.e(TAG, "Buttons:");
             printNodes(parentNode);
             stopAnyCurrentFreezing();
-            if (doOnAppCouldNotBeFrozen != null) {
-                doOnAppCouldNotBeFrozen.callback(this);
+            if (doICallbackContext != null) {
+                doICallbackContext.callback(this);
             }
             return false;
         } else if (nodes.size() > 1) {
@@ -244,8 +238,8 @@ public class FreezeService extends AccessibilityService {
         timeoutHandler.postDelayed(() -> {
             Log.w(TAG, "timeout");
             stopAnyCurrentFreezing();
-            if (doOnAppCouldNotBeFrozen != null) {
-                doOnAppCouldNotBeFrozen.callback(context);
+            if (doICallbackContext != null) {
+                doICallbackContext.callback(context);
             }
         }, 4000);
 

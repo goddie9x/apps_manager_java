@@ -18,6 +18,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -28,7 +29,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.god.ApplicationManager.Adapeter.ListAppAdapter;
+import com.god.ApplicationManager.Adapter.ListAppAdapter;
 import com.god.ApplicationManager.DB.SettingsDB;
 import com.god.ApplicationManager.Entity.AppInfo;
 import com.god.ApplicationManager.Enum.BackStackState;
@@ -37,6 +38,8 @@ import com.god.ApplicationManager.Enum.MenuContextType;
 import com.god.ApplicationManager.Enum.OrderAppType;
 import com.god.ApplicationManager.Enum.SortAppType;
 import com.god.ApplicationManager.Facade.AppManagerFacade;
+import com.god.ApplicationManager.Interface.IActionForSelectedApp;
+import com.god.ApplicationManager.Interface.ICallbackVoid;
 import com.god.ApplicationManager.Permission.PermissionHandler;
 import com.god.ApplicationManager.R;
 import com.god.ApplicationManager.Service.NotificationService;
@@ -78,6 +81,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView sortAppDes;
     private MenuItem darkModeItem;
     private MenuItem lightModeItem;
+    private MenuItem toggleWarningItem;
     private MenuContextType crrMenuContext;
 
     @Override
@@ -194,10 +198,12 @@ public class MainActivity extends AppCompatActivity {
         Menu menu = navView.getMenu();
         darkModeItem = menu.findItem(R.id.action_dark_mode);
         lightModeItem = menu.findItem(R.id.action_light_mode);
+        toggleWarningItem = menu.findItem(R.id.toggle_warning);
         MenuItem toggleAutoTurnOffNotification =
                 menu.findItem(R.id.toggle_auto_turn_off_notification);
 
         handleToggleTurnOffNotificationState(toggleAutoTurnOffNotification);
+        setDisplayToggleWarningItem(SettingsDB.getInstance().doNotWarningSystemApp);
         toggleAutoTurnOffNotification.setOnMenuItemClickListener(item -> {
             AppManagerFacade
                     .toggleStateAutoTurnOffNotification(this,
@@ -243,10 +249,29 @@ public class MainActivity extends AppCompatActivity {
                     item.setChecked(true);
                     setEnableDarkMode(false, true, true);
                     break;
+                case R.id.toggle_warning:
+                    handleToggleWarning();
+                    break;
             }
             mainDrawer.closeDrawer(GravityCompat.START);
             return true;
         });
+    }
+
+    private void handleToggleWarning() {
+        boolean doNotWarningSystemApp = SettingsDB.getInstance().doNotWarningSystemApp;
+        SettingsDB.getInstance().doNotWarningSystemApp = !doNotWarningSystemApp;
+        SettingsDB.saveSettings();
+        setDisplayToggleWarningItem(SettingsDB.getInstance().doNotWarningSystemApp);
+    }
+
+    private void setDisplayToggleWarningItem(boolean doNotWarningSystemApp) {
+        toggleWarningItem.setTitle(doNotWarningSystemApp?R.string.enable_warning:R.string.disable_warning);
+        toggleWarningItem.setIcon(doNotWarningSystemApp?
+                R.drawable.ic_enable_warning:R.drawable.ic_disable_warning);
+        Toast.makeText(this,getString(doNotWarningSystemApp?R.string.disabled_warning
+                        :R.string.enabled_warning),
+                Toast.LENGTH_SHORT).show();
     }
 
     private void handleToggleTurnOffNotificationState(MenuItem item) {
@@ -282,6 +307,11 @@ public class MainActivity extends AppCompatActivity {
 
         if (selectedAppInfo != null) {
             switch (item.getItemId()) {
+                case R.id.open_app:
+                {
+                    AppManagerFacade.openApp(selectedAppInfo);
+                    break;
+                }
                 case R.id.force_stop:
                     startActionForSelectedApp(selectedAppInfo, (appInfo) -> AppManagerFacade.forceStopApp(appInfo));
                     return true;
@@ -412,7 +442,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void toggleMultipleSelect() {
-        crrListListAppAdapter.toggleEnableSelect();
+        crrListListAppAdapter.toggleMultipleSelect();
         if (crrListListAppAdapter.getSelectionState()) {
             backStack.push(BackStackState.SELECT);
         } else {
@@ -574,7 +604,7 @@ public class MainActivity extends AppCompatActivity {
     private Stream handleFilterListAppStream(Stream<AppInfo> listAppStream) {
         switch (selectedGroupAppType) {
             case SYSTEM_APP:
-                sortAppDes.setText(R.string.filter_sytem_app_amount_title);
+                sortAppDes.setText(R.string.filter_system_app_amount_title);
                 return listAppStream.filter(appInfo -> appInfo.isSystemApp);
             case USER_APP:
                 sortAppDes.setText(R.string.filter_user_app_amount_title);
@@ -639,7 +669,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void initSelectEvent() {
         amountTextLabel = selectOptionBar.findViewById(R.id.amount_selected);
-        crrListListAppAdapter.setOnChangeAmountSelectionEvent(listAppSelected -> amountTextLabel.setText(String.format("%d", listAppSelected.size())));
+        crrListListAppAdapter.setOnIHandleListApp(listAppSelected -> amountTextLabel.setText(String.format("%d", listAppSelected.size())));
         closeMultipleSelectionBtn.setOnClickListener(v ->
                 toggleMultipleSelect());
         selectOptionBar.findViewById(R.id.select_all).setOnClickListener(v -> crrListListAppAdapter.selectAll());
@@ -647,32 +677,32 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void startActionForSelectedApp(AppInfo selectedApp,
-                                           TaskingHandler.ActionForSelectedApp action) {
+                                           IActionForSelectedApp action) {
         if (crrListListAppAdapter.getSelectionState()) {
             TaskingHandler.handleForSelectedApp(crrListListAppAdapter.getListSelectedApp(),
-                    appInfo -> proxyHandleRunAction(appInfo, action), () -> crrListListAppAdapter.clearSelectedAppInfo());
+                    appInfo -> proxyHandleRunAction(appInfo, action,this::setDisplayToggleWarningItem), () -> crrListListAppAdapter.clearSelectedAppInfo());
         } else {
-            proxyHandleRunAction(selectedApp, action);
+            proxyHandleRunAction(selectedApp, action,this::setDisplayToggleWarningItem);
         }
     }
 
-    private void startActionForSelectedApp(AppInfo selectedApp, TaskingHandler.ActionForSelectedApp action,
-                                           AppManagerFacade.CallbackVoid onDone) {
+    private void startActionForSelectedApp(AppInfo selectedApp, IActionForSelectedApp action,
+                                           ICallbackVoid onDone) {
         if (crrListListAppAdapter.getSelectionState()) {
             TaskingHandler.handleForSelectedApp(crrListListAppAdapter.getListSelectedApp(),
-                    appInfo -> proxyHandleRunAction(appInfo, action), () -> {
+                    appInfo -> proxyHandleRunAction(appInfo, action,this::setDisplayToggleWarningItem), () -> {
                         crrListListAppAdapter.clearSelectedAppInfo();
                         onDone.callback();
                     });
         } else {
-            proxyHandleRunAction(selectedApp, action);
+            proxyHandleRunAction(selectedApp, action,this::setDisplayToggleWarningItem);
             onDone.callback();
         }
     }
 
     private void startActionForSelectedAppWithoutWarningSystemApp(AppInfo selectedApp,
-                                                                  TaskingHandler.ActionForSelectedApp action,
-                                                                  AppManagerFacade.CallbackVoid onDone) {
+                                                                  IActionForSelectedApp action,
+                                                                  ICallbackVoid onDone) {
         if (crrListListAppAdapter.getSelectionState()) {
             TaskingHandler.handleForSelectedApp(crrListListAppAdapter.getListSelectedApp(),
                     action, () -> {

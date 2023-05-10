@@ -9,9 +9,10 @@ import com.god.ApplicationManager.Service.NotificationService;
 
 public class ServiceHandlerFacade {
     public static void startServices(Context context) {
-            startNotificationService(context);
-            startFreezeService(context);
+        startNotificationService(context);
+        startFreezeService(context);
     }
+
     public static void startNotificationService(Context context) {
         if (!isMyServiceRunning(NotificationService.class, context)) {
             Intent serviceIntent = new Intent(context, NotificationService.class);

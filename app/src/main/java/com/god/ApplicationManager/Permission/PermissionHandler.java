@@ -11,7 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationManagerCompat;
 import androidx.core.content.ContextCompat;
 
-import com.god.ApplicationManager.Facade.AppManagerFacade;
+import com.god.ApplicationManager.Interface.ICallbackVoid;
 import com.god.ApplicationManager.R;
 import com.god.ApplicationManager.Service.FreezeService;
 import com.god.ApplicationManager.Util.DialogUtils;
@@ -84,7 +84,8 @@ public class PermissionHandler {
             },()->{});
         }
     }
-private void showPermissionRequireDialog(String permissionDes, AppManagerFacade.CallbackVoid grandPermissionAction,AppManagerFacade.CallbackVoid cancelAction){
+private void showPermissionRequireDialog(String permissionDes, ICallbackVoid grandPermissionAction,
+                                         ICallbackVoid cancelAction){
     DialogUtils.showAlertDialog(activity,
             activity.getString(R.string.permission_requirement),
             permissionDes,

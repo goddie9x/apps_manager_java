@@ -16,6 +16,9 @@ import com.god.ApplicationManager.DB.SettingsDB;
 import com.god.ApplicationManager.Entity.AppInfo;
 import com.god.ApplicationManager.Enum.MenuContextType;
 import com.god.ApplicationManager.Facade.AppManagerFacade;
+import com.god.ApplicationManager.Interface.IActionForSelectedApp;
+import com.god.ApplicationManager.Interface.ICallbackVoid;
+import com.god.ApplicationManager.Interface.IHandleListApp;
 import com.god.ApplicationManager.Util.AsyncTaskBuilder;
 
 import java.util.ArrayList;
@@ -25,14 +28,7 @@ import java.util.stream.Collectors;
 
 public class TaskingHandler {
 
-    public interface SetListAppToRecycleView{
-        void callback(List<AppInfo>listApp);
-    }
-    public interface ActionForSelectedApp{
-        void callback(AppInfo listSelectedApp);
-    }
-
-    private static SetListAppToRecycleView setListAppToRecycleView;
+    private static IHandleListApp IHandleListApp;
     private static  List<AppInfo> listApp;
     private static  MenuContextType crrMenuContext;
 
@@ -43,16 +39,16 @@ public class TaskingHandler {
     public static  void setListApp(List<AppInfo> crrListApp){
         listApp = crrListApp;
         if(!checkCallBackSetListAppToRecycleViewInitialed())return;
-        setListAppToRecycleView.callback(listApp);
+        IHandleListApp.callback(listApp);
     }
-    public static void setCallbackSetListAppToRecycleView(SetListAppToRecycleView action) {
-        setListAppToRecycleView = action;
+    public static void setCallbackSetListAppToRecycleView(IHandleListApp action) {
+        IHandleListApp = action;
     }
     public static void setActivity(AppCompatActivity activ){
         activity = activ;
     }
     private static boolean checkCallBackSetListAppToRecycleViewInitialed(){
-        if(setListAppToRecycleView==null){
+        if(IHandleListApp ==null){
             Toast.makeText(activity,
                     "setListAppToRecycleView has bean null",Toast.LENGTH_SHORT).show();
             return false;
@@ -74,7 +70,7 @@ public class TaskingHandler {
                 } else {
                     newListApp = listApp;
                 }
-                setListAppToRecycleView.callback(newListApp);
+                IHandleListApp.callback(newListApp);
             });
             return null;
         });
@@ -88,7 +84,7 @@ public class TaskingHandler {
         taskSetListAppToRecycleView.setDoInBackgroundFunc(an -> {
             Handler handler = new Handler(Looper.getMainLooper());
             handler.post(() -> {
-                    setListAppToRecycleView.callback(listApp);
+                    IHandleListApp.callback(listApp);
             });
             return null;
         });
@@ -185,7 +181,7 @@ public class TaskingHandler {
                     newListApp = listApp;
             }
             Handler handler = new Handler(Looper.getMainLooper());
-            handler.post(() -> setListAppToRecycleView.callback(newListApp));
+            handler.post(() -> IHandleListApp.callback(newListApp));
             return null;
         });
         taskGetAllInstalledApp.setOnPreExecuteFunc(() -> {
@@ -222,8 +218,8 @@ public class TaskingHandler {
         return newListApp;
     }
 
-    public static void handleForSelectedApp(List<AppInfo> listApp, ActionForSelectedApp action,
-                                            AppManagerFacade.CallbackVoid onDone){
+    public static void handleForSelectedApp(List<AppInfo> listApp, IActionForSelectedApp action,
+                                            ICallbackVoid onDone){
         AsyncTaskBuilder<Void, Void, Void> taskDoActionEachSelectedApp = new AsyncTaskBuilder<>();
         ProgressDialog progressDialog = new ProgressDialog(activity);
 
