@@ -2,36 +2,55 @@ plugins {
     id 'com.android.application'
 }
 
+def localProperties = new Properties()
+def localPropertiesFile = rootProject.file('local.properties')
+if (localPropertiesFile.exists()) {
+    localPropertiesFile.withInputStream { localProperties.load(it) }
+}
+
 android {
     namespace 'com.god.ApplicationManager'
-    compileSdk 33
+    compileSdk 35
+
+    signingConfigs {
+        release {
+            if (localProperties.getProperty('keystore.path') != null) {
+                storeFile file(localProperties.getProperty('keystore.path'))
+                storePassword localProperties.getProperty('keystore.password')
+                keyAlias localProperties.getProperty('key.alias')
+                keyPassword localProperties.getProperty('key.password')
+            }
+        }
+    }
 
     defaultConfig {
         applicationId 'com.god.ApplicationManager'
         minSdk 24
-        targetSdk 33
-        versionCode 15
-        versionName "1.0.1.7"
+        targetSdk 35
+        versionCode 16 
+        versionName "1.0.1.8"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
         release {
             minifyEnabled true
+            signingConfig signingConfigs.release
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+
     buildFeatures {
         viewBinding true
     }
 }
 
 dependencies {
-
     implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation 'androidx.recyclerview:recyclerview:1.2.1'
     implementation 'com.google.android.material:material:1.8.0'
@@ -44,6 +63,7 @@ dependencies {
     implementation 'androidx.preference:preference:1.2.0'
     implementation 'eu.chainfire:libsuperuser:1.1.1'
     implementation 'com.github.satyan:sugar:1.5'
+    
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
