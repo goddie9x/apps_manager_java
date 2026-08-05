@@ -14,7 +14,7 @@ public class MainActivityActionHelper {
                                                  IActionForSelectedApp action, IBooleanReciverCallback warningCallback) {
         if (adapter.getSelectionState()) {
             TaskingHandler.handleForSelectedApp(adapter.getListSelectedApp(),
-                    appInfo -> AppManagerFacade.proxyHandleRunAction(appInfo, action, warningCallback),
+                    (AppInfo appInfo) -> AppManagerFacade.proxyHandleRunAction(appInfo, action, warningCallback),
                     adapter::clearSelectedAppInfo);
         } else {
             AppManagerFacade.proxyHandleRunAction(selectedApp, action, warningCallback);
@@ -26,7 +26,7 @@ public class MainActivityActionHelper {
                                                  IBooleanReciverCallback warningCallback) {
         if (adapter.getSelectionState()) {
             TaskingHandler.handleForSelectedApp(adapter.getListSelectedApp(),
-                    appInfo -> AppManagerFacade.proxyHandleRunAction(appInfo, action, warningCallback), () -> {
+                    (AppInfo appInfo) -> AppManagerFacade.proxyHandleRunAction(appInfo, action, warningCallback), () -> {
                         adapter.clearSelectedAppInfo();
                         onDone.callback();
                     });

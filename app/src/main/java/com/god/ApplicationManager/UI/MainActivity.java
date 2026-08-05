@@ -87,8 +87,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public Resources.Theme getTheme() {
         Resources.Theme theme = super.getTheme();
-        theme.applyStyle(SettingsDB.getInstance().isEnableDarkMode ?
-                R.style.Theme_ApplicationManager_DarkMode
+        theme.applyStyle(SettingsDB.getInstance().isEnableDarkMode ? R.style.Theme_ApplicationManager_DarkMode
                 : R.style.Theme_ApplicationManager, true);
         return theme;
     }
@@ -169,8 +168,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void handleStartServices() {
         if (ScheduleForServices.isJobCalled) {
-            ComponentName scheduleRunService =
-                    new ComponentName(this, ScheduleForServices.class);
+            ComponentName scheduleRunService = new ComponentName(this, ScheduleForServices.class);
             JobInfo jobInfo = new JobInfo.Builder(JOB_RUN_SERVICES, scheduleRunService)
                     .setPersisted(true)
                     .setPeriodic(900000)
@@ -233,16 +231,14 @@ public class MainActivity extends AppCompatActivity {
         darkModeItem = menu.findItem(R.id.action_dark_mode);
         lightModeItem = menu.findItem(R.id.action_light_mode);
         toggleWarningItem = menu.findItem(R.id.toggle_warning);
-        MenuItem toggleAutoTurnOffNotification =
-                menu.findItem(R.id.toggle_auto_turn_off_notification);
+        MenuItem toggleAutoTurnOffNotification = menu.findItem(R.id.toggle_auto_turn_off_notification);
 
         handleToggleTurnOffNotificationState(toggleAutoTurnOffNotification);
         setDisplayToggleWarningItem(SettingsDB.getInstance().doNotWarningSystemApp);
         toggleAutoTurnOffNotification.setOnMenuItemClickListener(item -> {
-            AppManagerFacade
-                    .toggleStateAutoTurnOffNotification(this,
-                            NotificationService::getDisableNotificationStatus);
-            handleToggleTurnOffNotificationState(item);
+            AppManagerFacade.toggleStateAutoTurnOffNotification(this, () -> {
+                handleToggleTurnOffNotificationState(item);
+            });
             return false;
         });
 
@@ -290,10 +286,9 @@ public class MainActivity extends AppCompatActivity {
 
     private void setDisplayToggleWarningItem(boolean doNotWarningSystemApp) {
         toggleWarningItem.setTitle(doNotWarningSystemApp ? R.string.enable_warning : R.string.disable_warning);
-        toggleWarningItem.setIcon(doNotWarningSystemApp ?
-                R.drawable.ic_enable_warning : R.drawable.ic_disable_warning);
+        toggleWarningItem.setIcon(doNotWarningSystemApp ? R.drawable.ic_enable_warning : R.drawable.ic_disable_warning);
         Toast.makeText(this, getString(doNotWarningSystemApp ? R.string.disabled_warning
-                        : R.string.enabled_warning),
+                : R.string.enabled_warning),
                 Toast.LENGTH_SHORT).show();
     }
 
@@ -319,7 +314,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
-                                           @NonNull int[] grantResults) {
+            @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         permissionHandler.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
@@ -348,7 +343,8 @@ public class MainActivity extends AppCompatActivity {
             } else if (id == R.id.uninstall) {
                 MainActivityActionHelper.startActionForSelectedApp(crrListListAppAdapter, selectedAppInfo,
                         TaskingHandler::execTaskUninstallApp,
-                        () -> TaskingHandler.execTaskGetAllInstalledApp(crrMenuContext), this::setDisplayToggleWarningItem);
+                        () -> TaskingHandler.execTaskGetAllInstalledApp(crrMenuContext),
+                        this::setDisplayToggleWarningItem);
                 return true;
             } else if (id == R.id.open_in_setting) {
                 AppManagerFacade.openAppSetting(selectedAppInfo);
@@ -372,9 +368,8 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        setTheme(SettingsDB.getInstance().isEnableDarkMode ?
-                R.style.Theme_ApplicationManager_DarkMode_PopupMenuStyle :
-                R.style.Theme_ApplicationManager_PopupMenuStyle);
+        setTheme(SettingsDB.getInstance().isEnableDarkMode ? R.style.Theme_ApplicationManager_DarkMode_PopupMenuStyle
+                : R.style.Theme_ApplicationManager_PopupMenuStyle);
         getMenuInflater().inflate(R.menu.menu_main, menu);
         optionsMenu = menu;
         return true;
@@ -516,8 +511,8 @@ public class MainActivity extends AppCompatActivity {
 
         listAppRecycleView.setLayoutManager(layoutManager);
         crrListListAppAdapter = new ListAppAdapter(new ArrayList<>());
-        crrListListAppAdapter.setOnTouchEvent((listServiceLayout, appInfo)
-                -> TaskingHandler.execTaskHandleGetListService(listServiceLayout, appInfo.packageName));
+        crrListListAppAdapter.setOnTouchEvent((listServiceLayout, appInfo) -> TaskingHandler
+                .execTaskHandleGetListService(listServiceLayout, appInfo.packageName));
         listAppRecycleView.setAdapter(crrListListAppAdapter);
         registerForContextMenu(listAppRecycleView);
         listAppRecycleView.setVerticalScrollBarEnabled(true);
@@ -578,7 +573,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void removeTargetStateFromBackStack(BackStackState targetState) {
-        if (backStack.isEmpty()) return;
+        if (backStack.isEmpty())
+            return;
         BackStackState crrState = backStack.pop();
         if (crrState != targetState) {
             backStack.pop();
@@ -588,7 +584,8 @@ public class MainActivity extends AppCompatActivity {
 
     private void initSelectEvent() {
         amountTextLabel = selectOptionBar.findViewById(R.id.amount_selected);
-        crrListListAppAdapter.setOnIHandleListApp(listAppSelected -> amountTextLabel.setText(String.format("%d", listAppSelected.size())));
+        crrListListAppAdapter.setOnIHandleListApp(
+                listAppSelected -> amountTextLabel.setText(String.format("%d", listAppSelected.size())));
         closeMultipleSelectionBtn.setOnClickListener(v -> toggleMultipleSelect());
         selectOptionBar.findViewById(R.id.select_all).setOnClickListener(v -> crrListListAppAdapter.selectAll());
         selectOptionBar.findViewById(R.id.deselect_all).setOnClickListener(v -> crrListListAppAdapter.clearSelect());

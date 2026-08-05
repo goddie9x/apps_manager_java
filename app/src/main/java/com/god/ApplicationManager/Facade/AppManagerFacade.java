@@ -98,7 +98,6 @@ public class AppManagerFacade {
                 Runtime.getRuntime().exec("su");
             } catch (IOException e) {
                 Handler handler = new Handler(Looper.getMainLooper());
-
                 handler.post(() -> Toast.makeText(activity, e.getMessage(), Toast.LENGTH_LONG).show());
             }
         }
@@ -130,7 +129,6 @@ public class AppManagerFacade {
                 return true;
             } else {
                 Handler handler = new Handler(Looper.getMainLooper());
-
                 handler.post(() -> Toast.makeText(activity,
                         activity.getString(R.string.cannot_uninstall_system_app_without_root)
                         , Toast.LENGTH_LONG).show());
@@ -155,7 +153,6 @@ public class AppManagerFacade {
         if (hasRootPermission) {
             forceStopAppWithRootPermission(appInfo.packageName);
         } else {
-            //since android 10 (sdk 29) we cannot force stop app, then we open setting of this app
             if (SDK_VERSION < 29) {
                 activityManager.killBackgroundProcesses(appInfo.packageName);
             } else {
@@ -233,9 +230,7 @@ public class AppManagerFacade {
         List<AppInfoDB> listAppTurnOffNotif = AppInfoDB.find(AppInfoDB.class,
                 "is_have_to_turn_off_notif =1");
         List<String> listPackageName = new ArrayList<>();
-        for (AppInfoDB app :
-                listAppTurnOffNotif
-        ) {
+        for (AppInfoDB app : listAppTurnOffNotif) {
             listPackageName.add(app.packageName);
         }
         return listPackageName;
@@ -272,7 +267,6 @@ public class AppManagerFacade {
     public static boolean executeCommandWithSuShell(String command) {
         Log.i(TAG, "exec command");
         Handler handler = new Handler(Looper.getMainLooper());
-
         try {
             Shell.Threaded shell = Shell.Pool.SU.get();
             shell.run(command);
@@ -312,7 +306,7 @@ public class AppManagerFacade {
         String crrPackageName = context.getPackageName();
         try {
             Shell.Threaded shell = Shell.Pool.SU.get();
-            if (packageName == crrPackageName) {
+            if (packageName.equals(crrPackageName)) {
                 if (putScreenOffAfterFreezing) {
                     shell.run("input keyevent 26");
                 }
@@ -334,7 +328,7 @@ public class AppManagerFacade {
         try {
             Shell.Threaded shell = Shell.Pool.SU.get();
             packages.forEach(it -> {
-                if (it == context.getPackageName()) {
+                if (it.equals(context.getPackageName())) {
                     if (putScreenOffAfterFreezing) {
                         try {
                             shell.run("input keyevent 26");
@@ -372,17 +366,16 @@ public class AppManagerFacade {
         } catch (Exception e) {
             onFailed.callback();
             Handler handler = new Handler(Looper.getMainLooper());
-
             handler.post(() -> {
                 Toast.makeText(activity,activity.getString(R.string.failed), Toast.LENGTH_SHORT).show();
             });
             return false;
         }
     }
+
     public static void openApp(AppInfo appInfo) {
         try {
             Intent intent = packageManager.getLaunchIntentForPackage(appInfo.packageName);
-
             if (intent != null) {
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 activity.startActivity(intent);
@@ -395,6 +388,7 @@ public class AppManagerFacade {
                     Toast.LENGTH_SHORT).show();
         }
     }
+
     public static void openAppSetting(AppInfo appInfo) {
         Intent intent = new Intent(android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
         intent.setData(Uri.parse("package:"+ appInfo.packageName));
@@ -445,8 +439,8 @@ public class AppManagerFacade {
             new Handler(mainLooper)
                     .post(()->proxyCheckSystemAppForAnAction(appInfo,action,changeDonotWarningCallback));
         }
-
     }
+
     public static void proxyCheckSystemAppForAnAction(AppInfo appInfo,
                                                       IActionForSelectedApp action,
                                                       IBooleanReciverCallback changeDonotWarningCallback){
