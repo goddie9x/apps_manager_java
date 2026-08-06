@@ -130,7 +130,18 @@
                 android:scrollbarSize="10dp"
                 android:scrollbarThumbVertical="@drawable/custom_scrollbar_thumb"
                 android:scrollbars="vertical" />
-
+            <TextView
+                android:id="@+id/system_info_label"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:background="?attr/colorPrimary"
+                android:textColor="?attr/colorOnPrimary"
+                android:padding="8dp"
+                android:gravity="center"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                android:visibility="gone" />
             <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:id="@+id/freeze_float_btn"
                 android:layout_width="wrap_content"

@@ -3,6 +3,7 @@ package com.god.ApplicationManager.Facade;
 import android.app.ActivityManager;
 import android.app.NotificationManager;
 import android.content.ActivityNotFoundException;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -18,7 +19,9 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
+import android.provider.Settings;
 import android.service.notification.StatusBarNotification;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -66,8 +69,7 @@ public class AppManagerFacade {
         activity = currentActivity;
         packageManager = activity.getPackageManager();
         activityManager = (ActivityManager) activity.getSystemService(Context.ACTIVITY_SERVICE);
-        notificationManager = (NotificationManager) activity
-                .getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager = (NotificationManager) activity.getSystemService(Context.NOTIFICATION_SERVICE);
         activeNotifications = notificationManager.getActiveNotifications();
     }
 
@@ -97,8 +99,7 @@ public class AppManagerFacade {
             try {
                 Runtime.getRuntime().exec("su");
             } catch (IOException e) {
-                Handler handler = new Handler(Looper.getMainLooper());
-                handler.post(() -> Toast.makeText(activity, e.getMessage(), Toast.LENGTH_LONG).show());
+                Log.e(TAG, "No root access available: " + e.getMessage());
             }
         }
     }
@@ -111,9 +112,9 @@ public class AppManagerFacade {
             hasRootPermission = !(s.hasNext() ? s.next() : "").equals("");
             return AppManagerFacade.hasRootPermission;
         } catch (IOException e) {
-            e.printStackTrace();
+            hasRootPermission = false;
         }
-        return false;
+        return hasRootPermission;
     }
 
     public static void uninstallAppWithRoot(String packageName) {
@@ -130,8 +131,7 @@ public class AppManagerFacade {
             } else {
                 Handler handler = new Handler(Looper.getMainLooper());
                 handler.post(() -> Toast.makeText(activity,
-                        activity.getString(R.string.cannot_uninstall_system_app_without_root)
-                        , Toast.LENGTH_LONG).show());
+                        activity.getString(R.string.cannot_uninstall_system_app_without_root), Toast.LENGTH_LONG).show());
                 return false;
             }
         } else {
@@ -149,7 +149,6 @@ public class AppManagerFacade {
     }
 
     public static void forceStopApp(AppInfo appInfo) {
-        Log.i(TAG, "forceStopApp");
         if (hasRootPermission) {
             forceStopAppWithRootPermission(appInfo.packageName);
         } else {
@@ -164,8 +163,8 @@ public class AppManagerFacade {
 
     public static void freezeAppWithRootPermission(String packageName) {
         executeCommandWithSuShell("pm disable " + packageName,
-                String.format(activity.getString(R.string.freeze_target_success),packageName),
-                String.format(activity.getString(R.string.freeze_target_failed),packageName));
+                String.format(activity.getString(R.string.freeze_target_success), packageName),
+                String.format(activity.getString(R.string.freeze_target_failed), packageName));
     }
 
     public static void freezeApp(AppInfo appInfo) {
@@ -208,7 +207,7 @@ public class AppManagerFacade {
                     "package_name=? and is_have_to_turn_off_notif = 1", appInfo.packageName);
             if (listAppCheck.size() > 0) {
                 handler.post(() -> Toast.makeText(activity, String.format(
-                        activity.getString(R.string.already_in_turn_off_notification),appInfo.packageName),
+                        activity.getString(R.string.already_in_turn_off_notification), appInfo.packageName),
                         Toast.LENGTH_SHORT).show());
                 return;
             }
@@ -222,7 +221,7 @@ public class AppManagerFacade {
         appInfoUpdate.save();
         handler.post(() -> Toast.makeText(activity,
                 String.format(
-                        activity.getString(R.string.has_added_to_the_list_notification),appInfo.packageName),
+                        activity.getString(R.string.has_added_to_the_list_notification), appInfo.packageName),
                 Toast.LENGTH_SHORT).show());
     }
 
@@ -254,8 +253,8 @@ public class AppManagerFacade {
 
                     shortcutManager.updateShortcuts(Collections.singletonList(builder.build()));
                 }
-                onDone.callback();
             }
+            new Handler(Looper.getMainLooper()).post(onDone::callback);
         }).start();
         Toast.makeText(
                 context, context.getString(newState ? R.string.disable_auto_turn_off_notification :
@@ -265,7 +264,6 @@ public class AppManagerFacade {
     }
 
     public static boolean executeCommandWithSuShell(String command) {
-        Log.i(TAG, "exec command");
         Handler handler = new Handler(Looper.getMainLooper());
         try {
             Shell.Threaded shell = Shell.Pool.SU.get();
@@ -292,7 +290,6 @@ public class AppManagerFacade {
             });
             return true;
         } catch (Exception e) {
-            Log.e(TAG, "ShellDiedException, probably we did not have root access. (???)");
             handler.post(() -> {
                 Toast.makeText(activity, textFail, Toast.LENGTH_SHORT).show();
             });
@@ -317,7 +314,6 @@ public class AppManagerFacade {
             }
             return true;
         } catch (Shell.ShellDiedException e) {
-            Log.e(TAG, "ShellDiedException, probably we did not have root access. (???)");
             return false;
         }
     }
@@ -349,7 +345,6 @@ public class AppManagerFacade {
             if (putScreenOffAfterFreezing) shell.run("input keyevent 26");
             return true;
         } catch (Shell.ShellDiedException e) {
-            Log.e(TAG, "ShellDiedException, probably we did not have root access. (???)");
             return false;
         }
     }
@@ -357,7 +352,6 @@ public class AppManagerFacade {
     public static boolean executeCommandWithSuShell(String command,
                                                     ICallbackVoid onSuccess,
                                                     ICallbackVoid onFailed) {
-        Log.i(TAG, "exec command");
         try {
             Shell.Threaded shell = Shell.Pool.SU.get();
             shell.run(command);
@@ -367,7 +361,7 @@ public class AppManagerFacade {
             onFailed.callback();
             Handler handler = new Handler(Looper.getMainLooper());
             handler.post(() -> {
-                Toast.makeText(activity,activity.getString(R.string.failed), Toast.LENGTH_SHORT).show();
+                Toast.makeText(activity, activity.getString(R.string.failed), Toast.LENGTH_SHORT).show();
             });
             return false;
         }
@@ -391,7 +385,7 @@ public class AppManagerFacade {
 
     public static void openAppSetting(AppInfo appInfo) {
         Intent intent = new Intent(android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-        intent.setData(Uri.parse("package:"+ appInfo.packageName));
+        intent.setData(Uri.parse("package:" + appInfo.packageName));
         activity.startActivity(intent);
     }
 
@@ -400,8 +394,7 @@ public class AppManagerFacade {
     }
 
     public static List<ActivityManager.RunningServiceInfo> getRunningServices() {
-        return activityManager
-                .getRunningServices(Integer.MAX_VALUE);
+        return activityManager.getRunningServices(Integer.MAX_VALUE);
     }
 
     public static List<AppInfoDB> getListAppFromDB() {
@@ -431,19 +424,19 @@ public class AppManagerFacade {
         }
     }
 
-    public static void proxyHandleRunAction(AppInfo appInfo, IActionForSelectedApp action,IBooleanReciverCallback changeDonotWarningCallback) {
+    public static void proxyHandleRunAction(AppInfo appInfo, IActionForSelectedApp action, IBooleanReciverCallback changeDonotWarningCallback) {
         Looper mainLooper = Looper.getMainLooper();
         if (Looper.myLooper() == mainLooper) {
-            proxyCheckSystemAppForAnAction(appInfo,action,changeDonotWarningCallback);
+            proxyCheckSystemAppForAnAction(appInfo, action, changeDonotWarningCallback);
         } else {
             new Handler(mainLooper)
-                    .post(()->proxyCheckSystemAppForAnAction(appInfo,action,changeDonotWarningCallback));
+                    .post(() -> proxyCheckSystemAppForAnAction(appInfo, action, changeDonotWarningCallback));
         }
     }
 
     public static void proxyCheckSystemAppForAnAction(AppInfo appInfo,
                                                       IActionForSelectedApp action,
-                                                      IBooleanReciverCallback changeDonotWarningCallback){
+                                                      IBooleanReciverCallback changeDonotWarningCallback) {
         if (appInfo.isSystemApp && !SettingsDB.getInstance().doNotWarningSystemApp) {
             showWarningDialog((dialog, which) -> {
                 action.callback(appInfo);
@@ -474,5 +467,36 @@ public class AppManagerFacade {
                             onDonotShowAgainCheckBoxChange.callback(donnotShowAgainCheckBox.isChecked()));
                     builder.setNegativeButton("No", negativeListener);
                 });
+    }
+
+    public static boolean isAccessibilityServiceEnabled(Context context, Class<?> accessibilityService) {
+        ComponentName expectedComponentName = new ComponentName(context, accessibilityService);
+        String enabledServicesSetting = Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES);
+        if (enabledServicesSetting == null) return false;
+        TextUtils.SimpleStringSplitter colonSplitter = new TextUtils.SimpleStringSplitter(':');
+        colonSplitter.setString(enabledServicesSetting);
+        while (colonSplitter.hasNext()) {
+            String componentNameString = colonSplitter.next();
+            ComponentName enabledService = ComponentName.unflattenFromString(componentNameString);
+            if (enabledService != null && enabledService.equals(expectedComponentName)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static boolean isNotificationServiceEnabled(Context context) {
+        String pkgName = context.getPackageName();
+        final String flat = Settings.Secure.getString(context.getContentResolver(), "enabled_notification_listeners");
+        if (!TextUtils.isEmpty(flat)) {
+            final String[] names = flat.split(":");
+            for (String name : names) {
+                final ComponentName cn = ComponentName.unflattenFromString(name);
+                if (cn != null && TextUtils.equals(pkgName, cn.getPackageName())) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 }

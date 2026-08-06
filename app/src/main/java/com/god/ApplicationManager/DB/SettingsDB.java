@@ -9,6 +9,7 @@ import java.util.List;
 
 @Keep
 public class SettingsDB extends SugarRecord {
+    public boolean isShowSystemInfo = true;
     public boolean isEnableDarkMode;
     public int freezeMode;
     public boolean doNotShowTermOfUse;

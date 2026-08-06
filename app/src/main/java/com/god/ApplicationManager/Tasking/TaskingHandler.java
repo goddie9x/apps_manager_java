@@ -31,7 +31,7 @@ import java.util.stream.Collectors;
 public class TaskingHandler {
 
     private static IHandleListApp IHandleListApp;
-    private static List<AppInfo> listApp;
+    private static List<AppInfo> listApp = new ArrayList<>();
     private static MenuContextType crrMenuContext;
     public static AppCompatActivity activity;
 
@@ -44,7 +44,7 @@ public class TaskingHandler {
     }
 
     public static void setListApp(List<AppInfo> crrListApp) {
-        listApp = crrListApp;
+        listApp = crrListApp != null ? crrListApp : new ArrayList<>();
         if (!checkCallBackSetListAppToRecycleViewInitialed()) return;
         IHandleListApp.callback(listApp);
     }
@@ -120,18 +120,25 @@ public class TaskingHandler {
                 }));
     }
 
-    public static void execTaskGetAllInstalledApp(MenuContextType menuContext) {
+    public static void execTaskGetAllInstalledApp(MenuContextType menuContext, boolean forceReload) {
         if (!checkCallBackSetListAppToRecycleViewInitialed()) return;
         if (menuContext == null) menuContext = MenuContextType.MAIN_MENU;
         crrMenuContext = menuContext;
 
-        ProgressDialog progressDialog = new ProgressDialog(activity);
-        progressDialog.setMessage("Loading...");
-        progressDialog.setCancelable(false);
-        progressDialog.show();
+        ProgressDialog progressDialog = null;
+        if (forceReload || listApp == null || listApp.isEmpty()) {
+            progressDialog = new ProgressDialog(activity);
+            progressDialog.setMessage("Loading...");
+            progressDialog.setCancelable(false);
+            progressDialog.show();
+        }
+
+        final ProgressDialog finalProgressDialog = progressDialog;
 
         CompletableFuture.supplyAsync(() -> {
-            listApp = AppManagerFacade.GetAllInstalledApp();
+            if (forceReload || listApp == null || listApp.isEmpty()) {
+                listApp = AppManagerFacade.GetAllInstalledApp();
+            }
             List<AppInfo> newListApp;
             switch (crrMenuContext) {
                 case FREEZE_MENU:
@@ -147,7 +154,7 @@ public class TaskingHandler {
             }
             return newListApp;
         }, backgroundExecutor).thenAccept(newListApp -> mainHandler.post(() -> {
-            if (progressDialog.isShowing()) progressDialog.dismiss();
+            if (finalProgressDialog != null && finalProgressDialog.isShowing()) finalProgressDialog.dismiss();
             IHandleListApp.callback(newListApp);
         }));
     }

@@ -1,6 +1,7 @@
 package com.god.ApplicationManager.UI;
 
 import android.annotation.SuppressLint;
+import android.app.ActivityManager;
 import android.app.job.JobInfo;
 import android.app.job.JobScheduler;
 import android.content.ComponentName;
@@ -9,6 +10,8 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.os.Parcelable;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -58,6 +61,8 @@ import java.util.stream.Stream;
 
 public class MainActivity extends AppCompatActivity {
     private static final int JOB_RUN_SERVICES = 69;
+    private static final int RECYCLER_VIEW_CACHE_SIZE = 20;
+
     private ListAppAdapter crrListListAppAdapter;
     private GroupAppType selectedGroupAppType = GroupAppType.ALL;
     private OrderAppType selectedOrderAppType = OrderAppType.NAME;
@@ -70,6 +75,7 @@ public class MainActivity extends AppCompatActivity {
     private LinearLayout selectOptionBar;
     private LinearLayout searchBar;
     private ImageButton closeMultipleSelectionBtn;
+    private TextView systemInfoLabel;
 
     private Menu optionsMenu;
     private SearchView searchApp;
@@ -83,11 +89,21 @@ public class MainActivity extends AppCompatActivity {
     private MenuItem lightModeItem;
     private MenuItem toggleWarningItem;
     private MenuContextType crrMenuContext;
+    
+    private final Handler systemInfoHandler = new Handler(Looper.getMainLooper());
+    private final Runnable systemInfoRunnable = new Runnable() {
+        @Override
+        public void run() {
+            updateSystemInfo();
+            systemInfoHandler.postDelayed(this, 5000);
+        }
+    };
 
     @Override
     public Resources.Theme getTheme() {
         Resources.Theme theme = super.getTheme();
-        theme.applyStyle(SettingsDB.getInstance().isEnableDarkMode ? R.style.Theme_ApplicationManager_DarkMode
+        theme.applyStyle(SettingsDB.getInstance().isEnableDarkMode ?
+                R.style.Theme_ApplicationManager_DarkMode
                 : R.style.Theme_ApplicationManager, true);
         return theme;
     }
@@ -98,7 +114,11 @@ public class MainActivity extends AppCompatActivity {
         initPermission();
         initAppManagerFacade();
         initTaskingHandler();
-        permissionHandler.getPermissions();
+        
+        if (savedInstanceState == null) {
+            permissionHandler.getPermissions();
+        }
+        
         handleStartServices();
         ActivityMainBinding binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
@@ -127,9 +147,47 @@ public class MainActivity extends AppCompatActivity {
 
         if (savedInstanceState == null || savedInstanceState.isEmpty()) {
             handleChangeMenuContextType(MenuContextType.MAIN_MENU);
-            TaskingHandler.execTaskGetAllInstalledApp(crrMenuContext);
+            TaskingHandler.execTaskGetAllInstalledApp(crrMenuContext, true);
         } else {
             restorePreviousState(savedInstanceState);
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        systemInfoHandler.post(systemInfoRunnable);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        systemInfoHandler.removeCallbacks(systemInfoRunnable);
+    }
+
+    private void updateSystemInfo() {
+        if (systemInfoLabel == null) return;
+        if (!SettingsDB.getInstance().isShowSystemInfo) {
+            systemInfoLabel.setVisibility(View.GONE);
+            return;
+        }
+        
+        ActivityManager activityManager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+        if (activityManager != null) {
+            ActivityManager.MemoryInfo memoryInfo = new ActivityManager.MemoryInfo();
+            activityManager.getMemoryInfo(memoryInfo);
+            
+            long availableMb = memoryInfo.availMem / 1048576L;
+            long totalMb = memoryInfo.totalMem / 1048576L;
+            
+            int runningServices = 0;
+            if (AppManagerFacade.getRunningServices() != null) {
+                runningServices = AppManagerFacade.getRunningServices().size();
+            }
+            
+            String info = String.format("RAM: %d MB / %d MB | Dịch vụ ngầm: %d", availableMb, totalMb, runningServices);
+            systemInfoLabel.setText(info);
+            systemInfoLabel.setVisibility(View.VISIBLE);
         }
     }
 
@@ -168,7 +226,8 @@ public class MainActivity extends AppCompatActivity {
 
     private void handleStartServices() {
         if (ScheduleForServices.isJobCalled) {
-            ComponentName scheduleRunService = new ComponentName(this, ScheduleForServices.class);
+            ComponentName scheduleRunService =
+                    new ComponentName(this, ScheduleForServices.class);
             JobInfo jobInfo = new JobInfo.Builder(JOB_RUN_SERVICES, scheduleRunService)
                     .setPersisted(true)
                     .setPeriodic(900000)
@@ -235,6 +294,7 @@ public class MainActivity extends AppCompatActivity {
 
         handleToggleTurnOffNotificationState(toggleAutoTurnOffNotification);
         setDisplayToggleWarningItem(SettingsDB.getInstance().doNotWarningSystemApp);
+        
         toggleAutoTurnOffNotification.setOnMenuItemClickListener(item -> {
             AppManagerFacade.toggleStateAutoTurnOffNotification(this, () -> {
                 handleToggleTurnOffNotificationState(item);
@@ -247,21 +307,21 @@ public class MainActivity extends AppCompatActivity {
         navView.setNavigationItemSelectedListener(item -> {
             int id = item.getItemId();
             if (id == R.id.refresh_list_app) {
-                TaskingHandler.execTaskGetAllInstalledApp(crrMenuContext);
+                TaskingHandler.execTaskGetAllInstalledApp(crrMenuContext, true);
             } else if (id == R.id.all_app_zone) {
                 if (crrMenuContext != MenuContextType.MAIN_MENU) {
                     handleChangeMenuContextType(MenuContextType.MAIN_MENU);
-                    TaskingHandler.execTaskGetAllInstalledApp(crrMenuContext);
+                    TaskingHandler.execTaskGetAllInstalledApp(crrMenuContext, false);
                 }
             } else if (id == R.id.freeze_zone) {
                 if (crrMenuContext != MenuContextType.FREEZE_MENU) {
                     handleChangeMenuContextType(MenuContextType.FREEZE_MENU);
-                    TaskingHandler.execTaskGetAllInstalledApp(crrMenuContext);
+                    TaskingHandler.execTaskGetAllInstalledApp(crrMenuContext, false);
                 }
             } else if (id == R.id.notification_zone) {
                 if (crrMenuContext != MenuContextType.NOTIFICATION_MENU) {
                     handleChangeMenuContextType(MenuContextType.NOTIFICATION_MENU);
-                    TaskingHandler.execTaskGetAllInstalledApp(crrMenuContext);
+                    TaskingHandler.execTaskGetAllInstalledApp(crrMenuContext, false);
                 }
             } else if (id == R.id.action_dark_mode) {
                 item.setChecked(true);
@@ -271,6 +331,10 @@ public class MainActivity extends AppCompatActivity {
                 setEnableDarkMode(false, true, true);
             } else if (id == R.id.toggle_warning) {
                 handleToggleWarning();
+            } else if (id == R.id.toggle_system_info) {
+                SettingsDB.getInstance().isShowSystemInfo = !SettingsDB.getInstance().isShowSystemInfo;
+                SettingsDB.saveSettings();
+                updateSystemInfo();
             }
             mainDrawer.closeDrawer(GravityCompat.START);
             return true;
@@ -286,9 +350,10 @@ public class MainActivity extends AppCompatActivity {
 
     private void setDisplayToggleWarningItem(boolean doNotWarningSystemApp) {
         toggleWarningItem.setTitle(doNotWarningSystemApp ? R.string.enable_warning : R.string.disable_warning);
-        toggleWarningItem.setIcon(doNotWarningSystemApp ? R.drawable.ic_enable_warning : R.drawable.ic_disable_warning);
+        toggleWarningItem.setIcon(doNotWarningSystemApp ?
+                R.drawable.ic_enable_warning : R.drawable.ic_disable_warning);
         Toast.makeText(this, getString(doNotWarningSystemApp ? R.string.disabled_warning
-                : R.string.enabled_warning),
+                        : R.string.enabled_warning),
                 Toast.LENGTH_SHORT).show();
     }
 
@@ -314,7 +379,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
-            @NonNull int[] grantResults) {
+                                           @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         permissionHandler.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
@@ -343,8 +408,7 @@ public class MainActivity extends AppCompatActivity {
             } else if (id == R.id.uninstall) {
                 MainActivityActionHelper.startActionForSelectedApp(crrListListAppAdapter, selectedAppInfo,
                         TaskingHandler::execTaskUninstallApp,
-                        () -> TaskingHandler.execTaskGetAllInstalledApp(crrMenuContext),
-                        this::setDisplayToggleWarningItem);
+                        () -> TaskingHandler.execTaskGetAllInstalledApp(crrMenuContext, true), this::setDisplayToggleWarningItem);
                 return true;
             } else if (id == R.id.open_in_setting) {
                 AppManagerFacade.openAppSetting(selectedAppInfo);
@@ -353,7 +417,7 @@ public class MainActivity extends AppCompatActivity {
                 MainActivityActionHelper.startActionForSelectedAppWithoutWarning(crrListListAppAdapter, selectedAppInfo,
                         appInfo -> AppManagerFacade.removeAppFromList(appInfo.packageName, crrMenuContext),
                         () -> {
-                            TaskingHandler.execTaskGetAllInstalledApp(crrMenuContext);
+                            TaskingHandler.execTaskGetAllInstalledApp(crrMenuContext, true);
                             if (crrMenuContext == MenuContextType.NOTIFICATION_MENU) {
                                 NotificationService.getListTurnOffNotificationFromDB();
                             }
@@ -368,8 +432,9 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        setTheme(SettingsDB.getInstance().isEnableDarkMode ? R.style.Theme_ApplicationManager_DarkMode_PopupMenuStyle
-                : R.style.Theme_ApplicationManager_PopupMenuStyle);
+        setTheme(SettingsDB.getInstance().isEnableDarkMode ?
+                R.style.Theme_ApplicationManager_DarkMode_PopupMenuStyle :
+                R.style.Theme_ApplicationManager_PopupMenuStyle);
         getMenuInflater().inflate(R.menu.menu_main, menu);
         optionsMenu = menu;
         return true;
@@ -439,6 +504,7 @@ public class MainActivity extends AppCompatActivity {
         sortAppDes = findViewById(R.id.app_group_description);
         searchBar = findViewById(R.id.search_bar);
         closeMultipleSelectionBtn = findViewById(R.id.close_select_options_bar);
+        systemInfoLabel = findViewById(R.id.system_info_label);
     }
 
     private void handleMenuOther(MenuItem item, int id) {
@@ -510,9 +576,12 @@ public class MainActivity extends AppCompatActivity {
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
 
         listAppRecycleView.setLayoutManager(layoutManager);
+        listAppRecycleView.setHasFixedSize(true);
+        listAppRecycleView.setItemViewCacheSize(RECYCLER_VIEW_CACHE_SIZE);
+        
         crrListListAppAdapter = new ListAppAdapter(new ArrayList<>());
-        crrListListAppAdapter.setOnTouchEvent((listServiceLayout, appInfo) -> TaskingHandler
-                .execTaskHandleGetListService(listServiceLayout, appInfo.packageName));
+        crrListListAppAdapter.setOnTouchEvent((listServiceLayout, appInfo)
+                -> TaskingHandler.execTaskHandleGetListService(listServiceLayout, appInfo.packageName));
         listAppRecycleView.setAdapter(crrListListAppAdapter);
         registerForContextMenu(listAppRecycleView);
         listAppRecycleView.setVerticalScrollBarEnabled(true);
@@ -573,8 +642,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void removeTargetStateFromBackStack(BackStackState targetState) {
-        if (backStack.isEmpty())
-            return;
+        if (backStack.isEmpty()) return;
         BackStackState crrState = backStack.pop();
         if (crrState != targetState) {
             backStack.pop();
@@ -584,8 +652,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void initSelectEvent() {
         amountTextLabel = selectOptionBar.findViewById(R.id.amount_selected);
-        crrListListAppAdapter.setOnIHandleListApp(
-                listAppSelected -> amountTextLabel.setText(String.format("%d", listAppSelected.size())));
+        crrListListAppAdapter.setOnIHandleListApp(listAppSelected -> amountTextLabel.setText(String.format("%d", listAppSelected.size())));
         closeMultipleSelectionBtn.setOnClickListener(v -> toggleMultipleSelect());
         selectOptionBar.findViewById(R.id.select_all).setOnClickListener(v -> crrListListAppAdapter.selectAll());
         selectOptionBar.findViewById(R.id.deselect_all).setOnClickListener(v -> crrListListAppAdapter.clearSelect());

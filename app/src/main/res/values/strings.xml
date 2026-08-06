@@ -1,20 +1,16 @@
 <resources>
     <string name="app_name">App Manager</string>
     <string name="action_settings">Settings</string>
-    <!-- Strings used for fragments for navigation -->
     <string name="first_fragment_label">First Fragment</string>
     <string name="second_fragment_label">Second Fragment</string>
     <string name="next">Next</string>
     <string name="previous">Previous</string>
-    <!-- Preference Titles -->
     <string name="messages_header">Messages</string>
     <string name="sync_header">Sync</string>
     <string name="navigation_draw_open">Open navigation drawer</string>
     <string name="navigation_draw_Close">Close navigation drawer</string>
-    <!-- Messages Preferences -->
     <string name="signature_title">Your signature</string>
     <string name="reply_title">Default reply action</string>
-    <!-- Sync Preferences -->
     <string name="sync_title">Sync email periodically</string>
     <string name="attachment_title">Download incoming attachments</string>
     <string name="attachment_summary_on">Automatically download attachments for incoming emails
@@ -31,7 +27,6 @@
     <string name="order_by_app_name">Order by app name</string>
     <string name="order_by_package_name">Order by package name</string>
     <string name="app_icon_default">App icon</string>
-
     <item name="group_filter_app" type="id" />
     <item name="group_sort_app" type="id" />
     <item name="group_order_app" type="id" />
@@ -126,4 +121,5 @@
     <string name="cannot_uninstall_system_app_without_root">You cannot uninstall system app without root</string>
     <string name="disabled_warning">Disabled warning</string>
     <string name="enabled_warning">Enabled warning</string>
+    <string name="toggle_system_info">Toggle system info</string>
 </resources>
