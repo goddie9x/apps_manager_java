@@ -12,6 +12,7 @@
         tools:ignore="ProtectedPermissions" />
     <uses-permission android:name="android.permission.ACCESS_NOTIFICATION_POLICY" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
     <uses-permission android:name="android.permission.REQUEST_DELETE_PACKAGES" />
     <uses-permission
         android:name="android.permission.PACKAGE_USAGE_STATS"
@@ -68,6 +69,9 @@
                 android:name="android.app.shortcuts"
                 android:resource="@xml/shortcuts" />
         </activity>
+        <activity
+            android:name=".UI.PermissionCenterActivity"
+            android:exported="false" />
         <activity
             android:name=".UI.FreezeShortcutActivity"
             android:exported="false"

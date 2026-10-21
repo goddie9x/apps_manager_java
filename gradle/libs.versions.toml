@@ -6,6 +6,9 @@ recyclerview = "1.4.0"
 constraintlayout = "2.2.1"
 room = "2.7.2"
 libsuperuser = "1.1.1"
+kotlin = "2.0.21"
+coroutines = "1.9.0"
+lifecycle = "2.8.7"
 junit = "4.13.2"
 androidx-test-ext-junit = "1.3.0"
 espresso = "3.7.0"
@@ -18,6 +21,9 @@ androidx-constraintlayout = { group = "androidx.constraintlayout", name = "const
 androidx-room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
 androidx-room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
 libsuperuser = { group = "eu.chainfire", name = "libsuperuser", version.ref = "libsuperuser" }
+kotlinx-coroutines-android = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "coroutines" }
+androidx-lifecycle-viewmodel-ktx = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-ktx", version.ref = "lifecycle" }
+androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycle" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-test-ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "androidx-test-ext-junit" }
 androidx-test-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espresso" }
@@ -25,3 +31,4 @@ androidx-test-espresso-core = { group = "androidx.test.espresso", name = "espres
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 android-library = { id = "com.android.library", version.ref = "agp" }
+kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }

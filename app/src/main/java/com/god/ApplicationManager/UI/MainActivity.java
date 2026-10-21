@@ -33,6 +33,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.god.ApplicationManager.Adapter.ListAppAdapter;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowCompat;
+import androidx.core.view.WindowInsetsCompat;
+import androidx.lifecycle.ViewModelProvider;
+
 import com.god.ApplicationManager.DB.SettingsDB;
 import com.god.ApplicationManager.Entity.AppInfo;
 import com.god.ApplicationManager.Enum.BackStackState;
@@ -125,6 +130,8 @@ public class MainActivity extends AppCompatActivity {
         initProperty();
         initLayout(binding);
         initListAppRecycleView();
+        MainViewModel mainViewModel = new ViewModelProvider(this).get(MainViewModel.class);
+        mainViewModel.observeDisplayedApps(this, this::setListAppToRecycleView);
         initSearchEvent();
         initSelectEvent();
         initFreezeFloatingBtn();
@@ -185,7 +192,7 @@ public class MainActivity extends AppCompatActivity {
                 runningServices = AppManagerFacade.getRunningServices().size();
             }
             
-            String info = String.format("RAM: %d MB / %d MB | Dịch vụ ngầm: %d", availableMb, totalMb, runningServices);
+            String info = getString(R.string.system_info_format, availableMb, totalMb, runningServices);
             systemInfoLabel.setText(info);
             systemInfoLabel.setVisibility(View.VISIBLE);
         }
@@ -267,11 +274,18 @@ public class MainActivity extends AppCompatActivity {
 
     private void initTaskingHandler() {
         TaskingHandler.setActivity(this);
-        TaskingHandler.setCallbackSetListAppToRecycleView(
-                this::setListAppToRecycleView);
+        // The list is rendered by collecting MainViewModel's StateFlow
+        // (see observeDisplayedApps in onCreate), not by the legacy callback.
     }
 
     private void initLayout(ActivityMainBinding binding) {
+        // Edge-to-edge: draw behind the system bars and pad the toolbar instead.
+        WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
+        ViewCompat.setOnApplyWindowInsetsListener(binding.toolbar, (v, insets) -> {
+            int top = insets.getInsets(WindowInsetsCompat.Type.systemBars()).top;
+            v.setPadding(v.getPaddingLeft(), top, v.getPaddingRight(), v.getPaddingBottom());
+            return insets;
+        });
         setSupportActionBar(binding.toolbar);
         mainDrawer = binding.drawerLayout;
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, mainDrawer,
@@ -329,6 +343,8 @@ public class MainActivity extends AppCompatActivity {
                 setEnableDarkMode(false, true, true);
             } else if (id == R.id.toggle_warning) {
                 handleToggleWarning();
+            } else if (id == R.id.action_permission_center) {
+                startActivity(new Intent(this, PermissionCenterActivity.class));
             } else if (id == R.id.toggle_system_info) {
                 SettingsDB.getInstance().isShowSystemInfo = !SettingsDB.getInstance().isShowSystemInfo;
                 SettingsDB.saveSettings();
@@ -583,6 +599,12 @@ public class MainActivity extends AppCompatActivity {
         listAppRecycleView.setAdapter(crrListListAppAdapter);
         registerForContextMenu(listAppRecycleView);
         listAppRecycleView.setVerticalScrollBarEnabled(true);
+        // Keep the last rows clear of the gesture/navigation bar in edge-to-edge mode.
+        ViewCompat.setOnApplyWindowInsetsListener(listAppRecycleView, (v, insets) -> {
+            int bottom = insets.getInsets(WindowInsetsCompat.Type.systemBars()).bottom;
+            v.setPadding(v.getPaddingLeft(), v.getPaddingTop(), v.getPaddingRight(), bottom);
+            return insets;
+        });
     }
 
     private void setListAppToRecycleView(List<AppInfo> crrListApp) {

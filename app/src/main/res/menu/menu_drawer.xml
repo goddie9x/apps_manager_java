@@ -46,4 +46,8 @@
         android:title="@string/disable_warning"
         android:icon="@drawable/ic_disable_warning"/>
     <item android:id="@+id/toggle_system_info" android:title="@string/toggle_system_info" />
+    <item
+        android:id="@+id/action_permission_center"
+        android:title="@string/permission_center"
+        android:icon="@drawable/ic_disable_warning" />
 </menu>

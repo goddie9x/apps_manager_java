@@ -14,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.god.ApplicationManager.DB.AppInfoDB;
 import com.god.ApplicationManager.DB.SettingsDB;
 import com.god.ApplicationManager.Entity.AppInfo;
+import com.god.ApplicationManager.data.AppListRepository;
 import com.god.ApplicationManager.Enum.MenuContextType;
 import com.god.ApplicationManager.Facade.AppManagerFacade;
 import com.god.ApplicationManager.Interface.IActionForSelectedApp;
@@ -45,8 +46,8 @@ public class TaskingHandler {
 
     public static void setListApp(List<AppInfo> crrListApp) {
         listApp = crrListApp != null ? crrListApp : new ArrayList<>();
-        if (!checkCallBackSetListAppToRecycleViewInitialed()) return;
-        IHandleListApp.callback(listApp);
+        AppListRepository.publish(listApp);
+        if (IHandleListApp != null) IHandleListApp.callback(listApp);
     }
 
     public static void setCallbackSetListAppToRecycleView(IHandleListApp action) {
@@ -66,7 +67,6 @@ public class TaskingHandler {
     }
 
     public static void execTaskForSearchApp(String queryText) {
-        if (!checkCallBackSetListAppToRecycleViewInitialed()) return;
         CompletableFuture.supplyAsync(() -> {
             if (queryText == null || queryText.isEmpty()) {
                 return listApp;
@@ -76,12 +76,15 @@ public class TaskingHandler {
                             appInfo.packageName.toLowerCase().contains(lowerQuery) ||
                                     appInfo.appName.toLowerCase().contains(lowerQuery))
                     .collect(Collectors.toList());
-        }, backgroundExecutor).thenAccept(newListApp -> mainHandler.post(() -> IHandleListApp.callback(newListApp)));
+        }, backgroundExecutor).thenAccept(newListApp -> mainHandler.post(() -> {
+            AppListRepository.publish(newListApp);
+            if (IHandleListApp != null) IHandleListApp.callback(newListApp);
+        }));
     }
 
     public static void handleTaskSetListAppToRecycleView() {
-        if (!checkCallBackSetListAppToRecycleViewInitialed()) return;
-        CompletableFuture.runAsync(() -> mainHandler.post(() -> IHandleListApp.callback(listApp)), backgroundExecutor);
+        AppListRepository.publish(listApp);
+        if (IHandleListApp != null) IHandleListApp.callback(listApp);
     }
 
     public static void execTaskHandleGetListService(LinearLayout listServiceLayout, String crrPackageName) {
@@ -121,8 +124,8 @@ public class TaskingHandler {
     }
 
     public static void execTaskGetAllInstalledApp(MenuContextType menuContext, boolean forceReload) {
-        if (!checkCallBackSetListAppToRecycleViewInitialed()) return;
         if (menuContext == null) menuContext = MenuContextType.MAIN_MENU;
+        AppListRepository.setLoading(true);
         crrMenuContext = menuContext;
 
         ProgressDialog progressDialog = null;
@@ -155,7 +158,8 @@ public class TaskingHandler {
             return newListApp;
         }, backgroundExecutor).thenAccept(newListApp -> mainHandler.post(() -> {
             if (finalProgressDialog != null && finalProgressDialog.isShowing()) finalProgressDialog.dismiss();
-            IHandleListApp.callback(newListApp);
+            AppListRepository.publish(newListApp);
+            if (IHandleListApp != null) IHandleListApp.callback(newListApp);
         }));
     }
 
