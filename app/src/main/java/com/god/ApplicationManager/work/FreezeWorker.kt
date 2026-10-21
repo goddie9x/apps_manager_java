@@ -25,9 +25,10 @@ class FreezeWorker(context: Context, params: WorkerParameters) : Worker(context,
         PrivilegeManager.refreshRootBlocking()
 
         val queued = FreezeQueueRepository.pending(appContext)
+        val trigger = inputData.getString(KEY_TRIGGER)
         val targets: List<Pair<Long, String>> = if (queued.isNotEmpty()) {
             queued.map { it.id to it.packageName }
-        } else if (inputData.getString(KEY_TRIGGER) == TRIGGER_SCREEN_OFF) {
+        } else if (trigger == TRIGGER_SCREEN_OFF || trigger == TRIGGER_BATTERY_LOW) {
             AppDatabase.getInstance(appContext).appInfoDao().freezeList
                 .map { -1L to it.packageName }
         } else {
@@ -46,6 +47,9 @@ class FreezeWorker(context: Context, params: WorkerParameters) : Worker(context,
         for ((rowId, pkg) in targets) {
             if (pkg == appContext.packageName) continue
             val ok = executor.standbyAndStop(appContext, pkg)
+            com.god.ApplicationManager.data.ActivityLogger.log(
+                appContext, pkg, "freeze", executor.backend.name, ok,
+            )
             if (rowId >= 0) {
                 if (ok) {
                     FreezeQueueRepository.remove(appContext, rowId)
@@ -71,6 +75,7 @@ class FreezeWorker(context: Context, params: WorkerParameters) : Worker(context,
         const val KEY_TRIGGER = "trigger"
         const val TRIGGER_MANUAL = "manual"
         const val TRIGGER_SCREEN_OFF = "screen_off"
+        const val TRIGGER_BATTERY_LOW = "battery_low"
         const val TRIGGER_PERIODIC = "periodic"
         private const val MAX_ATTEMPTS = 3
     }

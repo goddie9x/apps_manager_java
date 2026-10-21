@@ -13,17 +13,32 @@ import java.util.stream.Stream;
 public class AppStreamHelper {
 
     public static Stream<AppInfo> handleSort(Stream<AppInfo> stream, SortAppType sortType, OrderAppType orderType) {
-        if (sortType == SortAppType.Z_To_A) {
-            if (orderType == OrderAppType.PACKAGE_NAME) {
-                return stream.sorted((a, b) -> b.packageName.compareToIgnoreCase(a.packageName));
-            }
-            return stream.sorted((a, b) -> b.appName.compareToIgnoreCase(a.appName));
-        } else {
-            if (orderType == OrderAppType.PACKAGE_NAME) {
-                return stream.sorted((a, b) -> a.packageName.compareToIgnoreCase(b.packageName));
-            }
-            return stream.sorted((a, b) -> a.appName.compareToIgnoreCase(b.appName));
+        java.util.Comparator<AppInfo> comparator;
+        switch (orderType) {
+            case PACKAGE_NAME:
+                comparator = (a, b) -> a.packageName.compareToIgnoreCase(b.packageName);
+                break;
+            case DATE_INSTALL:
+                comparator = java.util.Comparator.comparingLong(a -> a.firstInstallTime);
+                break;
+            case DATE_UPDATED:
+                comparator = java.util.Comparator.comparingLong(a -> a.lastUpdateTime);
+                break;
+            case SIZE:
+                comparator = java.util.Comparator.comparingLong(a -> a.sizeBytes);
+                break;
+            case LAST_USED:
+                comparator = java.util.Comparator.comparingLong(a -> a.lastUsedAt);
+                break;
+            case NAME:
+            default:
+                comparator = (a, b) -> a.appName.compareToIgnoreCase(b.appName);
+                break;
         }
+        if (sortType == SortAppType.Z_To_A) {
+            comparator = comparator.reversed();
+        }
+        return stream.sorted(comparator);
     }
 
     @StringRes

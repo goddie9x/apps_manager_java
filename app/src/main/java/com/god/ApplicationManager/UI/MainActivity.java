@@ -86,6 +86,13 @@ public class MainActivity extends AppCompatActivity {
     private DrawerLayout mainDrawer;
     private Stack<BackStackState> backStack = new Stack<>();
     private PermissionHandler permissionHandler;
+
+    // SAF launchers for rule export/import and the pre-uninstall APK guard (F7, F18).
+    private androidx.activity.result.ActivityResultLauncher<String> rulesExportLauncher;
+    private androidx.activity.result.ActivityResultLauncher<String[]> rulesImportLauncher;
+    private androidx.activity.result.ActivityResultLauncher<String> apkExportLauncher;
+    private String pendingExportPackage;
+    private Runnable pendingAfterExport;
     private TextView sortAppDes;
     private MenuItem darkModeItem;
     private MenuItem lightModeItem;
@@ -115,6 +122,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         initPermission();
         initAppManagerFacade();
+        registerRuleLaunchers();
         initTaskingHandler();
         
         if (savedInstanceState == null) {
@@ -235,6 +243,105 @@ public class MainActivity extends AppCompatActivity {
         FreezeWorkScheduler.schedulePeriodicBackstop(this);
     }
 
+    private void registerRuleLaunchers() {
+        rulesExportLauncher = registerForActivityResult(
+                new androidx.activity.result.contract.ActivityResultContracts.CreateDocument("application/json"),
+                uri -> {
+                    if (uri == null) return;
+                    new Thread(() -> {
+                        boolean ok;
+                        try {
+                            String json = com.god.ApplicationManager.data.RulesTransfer.exportJson(this);
+                            try (java.io.OutputStream out = getContentResolver().openOutputStream(uri)) {
+                                out.write(json.getBytes(java.nio.charset.StandardCharsets.UTF_8));
+                            }
+                            ok = true;
+                        } catch (Exception e) {
+                            ok = false;
+                        }
+                        boolean success = ok;
+                        runOnUiThread(() -> android.widget.Toast.makeText(this,
+                                success ? R.string.export_done : R.string.failed,
+                                android.widget.Toast.LENGTH_SHORT).show());
+                    }).start();
+                });
+        rulesImportLauncher = registerForActivityResult(
+                new androidx.activity.result.contract.ActivityResultContracts.OpenDocument(),
+                uri -> {
+                    if (uri == null) return;
+                    new Thread(() -> {
+                        try {
+                            String json;
+                            try (java.io.InputStream in = getContentResolver().openInputStream(uri)) {
+                                java.io.ByteArrayOutputStream buffer = new java.io.ByteArrayOutputStream();
+                                byte[] chunk = new byte[8192];
+                                int read;
+                                while ((read = in.read(chunk)) != -1) buffer.write(chunk, 0, read);
+                                json = buffer.toString(java.nio.charset.StandardCharsets.UTF_8.name());
+                            }
+                            com.god.ApplicationManager.data.ImportReport report =
+                                    com.god.ApplicationManager.data.RulesTransfer.importJson(this, json);
+                            runOnUiThread(() -> new androidx.appcompat.app.AlertDialog.Builder(this)
+                                    .setTitle(R.string.drawer_import_rules)
+                                    .setMessage(getString(R.string.import_result,
+                                            report.getApplied(), report.getRejected().size(), report.getNotInstalled().size()))
+                                    .setPositiveButton(android.R.string.ok, null)
+                                    .show());
+                        } catch (Exception e) {
+                            runOnUiThread(() -> android.widget.Toast.makeText(this,
+                                    R.string.failed, android.widget.Toast.LENGTH_SHORT).show());
+                        }
+                    }).start();
+                });
+        apkExportLauncher = registerForActivityResult(
+                new androidx.activity.result.contract.ActivityResultContracts.CreateDocument(
+                        "application/vnd.android.package-archive"),
+                uri -> {
+                    Runnable after = pendingAfterExport;
+                    pendingAfterExport = null;
+                    if (uri == null || pendingExportPackage == null) return;
+                    String target = pendingExportPackage;
+                    pendingExportPackage = null;
+                    new Thread(() -> {
+                        try {
+                            String source = getPackageManager().getApplicationInfo(target, 0).sourceDir;
+                            try (java.io.InputStream in = new java.io.FileInputStream(source);
+                                 java.io.OutputStream out = getContentResolver().openOutputStream(uri)) {
+                                byte[] chunk = new byte[8192];
+                                int read;
+                                while ((read = in.read(chunk)) != -1) out.write(chunk, 0, read);
+                            }
+                        } catch (Exception ignored) {
+                        }
+                        if (after != null) runOnUiThread(after);
+                    }).start();
+                });
+    }
+
+    /** Rescue (F29): unfreeze everything in the freeze list and clear the pending queue. */
+    private void handleRescue() {
+        new androidx.appcompat.app.AlertDialog.Builder(this)
+                .setTitle(R.string.rescue_title)
+                .setMessage(R.string.rescue_message)
+                .setNegativeButton(android.R.string.cancel, null)
+                .setPositiveButton(android.R.string.ok, (dialog, which) -> new Thread(() -> {
+                    com.god.ApplicationManager.privilege.PrivilegeManager.refreshRootBlocking();
+                    com.god.ApplicationManager.privilege.PrivilegedExecutor executor =
+                            com.god.ApplicationManager.privilege.PrivilegeManager.current(this);
+                    com.god.ApplicationManager.DB.AppDatabase db =
+                            com.god.ApplicationManager.DB.AppDatabase.getInstance(this);
+                    for (com.god.ApplicationManager.DB.AppInfoDB rule : db.appInfoDao().getFreezeList()) {
+                        executor.unfreeze(this, rule.packageName);
+                        com.god.ApplicationManager.data.ActivityLogger.log(this,
+                                rule.packageName, "rescue_unfreeze", executor.getBackend().name(), true);
+                    }
+                    db.freezeQueueDao().clearAll();
+                    runOnUiThread(() -> android.widget.Toast.makeText(this,
+                            R.string.rescue_done, android.widget.Toast.LENGTH_SHORT).show());
+                }).start())
+                .show();
+    }
+
     private void initFreezeFloatingBtn() {
         freezeBtn = findViewById(R.id.freeze_float_btn);
         freezeBtn.setOnClickListener((btn) -> startActivity(new Intent(this, FreezeShortcutActivity.class)));
@@ -336,6 +443,22 @@ public class MainActivity extends AppCompatActivity {
                 handleToggleWarning();
             } else if (id == R.id.action_permission_center) {
                 startActivity(new Intent(this, PermissionCenterActivity.class));
+            } else if (id == R.id.drawer_profiles) {
+                startActivity(new Intent(this, ProfilesActivity.class));
+            } else if (id == R.id.drawer_activity_log) {
+                startActivity(new Intent(this, SimpleListActivity.class)
+                        .putExtra(SimpleListActivity.EXTRA_MODE, SimpleListActivity.MODE_LOG));
+            } else if (id == R.id.drawer_blocked_archive) {
+                startActivity(new Intent(this, SimpleListActivity.class)
+                        .putExtra(SimpleListActivity.EXTRA_MODE, SimpleListActivity.MODE_BLOCKED));
+            } else if (id == R.id.drawer_health_report) {
+                startActivity(new Intent(this, HealthReportActivity.class));
+            } else if (id == R.id.drawer_export_rules) {
+                rulesExportLauncher.launch("apps-manager-rules.json");
+            } else if (id == R.id.drawer_import_rules) {
+                rulesImportLauncher.launch(new String[]{"application/json"});
+            } else if (id == R.id.drawer_rescue) {
+                handleRescue();
             } else if (id == R.id.toggle_system_info) {
                 SettingsDB.getInstance().isShowSystemInfo = !SettingsDB.getInstance().isShowSystemInfo;
                 SettingsDB.saveSettings();
@@ -395,7 +518,11 @@ public class MainActivity extends AppCompatActivity {
 
         if (selectedAppInfo != null) {
             int id = item.getItemId();
-            if (id == R.id.open_app) {
+            if (id == R.id.app_detail) {
+                startActivity(new Intent(this, AppDetailActivity.class)
+                        .putExtra(AppDetailActivity.EXTRA_PACKAGE, selectedAppInfo.packageName));
+                return true;
+            } else if (id == R.id.open_app) {
                 AppManagerFacade.openApp(selectedAppInfo);
             } else if (id == R.id.force_stop) {
                 MainActivityActionHelper.startActionForSelectedApp(crrListListAppAdapter, selectedAppInfo,
@@ -411,9 +538,26 @@ public class MainActivity extends AppCompatActivity {
                         NotificationService::getListTurnOffNotificationFromDB, this::setDisplayToggleWarningItem);
                 return true;
             } else if (id == R.id.uninstall) {
-                MainActivityActionHelper.startActionForSelectedApp(crrListListAppAdapter, selectedAppInfo,
+                // Pre-uninstall guard (F18): offer to back up the APK (and the
+                // app's rules stay in history) before removing anything.
+                Runnable doUninstall = () -> MainActivityActionHelper.startActionForSelectedApp(
+                        crrListListAppAdapter, selectedAppInfo,
                         TaskingHandler::execTaskUninstallApp,
-                        () -> TaskingHandler.execTaskGetAllInstalledApp(crrMenuContext, true), this::setDisplayToggleWarningItem);
+                        () -> TaskingHandler.execTaskGetAllInstalledApp(crrMenuContext, true),
+                        this::setDisplayToggleWarningItem);
+                new androidx.appcompat.app.AlertDialog.Builder(this)
+                        .setTitle(R.string.uninstall)
+                        .setMessage(selectedAppInfo.packageName)
+                        .setNeutralButton(android.R.string.cancel, null)
+                        .setNegativeButton(R.string.uninstall_just, (d, w) -> doUninstall.run())
+                        .setPositiveButton(R.string.uninstall_export_first, (d, w) -> {
+                            pendingExportPackage = selectedAppInfo.packageName;
+                            pendingAfterExport = doUninstall;
+                            String label = selectedAppInfo.appName == null ? selectedAppInfo.packageName
+                                    : selectedAppInfo.appName.replaceAll("[^A-Za-z0-9._-]", "_");
+                            apkExportLauncher.launch(label + ".apk");
+                        })
+                        .show();
                 return true;
             } else if (id == R.id.open_in_setting) {
                 AppManagerFacade.openAppSetting(selectedAppInfo);

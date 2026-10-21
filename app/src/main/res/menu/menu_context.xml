@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
+        android:id="@+id/app_detail"
+        android:title="@string/app_detail"
+        android:tooltipText="@string/app_detail" />
+    <item
         android:id="@+id/open_app"
         android:title="@string/open_app"
         android:tooltipText="@string/open_app" />

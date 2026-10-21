@@ -59,6 +59,22 @@
                     android:id="@+id/order_by_package_name"
                     android:checkable="true"
                     android:title="@string/order_by_package_name" />
+                <item
+                    android:id="@+id/order_by_install_date"
+                    android:checkable="true"
+                    android:title="@string/order_by_install_date" />
+                <item
+                    android:id="@+id/order_by_update_date"
+                    android:checkable="true"
+                    android:title="@string/order_by_update_date" />
+                <item
+                    android:id="@+id/order_by_size"
+                    android:checkable="true"
+                    android:title="@string/order_by_size" />
+                <item
+                    android:id="@+id/order_by_last_used"
+                    android:checkable="true"
+                    android:title="@string/order_by_last_used" />
             </group>
         </menu>
     </item>

@@ -86,8 +86,11 @@ public class AppManagerFacade {
 
     public static List<AppInfo> GetAllInstalledApp() {
         List<AppInfo> appList = new ArrayList<>();
-        List<ApplicationInfo> installedApplications = packageManager.getInstalledApplications(PackageManager.GET_META_DATA);
-        for (ApplicationInfo applicationInfo : installedApplications) {
+        List<android.content.pm.PackageInfo> installedPackages =
+                packageManager.getInstalledPackages(0);
+        for (android.content.pm.PackageInfo packageInfo : installedPackages) {
+            ApplicationInfo applicationInfo = packageInfo.applicationInfo;
+            if (applicationInfo == null) continue;
             // Icons are resolved lazily through IconCache when a row binds;
             // loading every icon here for hundreds of apps was pure scan cost.
             String appName = applicationInfo.loadLabel(packageManager).toString();
@@ -97,9 +100,35 @@ public class AppManagerFacade {
                     (applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) != 0,
                     (applicationInfo.flags & ApplicationInfo.FLAG_STOPPED) == 0,
                     (applicationInfo.flags & ApplicationInfo.FLAG_SUSPENDED) != 0);
+            appInfo.firstInstallTime = packageInfo.firstInstallTime;
+            appInfo.lastUpdateTime = packageInfo.lastUpdateTime;
             appList.add(appInfo);
         }
+        enrichWithUsageAndStorage(appList);
         return appList;
+    }
+
+    /**
+     * Fills lastUsedAt and sizeBytes from UsageStats/StorageStats when Usage
+     * Access is granted; both stay at their "unknown" defaults otherwise.
+     * Runs on the caller's background thread (the scan path).
+     */
+    private static void enrichWithUsageAndStorage(List<AppInfo> appList) {
+        if (activity == null) return;
+        try {
+            if (!com.god.ApplicationManager.Helper.UsageStatsHelper.hasUsageAccess(activity)) return;
+            java.util.Map<String, com.god.ApplicationManager.Helper.UsageInfo> usage =
+                    com.god.ApplicationManager.Helper.UsageStatsHelper.usageByPackage(activity, 30);
+            for (AppInfo appInfo : appList) {
+                com.god.ApplicationManager.Helper.UsageInfo info = usage.get(appInfo.packageName);
+                if (info != null) appInfo.lastUsedAt = info.getLastTimeUsed();
+                com.god.ApplicationManager.Helper.StorageInfo storage =
+                        com.god.ApplicationManager.Helper.UsageStatsHelper.storageFor(activity, appInfo.packageName);
+                if (storage != null) appInfo.sizeBytes = storage.getTotalBytes();
+            }
+        } catch (Exception e) {
+            Log.w(TAG, "Usage/storage enrichment failed: " + e.getMessage());
+        }
     }
 
     public static List<ActivityManager.RunningAppProcessInfo> GetAllRunningApp() {

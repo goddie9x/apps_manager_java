@@ -47,6 +47,27 @@
         android:icon="@drawable/ic_disable_warning"/>
     <item android:id="@+id/toggle_system_info" android:title="@string/toggle_system_info" />
     <item
+        android:id="@+id/drawer_profiles"
+        android:title="@string/drawer_profiles" />
+    <item
+        android:id="@+id/drawer_activity_log"
+        android:title="@string/drawer_activity_log" />
+    <item
+        android:id="@+id/drawer_blocked_archive"
+        android:title="@string/drawer_blocked_archive" />
+    <item
+        android:id="@+id/drawer_health_report"
+        android:title="@string/drawer_health_report" />
+    <item
+        android:id="@+id/drawer_export_rules"
+        android:title="@string/drawer_export_rules" />
+    <item
+        android:id="@+id/drawer_import_rules"
+        android:title="@string/drawer_import_rules" />
+    <item
+        android:id="@+id/drawer_rescue"
+        android:title="@string/drawer_rescue" />
+    <item
         android:id="@+id/action_permission_center"
         android:title="@string/permission_center"
         android:icon="@drawable/ic_disable_warning" />

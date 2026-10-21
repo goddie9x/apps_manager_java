@@ -23,6 +23,10 @@ public class MainActivityMenuHelper {
     public static OrderAppType getOrderType(int id) {
         if (id == R.id.order_by_app_name) return OrderAppType.NAME;
         if (id == R.id.order_by_package_name) return OrderAppType.PACKAGE_NAME;
+        if (id == R.id.order_by_install_date) return OrderAppType.DATE_INSTALL;
+        if (id == R.id.order_by_update_date) return OrderAppType.DATE_UPDATED;
+        if (id == R.id.order_by_size) return OrderAppType.SIZE;
+        if (id == R.id.order_by_last_used) return OrderAppType.LAST_USED;
         return null;
     }
 }

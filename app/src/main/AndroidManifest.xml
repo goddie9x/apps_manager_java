@@ -29,6 +29,64 @@
         android:supportsRtl="true"
         tools:replace="android:icon"
         tools:targetApi="36">
+        <activity
+            android:name=".UI.AppDetailActivity"
+            android:exported="false" />
+        <activity
+            android:name=".UI.ComponentManagerActivity"
+            android:exported="false" />
+        <activity
+            android:name=".UI.SimpleListActivity"
+            android:exported="false" />
+        <activity
+            android:name=".UI.ProfilesActivity"
+            android:exported="false" />
+        <activity
+            android:name=".UI.HealthReportActivity"
+            android:exported="false" />
+        <receiver
+            android:name=".widget.FreezeWidgetProvider"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/widget_freeze_info" />
+        </receiver>
+        <receiver
+            android:name=".work.BatteryLowReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.intent.action.BATTERY_LOW" />
+            </intent-filter>
+        </receiver>
+        <service
+            android:name=".tile.FreezeTileService"
+            android:exported="true"
+            android:icon="@drawable/ic_freeze"
+            android:label="@string/freeze_all_app"
+            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
+            <intent-filter>
+                <action android:name="android.service.quicksettings.action.QS_TILE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.service.quicksettings.ACTIVE_TILE"
+                android:value="true" />
+        </service>
+        <service
+            android:name=".tile.NotifToggleTileService"
+            android:exported="true"
+            android:icon="@drawable/ic_notification_off"
+            android:label="@string/turn_on_notification"
+            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
+            <intent-filter>
+                <action android:name="android.service.quicksettings.action.QS_TILE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.service.quicksettings.ACTIVE_TILE"
+                android:value="true" />
+        </service>
         <receiver
             android:name=".admin.AppAdminReceiver"
             android:description="@string/app_name"

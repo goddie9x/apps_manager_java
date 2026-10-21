@@ -66,17 +66,30 @@ public class TaskingHandler {
         return true;
     }
 
+    private static final java.util.concurrent.atomic.AtomicInteger searchSequence =
+            new java.util.concurrent.atomic.AtomicInteger();
+
+    /** Lowercases with Locale.ROOT and strips diacritics so "dong bang" finds "Đóng băng". */
+    public static String normalizeForSearch(String text) {
+        if (text == null) return "";
+        String normalized = java.text.Normalizer.normalize(text, java.text.Normalizer.Form.NFD);
+        return normalized.replaceAll("\\p{Mn}+", "").toLowerCase(java.util.Locale.ROOT);
+    }
+
     public static void execTaskForSearchApp(String queryText) {
+        int mySequence = searchSequence.incrementAndGet();
         CompletableFuture.supplyAsync(() -> {
             if (queryText == null || queryText.isEmpty()) {
                 return listApp;
             }
-            String lowerQuery = queryText.toLowerCase();
+            String needle = normalizeForSearch(queryText);
             return listApp.stream().filter(appInfo ->
-                            appInfo.packageName.toLowerCase().contains(lowerQuery) ||
-                                    appInfo.appName.toLowerCase().contains(lowerQuery))
+                            normalizeForSearch(appInfo.packageName).contains(needle) ||
+                                    normalizeForSearch(appInfo.appName).contains(needle))
                     .collect(Collectors.toList());
         }, backgroundExecutor).thenAccept(newListApp -> mainHandler.post(() -> {
+            // A newer query superseded this one while it was computing: drop the stale result.
+            if (mySequence != searchSequence.get()) return;
             AppListRepository.publish(newListApp);
             if (IHandleListApp != null) IHandleListApp.callback(newListApp);
         }));

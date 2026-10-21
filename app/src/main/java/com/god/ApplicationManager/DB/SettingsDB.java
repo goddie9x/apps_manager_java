@@ -47,6 +47,18 @@ public class SettingsDB {
     @ColumnInfo(name = "is_disable_turn_off_notification")
     public boolean isDisableTurnOffNotification;
 
+    /** Archive blocked notifications (title/app/time) in-app; default on. */
+    @ColumnInfo(name = "store_blocked_notifications", defaultValue = "1")
+    public boolean storeBlockedNotifications = true;
+
+    /** Delay after screen-off before the auto-freeze runs, in seconds (0 = immediate). */
+    @ColumnInfo(name = "screen_off_freeze_delay_seconds", defaultValue = "0")
+    public int screenOffFreezeDelaySeconds;
+
+    /** Days without use before an app is suggested as unused. */
+    @ColumnInfo(name = "unused_app_threshold_days", defaultValue = "60")
+    public int unusedAppThresholdDays = 60;
+
     private static SettingsDB instance;
 
     public SettingsDB() {
