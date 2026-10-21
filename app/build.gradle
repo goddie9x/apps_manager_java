@@ -1,5 +1,6 @@
 plugins {
     id 'com.android.application'
+    alias(libs.plugins.kotlin.android)
 }
 
 def localProperties = new Properties()
@@ -66,6 +67,9 @@ dependencies {
     implementation libs.androidx.room.runtime
     annotationProcessor libs.androidx.room.compiler
     implementation libs.libsuperuser
+    implementation libs.kotlinx.coroutines.android
+    implementation libs.androidx.lifecycle.viewmodel.ktx
+    implementation libs.androidx.lifecycle.runtime.ktx
 
     testImplementation libs.junit
     androidTestImplementation libs.androidx.test.ext.junit

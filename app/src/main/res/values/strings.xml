@@ -1,21 +1,7 @@
 <resources>
     <string name="app_name">App Manager</string>
-    <string name="action_settings">Settings</string>
-    <string name="first_fragment_label">First Fragment</string>
-    <string name="second_fragment_label">Second Fragment</string>
-    <string name="next">Next</string>
-    <string name="previous">Previous</string>
-    <string name="messages_header">Messages</string>
-    <string name="sync_header">Sync</string>
     <string name="navigation_draw_open">Open navigation drawer</string>
     <string name="navigation_draw_Close">Close navigation drawer</string>
-    <string name="signature_title">Your signature</string>
-    <string name="reply_title">Default reply action</string>
-    <string name="sync_title">Sync email periodically</string>
-    <string name="attachment_title">Download incoming attachments</string>
-    <string name="attachment_summary_on">Automatically download attachments for incoming emails
-    </string>
-    <string name="attachment_summary_off">Only download attachments when manually requested</string>
     <string name="menu_filter_by">Menu filter by</string>
     <string name="all">All</string>
     <string name="system">System</string>
@@ -30,15 +16,8 @@
     <item name="group_filter_app" type="id" />
     <item name="group_sort_app" type="id" />
     <item name="group_order_app" type="id" />
-    <string name="title_activity_left_control">LeftControlActivity</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="nav_header_title">Android Studio</string>
-    <string name="nav_header_subtitle">android.studio@android.com</string>
-    <string name="nav_header_desc">Navigation header</string>
-    <string name="menu_home">Home</string>
-    <string name="menu_gallery">Gallery</string>
-    <string name="menu_slideshow">Slideshow</string>
     <string name="search">Search</string>
     <string name="multiple_select">Multiple select</string>
     <string name="hide_search_bar">Hide search bar</string>
@@ -49,7 +28,6 @@
     <string name="stopped">Stopped</string>
     <string name="running">Running</string>
     <string name="settings">Settings</string>
-    <string name="back_to_main_screen">Back to main screen</string>
     <string name="group_app_description_default_0">group app description default (0)</string>
     <string name="dark_mode">Dark mode</string>
     <string name="freeze_all_app">Freeze all app</string>
@@ -122,4 +100,20 @@
     <string name="disabled_warning">Disabled warning</string>
     <string name="enabled_warning">Enabled warning</string>
     <string name="toggle_system_info">Toggle system info</string>
+    <string name="permission_center">Permission Center</string>
+    <string name="permission_center_intro">Every capability this app can use, its current state, and a shortcut to the system screen that grants it. Features whose permission is missing are skipped safely.</string>
+    <string name="pc_accessibility">Accessibility service (freeze without root)</string>
+    <string name="pc_notification_access">Notification access (notification blocking)</string>
+    <string name="pc_usage_access">Usage access (running-state labels)</string>
+    <string name="pc_post_notifications">Post notifications (Android 13+)</string>
+    <string name="pc_battery">Battery optimisation exemption (auto-freeze reliability)</string>
+    <string name="pc_root">Root access</string>
+    <string name="pc_shizuku">Shizuku</string>
+    <string name="pc_status_granted">Granted</string>
+    <string name="pc_status_missing">Not granted</string>
+    <string name="pc_status_not_required">Not required on this Android version</string>
+    <string name="pc_shizuku_installed">Installed (backend arrives with the privileged-executor update)</string>
+    <string name="pc_shizuku_missing">Not installed</string>
+    <string name="pc_open">Open</string>
+    <string name="system_info_format">RAM: %1$d MB / %2$d MB | Background services: %3$d</string>
 </resources>

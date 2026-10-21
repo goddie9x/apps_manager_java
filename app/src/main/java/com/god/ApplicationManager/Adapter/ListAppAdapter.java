@@ -14,9 +14,12 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.DiffUtil;
+import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.god.ApplicationManager.Entity.AppInfo;
+import com.god.ApplicationManager.Helper.IconCache;
 import com.god.ApplicationManager.Enum.MenuContextType;
 import com.god.ApplicationManager.Interface.IHandleListApp;
 import com.god.ApplicationManager.Interface.ITouchItemEvent;
@@ -25,9 +28,22 @@ import com.god.ApplicationManager.R;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ListAppAdapter extends RecyclerView.Adapter<ListAppAdapter.AppItemHolder>
+public class ListAppAdapter extends ListAdapter<AppInfo, ListAppAdapter.AppItemHolder>
         implements View.OnCreateContextMenuListener {
-    private List<AppInfo> listApp;
+    private static final DiffUtil.ItemCallback<AppInfo> DIFF_CALLBACK =
+            new DiffUtil.ItemCallback<AppInfo>() {
+                @Override
+                public boolean areItemsTheSame(@NonNull AppInfo oldItem, @NonNull AppInfo newItem) {
+                    return oldItem.packageName.equals(newItem.packageName);
+                }
+
+                @Override
+                public boolean areContentsTheSame(@NonNull AppInfo oldItem, @NonNull AppInfo newItem) {
+                    return oldItem.isSystemApp == newItem.isSystemApp
+                            && oldItem.isRunning == newItem.isRunning
+                            && java.util.Objects.equals(oldItem.appName, newItem.appName);
+                }
+            };
     private AppInfo selectedAppInfo;
     private List<AppInfo> listSelectedApp = new ArrayList<>();
     private boolean isEnableSelect = false;
@@ -56,7 +72,8 @@ public class ListAppAdapter extends RecyclerView.Adapter<ListAppAdapter.AppItemH
     }
 
     public ListAppAdapter(List<AppInfo> listApp) {
-        this.listApp = listApp;
+        super(DIFF_CALLBACK);
+        submitList(listApp);
     }
 
     @NonNull
@@ -75,10 +92,11 @@ public class ListAppAdapter extends RecyclerView.Adapter<ListAppAdapter.AppItemH
     @SuppressLint("ResourceAsColor")
     @Override
     public void onBindViewHolder(@NonNull ListAppAdapter.AppItemHolder holder, int position) {
-        AppInfo crrAppInfo = listApp.get(position);
+        AppInfo crrAppInfo = getItem(position);
         holder.appNameLabel.setText(crrAppInfo.appName);
         holder.appPackageLabel.setText(crrAppInfo.packageName);
-        holder.appIcon.setImageDrawable(crrAppInfo.appIcon);
+        holder.appIcon.setImageDrawable(
+                IconCache.getIcon(holder.itemView.getContext(), crrAppInfo.packageName));
         if (crrAppInfo.isSystemApp) {
             holder.systemLabel.setText(R.string.system);
             holder.systemLabel.setTextColor(Color.GRAY);
@@ -142,14 +160,9 @@ public class ListAppAdapter extends RecyclerView.Adapter<ListAppAdapter.AppItemH
         }
         if (holder != null) {
             int indexItemSelected = holder.getBindingAdapterPosition();
-            selectedAppInfo = (indexItemSelected >= 0 && indexItemSelected < listApp.size())
-                    ? listApp.get(indexItemSelected) : null;
+            selectedAppInfo = (indexItemSelected >= 0 && indexItemSelected < getItemCount())
+                    ? getItem(indexItemSelected) : null;
         }
-    }
-
-    @Override
-    public int getItemCount() {
-        return listApp.size();
     }
 
     public static class AppItemHolder extends RecyclerView.ViewHolder {
@@ -208,8 +221,8 @@ public class ListAppAdapter extends RecyclerView.Adapter<ListAppAdapter.AppItemH
     }
 
     public void setListApp(List<AppInfo> listApp) {
-        this.listApp = listApp;
-        notifyDataSetChanged();
+        // Defensive copy: ListAdapter keeps the reference and diffs against it.
+        submitList(listApp != null ? new ArrayList<>(listApp) : null);
     }
 
     public void toggleMultipleSelect() {
@@ -221,7 +234,7 @@ public class ListAppAdapter extends RecyclerView.Adapter<ListAppAdapter.AppItemH
 
     public void selectAll() {
         listSelectedApp.clear();
-        listSelectedApp.addAll(listApp);
+        listSelectedApp.addAll(getCurrentList());
         if (onIHandleListApp != null) {
             onIHandleListApp.callback(listSelectedApp);
         }

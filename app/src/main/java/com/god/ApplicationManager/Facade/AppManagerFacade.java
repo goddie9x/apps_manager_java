@@ -87,10 +87,11 @@ public class AppManagerFacade {
         List<AppInfo> appList = new ArrayList<>();
         List<ApplicationInfo> installedApplications = packageManager.getInstalledApplications(PackageManager.GET_META_DATA);
         for (ApplicationInfo applicationInfo : installedApplications) {
-            Drawable appIcon = applicationInfo.loadIcon(packageManager);
+            // Icons are resolved lazily through IconCache when a row binds;
+            // loading every icon here for hundreds of apps was pure scan cost.
             String appName = applicationInfo.loadLabel(packageManager).toString();
             String packageName = applicationInfo.packageName;
-            AppInfo appInfo = new AppInfo(appIcon,
+            AppInfo appInfo = new AppInfo(null,
                     appName, packageName,
                     (applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) != 0,
                     (applicationInfo.flags & ApplicationInfo.FLAG_STOPPED) == 0,
