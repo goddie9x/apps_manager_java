@@ -67,9 +67,9 @@
     <string name="refresh">refresh</string>
     <string name="freeze_zone">Freeze zone</string>
     <string name="notification_zone">Notification zone</string>
-    <string name="filter_system_app_amount_title">System applications (</string>
-    <string name="filter_user_app_amount_title">User applications (</string>
-    <string name="filter_all_app_amount_title">All applications (</string>
+    <string name="filter_system_app_amount_title">System applications (%1$d)</string>
+    <string name="filter_user_app_amount_title">User applications (%1$d)</string>
+    <string name="filter_all_app_amount_title">All applications (%1$d)</string>
     <string name="nothingToFreeze">List  app to freeze is empty</string>
     <string name="power_button_hint">Hint: Press the Power button to abort the freeze process</string>
     <string name="warning_accessibility_require">Warning accessibility require</string>

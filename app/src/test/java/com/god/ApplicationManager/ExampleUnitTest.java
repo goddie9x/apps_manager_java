@@ -1,4 +1,4 @@
-package com.god.ApplicationManager.;
+package com.god.ApplicationManager;
 
 import org.junit.Test;
 

@@ -225,17 +225,15 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void handleStartServices() {
-        if (ScheduleForServices.isJobCalled) {
-            ComponentName scheduleRunService =
-                    new ComponentName(this, ScheduleForServices.class);
-            JobInfo jobInfo = new JobInfo.Builder(JOB_RUN_SERVICES, scheduleRunService)
-                    .setPersisted(true)
-                    .setPeriodic(900000)
-                    .build();
-            JobScheduler jobScheduler = (JobScheduler) getSystemService(JOB_SCHEDULER_SERVICE);
-            if (jobScheduler != null) {
-                jobScheduler.schedule(jobInfo);
-            }
+        ComponentName scheduleRunService =
+                new ComponentName(this, ScheduleForServices.class);
+        JobInfo jobInfo = new JobInfo.Builder(JOB_RUN_SERVICES, scheduleRunService)
+                .setPersisted(true)
+                .setPeriodic(900000)
+                .build();
+        JobScheduler jobScheduler = (JobScheduler) getSystemService(JOB_SCHEDULER_SERVICE);
+        if (jobScheduler != null) {
+            jobScheduler.schedule(jobInfo);
         }
     }
 
@@ -255,7 +253,7 @@ public class MainActivity extends AppCompatActivity {
         crrMenuContext = menuContextType;
         freezeBtn.setVisibility(menuContextType == MenuContextType.FREEZE_MENU ? View.VISIBLE : View.GONE);
         crrListListAppAdapter.setMenuContextType(menuContextType);
-        backStack.empty();
+        backStack.clear();
     }
 
     private void initAppManagerFacade() {
@@ -590,11 +588,11 @@ public class MainActivity extends AppCompatActivity {
     private void setListAppToRecycleView(List<AppInfo> crrListApp) {
         if (crrListApp != null) {
             Stream<AppInfo> listAppStream = crrListApp.stream();
-            listAppStream = AppStreamHelper.handleFilter(listAppStream, selectedGroupAppType, sortAppDes);
+            listAppStream = AppStreamHelper.handleFilter(listAppStream, selectedGroupAppType);
             listAppStream = AppStreamHelper.handleSort(listAppStream, selectedSortAppType, selectedOrderAppType);
             crrListApp = listAppStream.collect(Collectors.toList());
             crrListListAppAdapter.setListApp(crrListApp);
-            sortAppDes.setText(sortAppDes.getText().toString() + crrListApp.size() + ")");
+            sortAppDes.setText(getString(AppStreamHelper.getGroupTitleRes(selectedGroupAppType), crrListApp.size()));
         }
     }
 
@@ -642,12 +640,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void removeTargetStateFromBackStack(BackStackState targetState) {
-        if (backStack.isEmpty()) return;
-        BackStackState crrState = backStack.pop();
-        if (crrState != targetState) {
-            backStack.pop();
-            backStack.push(crrState);
-        }
+        backStack.remove(targetState);
     }
 
     private void initSelectEvent() {

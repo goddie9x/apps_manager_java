@@ -37,12 +37,13 @@ public class SettingsDB extends SugarRecord {
         return instance;
     }
     public static void saveSettings(){
-        instance.save();
+        getInstance().save();
     }
     public static boolean toggleDisableAutoTurnOffNotificationState(){
-        instance.isDisableTurnOffNotification = !instance.isDisableTurnOffNotification;
+        SettingsDB settings = getInstance();
+        settings.isDisableTurnOffNotification = !settings.isDisableTurnOffNotification;
         NotificationService.getDisableNotificationStatus();
-        instance.save();
-        return  instance.isDisableTurnOffNotification;
+        settings.save();
+        return settings.isDisableTurnOffNotification;
     }
 }

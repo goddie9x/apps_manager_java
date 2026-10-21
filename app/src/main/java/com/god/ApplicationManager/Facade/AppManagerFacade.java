@@ -43,10 +43,12 @@ import com.god.ApplicationManager.Service.FreezeService;
 import com.god.ApplicationManager.UI.FreezeShortcutActivity;
 import com.god.ApplicationManager.Util.DialogUtils;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.regex.Pattern;
 
 import eu.chainfire.libsuperuser.Shell;
 
@@ -58,6 +60,14 @@ public class AppManagerFacade {
     private static StatusBarNotification[] activeNotifications;
     public static final int SDK_VERSION = android.os.Build.VERSION.SDK_INT;
     private static final String TAG = "app manager facade";
+    private static final Pattern PACKAGE_NAME_PATTERN =
+            Pattern.compile("^[a-zA-Z][a-zA-Z0-9_]*(\\.[a-zA-Z][a-zA-Z0-9_]*)+$");
+    private static final ExecutorService rootExecutor = Executors.newSingleThreadExecutor();
+    private static volatile boolean rootCheckRunning = false;
+
+    public static boolean isValidPackageName(String packageName) {
+        return packageName != null && PACKAGE_NAME_PATTERN.matcher(packageName).matches();
+    }
 
     public interface IEventToggle {
         void callback(boolean state);
@@ -94,31 +104,37 @@ public class AppManagerFacade {
         return activityManager.getRunningAppProcesses();
     }
 
+    /** Starts an asynchronous root check; never blocks the calling (UI) thread. */
     public static void getRootPermission() {
-        if (!hasRootAccess()) {
+        if (rootCheckRunning) return;
+        rootCheckRunning = true;
+        rootExecutor.execute(() -> {
             try {
-                Runtime.getRuntime().exec("su");
-            } catch (IOException e) {
-                Log.e(TAG, "No root access available: " + e.getMessage());
+                hasRootAccess();
+            } finally {
+                rootCheckRunning = false;
             }
-        }
+        });
     }
 
+    /** Blocking real root check (runs "id" through su). Call only from a background thread. */
     public static boolean hasRootAccess() {
         try {
-            java.util.Scanner s = new java.util.Scanner(Runtime.getRuntime()
-                    .exec(new String[]{"/system/bin/su", "-c", "cd / && ls"})
-                    .getInputStream()).useDelimiter("\\A");
-            hasRootPermission = !(s.hasNext() ? s.next() : "").equals("");
-            return AppManagerFacade.hasRootPermission;
-        } catch (IOException e) {
+            List<String> output = Shell.SU.run("id");
+            hasRootPermission = output != null && !output.isEmpty();
+        } catch (Exception e) {
+            Log.e(TAG, "Root check failed: " + e.getMessage());
             hasRootPermission = false;
         }
         return hasRootPermission;
     }
 
     public static void uninstallAppWithRoot(String packageName) {
-        executeCommandWithSuShell("pm uninstall  --user 0 " + packageName,
+        if (!isValidPackageName(packageName)) {
+            Log.e(TAG, "Refusing root uninstall for invalid package name: " + packageName);
+            return;
+        }
+        executeCommandWithSuShell("pm uninstall --user 0 " + packageName,
                 String.format(activity.getString(R.string.uninstall_target_success), packageName),
                 String.format(activity.getString(R.string.uninstall_target_failed), packageName));
     }
@@ -143,6 +159,10 @@ public class AppManagerFacade {
     }
 
     public static void forceStopAppWithRootPermission(String packageName) {
+        if (!isValidPackageName(packageName)) {
+            Log.e(TAG, "Refusing root force-stop for invalid package name: " + packageName);
+            return;
+        }
         executeCommandWithSuShell("am force-stop " + packageName,
                 "Kill " + packageName + " success",
                 "Kill " + packageName + " failed");
@@ -162,6 +182,10 @@ public class AppManagerFacade {
     }
 
     public static void freezeAppWithRootPermission(String packageName) {
+        if (!isValidPackageName(packageName)) {
+            Log.e(TAG, "Refusing root freeze for invalid package name: " + packageName);
+            return;
+        }
         executeCommandWithSuShell("pm disable " + packageName,
                 String.format(activity.getString(R.string.freeze_target_success), packageName),
                 String.format(activity.getString(R.string.freeze_target_failed), packageName));
@@ -263,38 +287,32 @@ public class AppManagerFacade {
         return newState;
     }
 
+    /** Runs the command on a background thread and reports the real outcome. Returns true if dispatched. */
     public static boolean executeCommandWithSuShell(String command) {
-        Handler handler = new Handler(Looper.getMainLooper());
-        try {
-            Shell.Threaded shell = Shell.Pool.SU.get();
-            shell.run(command);
-            handler.post(() -> {
-                Toast.makeText(activity, activity.getString(R.string.done), Toast.LENGTH_SHORT).show();
-            });
-            return true;
-        } catch (Exception e) {
-            handler.post(() -> {
-                Toast.makeText(activity, activity.getString(R.string.failed), Toast.LENGTH_SHORT).show();
-            });
-            return false;
-        }
+        return executeCommandWithSuShell(command,
+                activity != null ? activity.getString(R.string.done) : "Done",
+                activity != null ? activity.getString(R.string.failed) : "Failed");
     }
 
+    /** Runs the command on a background thread; the toast reflects the actual shell result. */
     public static boolean executeCommandWithSuShell(String command, String textSuccess, String textFail) {
         Handler handler = new Handler(Looper.getMainLooper());
-        try {
-            Shell.Threaded shell = Shell.Pool.SU.get();
-            shell.run(command);
+        rootExecutor.execute(() -> {
+            List<String> output;
+            try {
+                output = Shell.SU.run(command);
+            } catch (Exception e) {
+                Log.e(TAG, "Root command failed: " + e.getMessage());
+                output = null;
+            }
+            List<String> result = output;
             handler.post(() -> {
-                Toast.makeText(activity, textSuccess, Toast.LENGTH_SHORT).show();
+                if (activity != null) {
+                    Toast.makeText(activity, result != null ? textSuccess : textFail, Toast.LENGTH_SHORT).show();
+                }
             });
-            return true;
-        } catch (Exception e) {
-            handler.post(() -> {
-                Toast.makeText(activity, textFail, Toast.LENGTH_SHORT).show();
-            });
-            return false;
-        }
+        });
+        return true;
     }
 
     public static boolean freezeAppUsingRoot(String packageName,
@@ -349,22 +367,29 @@ public class AppManagerFacade {
         }
     }
 
+    /** Callback variant: callbacks fire on the main thread with the real shell outcome. */
     public static boolean executeCommandWithSuShell(String command,
                                                     ICallbackVoid onSuccess,
                                                     ICallbackVoid onFailed) {
-        try {
-            Shell.Threaded shell = Shell.Pool.SU.get();
-            shell.run(command);
-            onSuccess.callback();
-            return true;
-        } catch (Exception e) {
-            onFailed.callback();
-            Handler handler = new Handler(Looper.getMainLooper());
+        Handler handler = new Handler(Looper.getMainLooper());
+        rootExecutor.execute(() -> {
+            boolean ok;
+            try {
+                ok = Shell.SU.run(command) != null;
+            } catch (Exception e) {
+                Log.e(TAG, "Root command failed: " + e.getMessage());
+                ok = false;
+            }
+            boolean success = ok;
             handler.post(() -> {
-                Toast.makeText(activity, activity.getString(R.string.failed), Toast.LENGTH_SHORT).show();
+                if (success) {
+                    onSuccess.callback();
+                } else {
+                    onFailed.callback();
+                }
             });
-            return false;
-        }
+        });
+        return true;
     }
 
     public static void openApp(AppInfo appInfo) {
