@@ -25,8 +25,10 @@ jobs:
         # platform/build-tools this project needs. (android-actions/setup-android
         # still tries to install the removed legacy 'tools' package.)
         run: |
-          yes | sdkmanager --licenses > /dev/null || true
-          sdkmanager "platforms;android-36" "build-tools;36.0.0"
+          SDKMANAGER="$(ls "$ANDROID_HOME"/cmdline-tools/*/bin/sdkmanager | sort -V | tail -1)"
+          echo "Using $SDKMANAGER"
+          yes | "$SDKMANAGER" --licenses > /dev/null || true
+          "$SDKMANAGER" "platforms;android-36" "build-tools;36.0.0"
 
       - name: Lint, unit tests, debug build
         run: ./gradlew lintDebug testDebugUnitTest assembleDebug --stacktrace
