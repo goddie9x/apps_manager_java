@@ -20,8 +20,13 @@ jobs:
           java-version: '17'
           cache: gradle
 
-      - name: Set up Android SDK
-        uses: android-actions/setup-android@v3
+      - name: Install Android SDK packages
+        # The GitHub runner image already ships an Android SDK; install only the
+        # platform/build-tools this project needs. (android-actions/setup-android
+        # still tries to install the removed legacy 'tools' package.)
+        run: |
+          yes | sdkmanager --licenses > /dev/null || true
+          sdkmanager "platforms;android-36" "build-tools;36.0.0"
 
       - name: Lint, unit tests, debug build
         run: ./gradlew lintDebug testDebugUnitTest assembleDebug --stacktrace
