@@ -2,8 +2,9 @@ pluginManagement {
     repositories {
         google()
         mavenCentral()
-        gradlePluginPortal()
+        // Still required by eu.chainfire:libsuperuser (not on Maven Central); removed with it in the privileged-executor batch.
         maven { url 'https://jitpack.io' }
+        gradlePluginPortal()
     }
 }
 dependencyResolutionManagement {
@@ -11,6 +12,7 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
+        // Still required by eu.chainfire:libsuperuser (not on Maven Central); removed with it in the privileged-executor batch.
         maven { url 'https://jitpack.io' }
     }
 }
