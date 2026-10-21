@@ -22,4 +22,7 @@ public interface FreezeQueueDao {
 
     @Query("SELECT COUNT(*) FROM freeze_queue")
     int count();
+
+    @Query("DELETE FROM freeze_queue")
+    void clearAll();
 }

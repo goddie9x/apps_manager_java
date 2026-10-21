@@ -122,6 +122,39 @@ object ShizukuShell {
     }
 
     @JvmStatic
+    fun runWithOutput(command: String): List<String>? {
+        if (!hasPermission()) return null
+        return try {
+            val method = Shizuku::class.java.getMethod(
+                "newProcess",
+                Array<String>::class.java,
+                Array<String>::class.java,
+                String::class.java,
+            )
+            val process = method.invoke(null, arrayOf("sh", "-c", command), null, null) as Process
+            val output = java.util.Collections.synchronizedList(mutableListOf<String>())
+            val reader = Thread {
+                try {
+                    java.io.BufferedReader(java.io.InputStreamReader(process.inputStream))
+                        .forEachLine { output.add(it) }
+                } catch (ignored: Exception) {
+                }
+            }
+            reader.isDaemon = true
+            reader.start()
+            if (!waitForTimeout(process, 30)) {
+                null
+            } else {
+                reader.join(1000)
+                if (process.exitValue() == 0) output else null
+            }
+        } catch (e: Exception) {
+            Log.e(TAG, "Shizuku command failed: $command (${e.message})")
+            null
+        }
+    }
+
+    @JvmStatic
     fun run(command: String): Boolean {
         if (!hasPermission()) return false
         return try {
@@ -237,6 +270,14 @@ object PrivilegeManager {
         rootAvailable -> RootShell.run(command)
         ShizukuShell.hasPermission() -> ShizukuShell.run(command)
         else -> false
+    }
+
+    /** Output-returning variant of [runShellCommand]; null when no shell backend or the command failed. */
+    @JvmStatic
+    fun runShellCommandWithOutput(context: Context, command: String): List<String>? = when {
+        rootAvailable -> RootShell.runWithOutput(command)
+        ShizukuShell.hasPermission() -> ShizukuShell.runWithOutput(command)
+        else -> null
     }
 
     @JvmStatic

@@ -24,6 +24,7 @@ public class App extends Application {
         initDatabaseOffMainThread();
         PrivilegeManager.refreshRootAsync();
         FreezeWorkScheduler.schedulePeriodicBackstop(this);
+        FreezeWorkScheduler.scheduleUsageReminder(this);
     }
 
     /**

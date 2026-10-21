@@ -18,6 +18,11 @@ public class AppInfo implements Parcelable {
     public boolean isSystemApp = false;
     public boolean isRunning = false;
     public boolean isFrozen = false;
+    // Enrichment for detail/sort (filled during the scan when available):
+    public long firstInstallTime = 0;
+    public long lastUpdateTime = 0;
+    public long sizeBytes = -1;
+    public long lastUsedAt = 0;
     public AppInfo(Drawable appIcon,String appName,String packageName){
         this.appIcon = appIcon;
         this.appName = appName;
@@ -64,6 +69,12 @@ public class AppInfo implements Parcelable {
             Bitmap iconBitmap = (Bitmap) in.readParcelable(Bitmap.class.getClassLoader());
             appIcon = iconBitmap != null ? new BitmapDrawable(null, iconBitmap) : null;
         }
+        if (in.dataAvail() >= 32) {
+            firstInstallTime = in.readLong();
+            lastUpdateTime = in.readLong();
+            sizeBytes = in.readLong();
+            lastUsedAt = in.readLong();
+        }
     }
 
     @Override
@@ -94,6 +105,10 @@ public class AppInfo implements Parcelable {
         if (iconBitmap != null) {
             dest.writeParcelable(iconBitmap, flags);
         }
+        dest.writeLong(firstInstallTime);
+        dest.writeLong(lastUpdateTime);
+        dest.writeLong(sizeBytes);
+        dest.writeLong(lastUsedAt);
     }
 
     private static Bitmap toBitmap(Drawable drawable) {

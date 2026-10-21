@@ -61,6 +61,30 @@ class NotificationService : NotificationListenerService() {
         if (sbn == null || masterDisabled) return
         if (sbn.packageName in blockedPackages) {
             cancelNotification(sbn.key)
+            archive(sbn)
+        }
+    }
+
+    /** Keeps title/app/time of the cancelled notification in the in-app archive (F10), capped at 200 rows. */
+    private fun archive(sbn: StatusBarNotification) {
+        if (!SettingsDB.getInstance().storeBlockedNotifications) return
+        val title = try {
+            sbn.notification.extras.getCharSequence(android.app.Notification.EXTRA_TITLE)?.toString()
+        } catch (e: Exception) {
+            null
+        }
+        val appContext = applicationContext
+        AppDatabase.dbIo.execute {
+            try {
+                val dao = AppDatabase.getInstance(appContext).featureDao()
+                val item = com.god.ApplicationManager.DB.BlockedNotificationItem()
+                item.packageName = sbn.packageName
+                item.title = title
+                item.at = System.currentTimeMillis()
+                dao.insertBlocked(item)
+                dao.trimBlocked(200)
+            } catch (ignored: Exception) {
+            }
         }
     }
 

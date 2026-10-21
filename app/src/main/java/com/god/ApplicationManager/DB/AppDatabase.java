@@ -30,7 +30,7 @@ import java.util.concurrent.Executors;
  * through {@link #dbIo} (a single-thread executor that also serialises writes
  * before reads), and the settings row is preloaded at process start.
  */
-@Database(entities = {AppInfoDB.class, SettingsDB.class, FreezeQueueItem.class}, version = 2, exportSchema = false)
+@Database(entities = {AppInfoDB.class, SettingsDB.class, FreezeQueueItem.class, ActivityLogItem.class, BlockedNotificationItem.class, FreezeProfileItem.class}, version = 3, exportSchema = false)
 public abstract class AppDatabase extends RoomDatabase {
     private static final String TAG = "AppDatabase";
     private static final String DB_NAME = "apps-manager.db";
@@ -50,11 +50,25 @@ public abstract class AppDatabase extends RoomDatabase {
         }
     };
 
+    static final Migration MIGRATION_2_3 = new Migration(2, 3) {
+        @Override
+        public void migrate(SupportSQLiteDatabase db) {
+            db.execSQL("CREATE TABLE IF NOT EXISTS `activity_log` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `package_name` TEXT NOT NULL, `action` TEXT NOT NULL, `backend` TEXT NOT NULL, `success` INTEGER NOT NULL, `at` INTEGER NOT NULL)");
+            db.execSQL("CREATE TABLE IF NOT EXISTS `blocked_notifications` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `package_name` TEXT NOT NULL, `title` TEXT, `at` INTEGER NOT NULL)");
+            db.execSQL("CREATE TABLE IF NOT EXISTS `freeze_profiles` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT NOT NULL, `packages` TEXT NOT NULL)");
+            db.execSQL("ALTER TABLE `settings` ADD COLUMN `store_blocked_notifications` INTEGER NOT NULL DEFAULT 1");
+            db.execSQL("ALTER TABLE `settings` ADD COLUMN `screen_off_freeze_delay_seconds` INTEGER NOT NULL DEFAULT 0");
+            db.execSQL("ALTER TABLE `settings` ADD COLUMN `unused_app_threshold_days` INTEGER NOT NULL DEFAULT 60");
+        }
+    };
+
     public abstract AppInfoDao appInfoDao();
 
     public abstract SettingsDao settingsDao();
 
     public abstract FreezeQueueDao freezeQueueDao();
+
+    public abstract FeatureDao featureDao();
 
     public static AppDatabase getInstance(Context context) {
         if (instance == null) {
@@ -62,7 +76,7 @@ public abstract class AppDatabase extends RoomDatabase {
                 if (instance == null) {
                     Context appContext = context.getApplicationContext();
                     instance = Room.databaseBuilder(appContext, AppDatabase.class, DB_NAME)
-                            .addMigrations(MIGRATION_1_2)
+                            .addMigrations(MIGRATION_1_2, MIGRATION_2_3)
                             .build();
                     importLegacySugarIfNeeded(appContext, instance);
                 }
