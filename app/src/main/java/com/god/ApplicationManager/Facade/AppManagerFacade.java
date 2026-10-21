@@ -33,6 +33,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.god.ApplicationManager.DB.AppInfoDB;
 import com.god.ApplicationManager.DB.SettingsDB;
 import com.god.ApplicationManager.Entity.AppInfo;
+import com.god.ApplicationManager.privilege.PrivilegeManager;
+import com.god.ApplicationManager.privilege.RootShell;
 import com.god.ApplicationManager.Enum.FreezeServiceNextAction;
 import com.god.ApplicationManager.Enum.MenuContextType;
 import com.god.ApplicationManager.Interface.IActionForSelectedApp;
@@ -50,7 +52,6 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.regex.Pattern;
 
-import eu.chainfire.libsuperuser.Shell;
 
 public class AppManagerFacade {
     private static PackageManager packageManager;
@@ -120,13 +121,7 @@ public class AppManagerFacade {
 
     /** Blocking real root check (runs "id" through su). Call only from a background thread. */
     public static boolean hasRootAccess() {
-        try {
-            List<String> output = Shell.SU.run("id");
-            hasRootPermission = output != null && !output.isEmpty();
-        } catch (Exception e) {
-            Log.e(TAG, "Root check failed: " + e.getMessage());
-            hasRootPermission = false;
-        }
+        hasRootPermission = PrivilegeManager.refreshRootBlocking();
         return hasRootPermission;
     }
 
@@ -195,7 +190,8 @@ public class AppManagerFacade {
     public static void freezeApp(AppInfo appInfo) {
         Handler handler = new Handler(Looper.getMainLooper());
         if (checkWhetherAppAlreadyInFreezeList(appInfo, handler)) return;
-        if (hasRootPermission) {
+        if (PrivilegeManager.current(activity).getBackend()
+                != com.god.ApplicationManager.privilege.PrivilegeBackend.NON_ROOT) {
             freezeAppWithRootPermission(appInfo.packageName);
         } else {
             FreezeShortcutActivity.freezeApp(appInfo.packageName, activity);
@@ -299,73 +295,49 @@ public class AppManagerFacade {
     public static boolean executeCommandWithSuShell(String command, String textSuccess, String textFail) {
         Handler handler = new Handler(Looper.getMainLooper());
         rootExecutor.execute(() -> {
-            List<String> output;
-            try {
-                output = Shell.SU.run(command);
-            } catch (Exception e) {
-                Log.e(TAG, "Root command failed: " + e.getMessage());
-                output = null;
-            }
-            List<String> result = output;
+            boolean ok = activity != null
+                    ? PrivilegeManager.runShellCommand(activity, command)
+                    : RootShell.run(command);
             handler.post(() -> {
                 if (activity != null) {
-                    Toast.makeText(activity, result != null ? textSuccess : textFail, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(activity, ok ? textSuccess : textFail, Toast.LENGTH_SHORT).show();
                 }
             });
         });
         return true;
     }
 
+    /** Freezes one app through the strongest privileged backend (root/Shizuku shell or Device Owner). */
     public static boolean freezeAppUsingRoot(String packageName,
                                              Context context,
                                              boolean putScreenOffAfterFreezing) {
-        String crrPackageName = context.getPackageName();
-        try {
-            Shell.Threaded shell = Shell.Pool.SU.get();
-            if (packageName.equals(crrPackageName)) {
-                if (putScreenOffAfterFreezing) {
-                    shell.run("input keyevent 26");
-                }
-            } else {
-                shell.run("am set-inactive " + packageName + " true");
-                shell.run("am force-stop " + packageName);
-                shell.run("am kill " + packageName);
-            }
-            return true;
-        } catch (Shell.ShellDiedException e) {
+        if (!isValidPackageName(packageName)) {
+            Log.e(TAG, "Refusing freeze for invalid package name: " + packageName);
             return false;
         }
+        if (packageName.equals(context.getPackageName())) {
+            if (putScreenOffAfterFreezing) {
+                PrivilegeManager.runShellCommand(context, "input keyevent 26");
+            }
+            return true;
+        }
+        return PrivilegeManager.current(context).standbyAndStop(context, packageName);
     }
 
+    /** Batch variant of {@link #freezeAppUsingRoot}; false when the backend could not freeze everything. */
     public static boolean freezeListAppUsingRoot(List<String> packages,
                                                  Context context,
                                                  boolean putScreenOffAfterFreezing) {
-        try {
-            Shell.Threaded shell = Shell.Pool.SU.get();
-            packages.forEach(it -> {
-                if (it.equals(context.getPackageName())) {
-                    if (putScreenOffAfterFreezing) {
-                        try {
-                            shell.run("input keyevent 26");
-                        } catch (Shell.ShellDiedException e) {
-                            Log.e(TAG, e.getMessage());
-                        }
-                    }
-                } else {
-                    try {
-                        shell.run("am set-inactive " + it + " true");
-                        shell.run("am force-stop " + it);
-                        shell.run("am kill " + it);
-                    } catch (Shell.ShellDiedException e) {
-                        Log.e(TAG, e.getMessage());
-                    }
-                }
-            });
-            if (putScreenOffAfterFreezing) shell.run("input keyevent 26");
-            return true;
-        } catch (Shell.ShellDiedException e) {
-            return false;
+        boolean allOk = true;
+        for (String pkg : packages) {
+            if (!freezeAppUsingRoot(pkg, context, false)) {
+                allOk = false;
+            }
         }
+        if (putScreenOffAfterFreezing) {
+            PrivilegeManager.runShellCommand(context, "input keyevent 26");
+        }
+        return allOk;
     }
 
     /** Callback variant: callbacks fire on the main thread with the real shell outcome. */
@@ -374,13 +346,9 @@ public class AppManagerFacade {
                                                     ICallbackVoid onFailed) {
         Handler handler = new Handler(Looper.getMainLooper());
         rootExecutor.execute(() -> {
-            boolean ok;
-            try {
-                ok = Shell.SU.run(command) != null;
-            } catch (Exception e) {
-                Log.e(TAG, "Root command failed: " + e.getMessage());
-                ok = false;
-            }
+            boolean ok = activity != null
+                    ? PrivilegeManager.runShellCommand(activity, command)
+                    : RootShell.run(command);
             boolean success = ok;
             handler.post(() -> {
                 if (success) {

@@ -66,7 +66,9 @@ dependencies {
     implementation libs.androidx.constraintlayout
     implementation libs.androidx.room.runtime
     annotationProcessor libs.androidx.room.compiler
-    implementation libs.libsuperuser
+    implementation libs.androidx.work.runtime.ktx
+    implementation libs.shizuku.api
+    implementation libs.shizuku.provider
     implementation libs.kotlinx.coroutines.android
     implementation libs.androidx.lifecycle.viewmodel.ktx
     implementation libs.androidx.lifecycle.runtime.ktx

@@ -2,8 +2,6 @@ package com.god.ApplicationManager.UI;
 
 import android.annotation.SuppressLint;
 import android.app.ActivityManager;
-import android.app.job.JobInfo;
-import android.app.job.JobScheduler;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -52,7 +50,7 @@ import com.god.ApplicationManager.Helper.MainActivityMenuHelper;
 import com.god.ApplicationManager.Permission.PermissionHandler;
 import com.god.ApplicationManager.R;
 import com.god.ApplicationManager.Service.NotificationService;
-import com.god.ApplicationManager.Service.ScheduleForServices;
+import com.god.ApplicationManager.work.FreezeWorkScheduler;
 import com.god.ApplicationManager.Tasking.TaskingHandler;
 import com.god.ApplicationManager.databinding.ActivityMainBinding;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -65,7 +63,6 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class MainActivity extends AppCompatActivity {
-    private static final int JOB_RUN_SERVICES = 69;
     private static final int RECYCLER_VIEW_CACHE_SIZE = 20;
 
     private ListAppAdapter crrListListAppAdapter;
@@ -232,16 +229,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void handleStartServices() {
-        ComponentName scheduleRunService =
-                new ComponentName(this, ScheduleForServices.class);
-        JobInfo jobInfo = new JobInfo.Builder(JOB_RUN_SERVICES, scheduleRunService)
-                .setPersisted(true)
-                .setPeriodic(900000)
-                .build();
-        JobScheduler jobScheduler = (JobScheduler) getSystemService(JOB_SCHEDULER_SERVICE);
-        if (jobScheduler != null) {
-            jobScheduler.schedule(jobInfo);
-        }
+        // Auto-freeze scheduling is WorkManager-based now: a screen-off receiver
+        // enqueues immediate work and a daily backstop drains the durable queue.
+        // Both are registered from App.onCreate; nothing to schedule here.
+        FreezeWorkScheduler.schedulePeriodicBackstop(this);
     }
 
     private void initFreezeFloatingBtn() {
