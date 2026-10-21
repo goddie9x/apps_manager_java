@@ -80,24 +80,19 @@ public class PermissionHandler {
     }
 
     public void getQueryAllPackagePermission() {
-        if (activity.checkSelfPermission(Manifest.permission.QUERY_ALL_PACKAGES) != PackageManager.PERMISSION_GRANTED) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                activity.requestPermissions(new String[]{Manifest.permission.QUERY_ALL_PACKAGES}, PERMISSION_QUERY_ALL_PACKAGES_CODE);
-            }
+        // QUERY_ALL_PACKAGES is an install-time (normal) permission: it is granted
+        // automatically when declared in the manifest and cannot be requested at runtime.
+        boolean granted = activity.checkSelfPermission(Manifest.permission.QUERY_ALL_PACKAGES)
+                == PackageManager.PERMISSION_GRANTED;
+        if (!granted) {
+            android.util.Log.w(TAG, "QUERY_ALL_PACKAGES not granted; app list will be filtered by package visibility");
         }
     }
 
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         switch (requestCode) {
             case PERMISSION_QUERY_ALL_PACKAGES_CODE: {
-                if (grantResults.length < 1 || grantResults[0] != PackageManager.PERMISSION_GRANTED) {
-                    DialogUtils.showAlertDialog(activity,
-                            activity.getString(R.string.permission_requirement),
-                            activity.getString(R.string.permission_require_to_full_power),
-                            (dialog, which) -> getQueryAllPackagePermission(),
-                            (dialog, which) -> {}
-                    );
-                }
+                // No runtime permission is requested anymore; kept for compatibility.
                 break;
             }
         }

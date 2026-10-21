@@ -10,14 +10,14 @@ import com.god.ApplicationManager.Facade.AppManagerFacade;
 import java.util.List;
 
 public class NotificationService extends NotificationListenerService {
-    private static List<String> listPackageNameHaveToTurnOffNotif;
+    private static List<String> listPackageNameHaveToTurnOffNotif = new java.util.ArrayList<>();
 
     private static boolean isDisableTurnOffNotification;
     private static final String TAG="NotificationService";
 
     public static void getListTurnOffNotificationFromDB() {
-        listPackageNameHaveToTurnOffNotif = AppManagerFacade
-                .getListPackageNameHaveToTurnOffNotif();
+        List<String> loaded = AppManagerFacade.getListPackageNameHaveToTurnOffNotif();
+        listPackageNameHaveToTurnOffNotif = loaded != null ? loaded : new java.util.ArrayList<>();
     }
     public static void getDisableNotificationStatus(){
         isDisableTurnOffNotification = SettingsDB.getInstance()
@@ -27,7 +27,9 @@ public class NotificationService extends NotificationListenerService {
     @Override
     public void onNotificationPosted(StatusBarNotification sbn) {
         String packageName = sbn.getPackageName();
-        if (listPackageNameHaveToTurnOffNotif.contains(packageName)&&!isDisableTurnOffNotification) {
+        if (listPackageNameHaveToTurnOffNotif != null
+                && listPackageNameHaveToTurnOffNotif.contains(packageName)
+                && !isDisableTurnOffNotification) {
             String key = sbn.getKey();
             cancelNotification(key);
             Log.i(TAG,key);
@@ -38,7 +40,10 @@ public class NotificationService extends NotificationListenerService {
     public void onListenerConnected() {
         super.onListenerConnected();
         getListTurnOffNotificationFromDB();
+        getDisableNotificationStatus();
+        if (isDisableTurnOffNotification || listPackageNameHaveToTurnOffNotif == null) return;
         StatusBarNotification[] activeNotifications = getActiveNotifications();
+        if (activeNotifications == null) return;
         for (StatusBarNotification notification : activeNotifications) {
             if (listPackageNameHaveToTurnOffNotif.contains(notification.getPackageName())) {
                 cancelNotification(notification.getKey());
@@ -50,5 +55,6 @@ public class NotificationService extends NotificationListenerService {
     public void onCreate() {
         super.onCreate();
         getListTurnOffNotificationFromDB();
+        getDisableNotificationStatus();
     }
 }

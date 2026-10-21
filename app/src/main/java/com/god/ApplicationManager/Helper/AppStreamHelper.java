@@ -1,6 +1,6 @@
 package com.god.ApplicationManager.Helper;
 
-import android.widget.TextView;
+import androidx.annotation.StringRes;
 
 import com.god.ApplicationManager.Entity.AppInfo;
 import com.god.ApplicationManager.Enum.GroupAppType;
@@ -26,17 +26,27 @@ public class AppStreamHelper {
         }
     }
 
-    public static Stream<AppInfo> handleFilter(Stream<AppInfo> stream, GroupAppType groupType, TextView sortAppDes) {
+    @StringRes
+    public static int getGroupTitleRes(GroupAppType groupType) {
         switch (groupType) {
             case SYSTEM_APP:
-                sortAppDes.setText(R.string.filter_system_app_amount_title);
+                return R.string.filter_system_app_amount_title;
+            case USER_APP:
+                return R.string.filter_user_app_amount_title;
+            case ALL:
+            default:
+                return R.string.filter_all_app_amount_title;
+        }
+    }
+
+    public static Stream<AppInfo> handleFilter(Stream<AppInfo> stream, GroupAppType groupType) {
+        switch (groupType) {
+            case SYSTEM_APP:
                 return stream.filter(appInfo -> appInfo.isSystemApp);
             case USER_APP:
-                sortAppDes.setText(R.string.filter_user_app_amount_title);
                 return stream.filter(appInfo -> !appInfo.isSystemApp);
             case ALL:
             default:
-                sortAppDes.setText(R.string.filter_all_app_amount_title);
                 return stream;
         }
     }

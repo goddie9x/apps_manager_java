@@ -8,35 +8,37 @@ import com.god.ApplicationManager.Facade.ServiceHandlerFacade;
 
 public class ScheduleForServices extends JobService {
     private static final String TAG = "ScheduleForServices";
-    public static boolean isJobCalled = false;
+    private volatile boolean jobStopped = false;
+
     @Override
     public boolean onStartJob(JobParameters params) {
+        jobStopped = false;
         doInBackGround(params);
-        isJobCalled = false;
-        return false;
+        return true;
     }
 
     private void doInBackGround(JobParameters params) {
-        new Thread(()->{
+        new Thread(() -> {
             int time = 0;
-            while (!isJobCalled&& time<21)
-            {
+            while (!jobStopped && time < 21) {
                 ServiceHandlerFacade.startServices(this);
-                try{
+                try {
                     Thread.sleep(45000);
                     time++;
-                }catch (InterruptedException e){
-                    Log.e(TAG,e.getMessage());
+                } catch (InterruptedException e) {
+                    Log.e(TAG, "Service check loop interrupted", e);
+                    Thread.currentThread().interrupt();
+                    break;
                 }
             }
-            jobFinished(params,true);
+            jobFinished(params, false);
         }).start();
     }
 
     @Override
     public boolean onStopJob(JobParameters params) {
-        Log.e(TAG,"Job cancel");
-        isJobCalled = true;
-        return false;
+        Log.i(TAG, "Job stopped by system; asking to reschedule");
+        jobStopped = true;
+        return true;
     }
 }

@@ -43,7 +43,17 @@ public class FreezeShortcutActivity extends AppCompatActivity {
         activity = this;
 
         Intent intent = getIntent();
-        if (!Intent.ACTION_CREATE_SHORTCUT.equals(intent.getAction())) {
+        if (Intent.ACTION_CREATE_SHORTCUT.equals(intent.getAction())) {
+            Intent result = new Intent();
+            result.putExtra(Intent.EXTRA_SHORTCUT_INTENT, createShortcutIntent(this));
+            result.putExtra(Intent.EXTRA_SHORTCUT_NAME, getString(R.string.freeze_all_app));
+            result.putExtra(Intent.EXTRA_SHORTCUT_ICON_RESOURCE,
+                    Intent.ShortcutIconResource.fromContext(this, R.drawable.ic_freeze_shortcut));
+            setResult(RESULT_OK, result);
+            finish();
+            return;
+        }
+        {
             AppManagerFacade.setActivity(this);
             if(AppManagerFacade.hasRootPermission){
                 List<String>listPackageName = new ArrayList<>();
@@ -65,10 +75,10 @@ public class FreezeShortcutActivity extends AppCompatActivity {
                     if (ICallbackContext != null) {
                         ICallbackContext.callback(this);
                         ICallbackContext = null;
-                        freezeOnScreenOffFailedDialog();
-                        Log.e(TAG, "Screen not unlocked.");
-                        return;
                     }
+                    freezeOnScreenOffFailedDialog();
+                    Log.e(TAG, "Screen not unlocked; aborting freeze.");
+                    return;
                 }
                 Log.i(TAG, "Performing Freeze.");
                 isWorking = true;

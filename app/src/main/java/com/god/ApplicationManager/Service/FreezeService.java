@@ -9,7 +9,6 @@ import android.os.Handler;
 import android.util.Log;
 import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityNodeInfo;
-import android.widget.Toast;
 
 import com.god.ApplicationManager.Enum.FreezeServiceNextAction;
 import com.god.ApplicationManager.Interface.HandleGetNodeToClick;
@@ -23,7 +22,6 @@ import java.util.stream.Collectors;
 public class FreezeService extends AccessibilityService {
     private static final String TAG = "FreezeService";
     public static boolean isRunning;
-    private Thread backgroundThread;
     private final String SETTINGS_PACKAGE_NAME = "com.android.settings";
     private Resources settingsResource;
     private static List<String> listPackageHaveToBeFreeze = new ArrayList<>();
@@ -39,6 +37,7 @@ public class FreezeService extends AccessibilityService {
     }
 
     private String getForceStopButtonName() {
+        if (settingsResource == null) return null;
         if (forceStopButtonName == null || forceStopButtonName.isEmpty()) {
             try {
                 // Try to find out what it says on the Force Stop button (different in different languages)
@@ -63,25 +62,27 @@ public class FreezeService extends AccessibilityService {
     @Override
     public void onAccessibilityEvent(AccessibilityEvent event) {
         Log.i(TAG, "onAccessibilityEvent");
-        String className = (String) event.getClassName();
-        String packageName = (String) event.getPackageName();
+        CharSequence classNameSeq = event.getClassName();
+        String className = classNameSeq != null ? classNameSeq.toString() : null;
+        CharSequence packageNameSeq = event.getPackageName();
+        String packageName = packageNameSeq != null ? packageNameSeq.toString() : null;
         switch (nextAction) {
                 case PRESS_FORCE_STOP:
                     if (Objects.equals(className, "com.android.settings.applications.InstalledAppDetailsTop")) {
                         pressForceStopButton(event);
                     } else {
-                        Log.w(TAG, "awaited InstalledAppDetailsTop to be the next screen but it was ${event.className}");
+                        Log.w(TAG, "awaited InstalledAppDetailsTop to be the next screen but it was " + className);
                         wrongScreenShown();
                     }
 
                     break;
                 case PRESS_OK:
-                    String eventClassName = event.getClassName().toString();
+                    String eventClassName = className != null ? className : "";
                     if (eventClassName.endsWith(".app.AlertDialog")
                             || eventClassName.endsWith(".app.COUIAlertDialog")) {
                         pressOkButton(event);
                     } else {
-                        Log.w(TAG, "awaited AlertDialog to be the next screen but it was ${event.className}");
+                        Log.w(TAG, "awaited AlertDialog to be the next screen but it was " + eventClassName);
                         wrongScreenShown();
                     }
                     break;
@@ -102,17 +103,14 @@ public class FreezeService extends AccessibilityService {
             settingsResource = packageManager
                     .getResourcesForApplication(SETTINGS_PACKAGE_NAME);
         } catch (PackageManager.NameNotFoundException e) {
-            Toast.makeText(baseContext, "Get app settings failed", Toast.LENGTH_SHORT).show();
-            throw new RuntimeException(e);
+            Log.e(TAG, "Settings app resources not found; force-stop label lookup disabled", e);
+            settingsResource = null;
         }
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        if (!isRunning) {
-            isRunning = true;
-            startBackgroundThread();
-        }
+        isRunning = true;
         return START_STICKY;
     }
 
@@ -128,27 +126,11 @@ public class FreezeService extends AccessibilityService {
         prefUseAccessibilityService = true;
     }
 
-    private void startBackgroundThread() {
-        backgroundThread = new Thread(() -> {
-            if (isRunning) {
-                try {
-                    Thread.sleep(15000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-        backgroundThread.start();
-    }
-
     @Override
     public void onDestroy() {
         Log.i(TAG, "FreezerService was destroyed.");
         isRunning = false;
         stopAnyCurrentFreezing();
-        if (backgroundThread != null) {
-            backgroundThread.interrupt();
-        }
     }
 
     public void pressForceStopButton(AccessibilityEvent event) {
@@ -157,7 +139,10 @@ public class FreezeService extends AccessibilityService {
                 nodesToClick = node.findAccessibilityNodeInfosByViewId("com.android.settings:id/force_stop_button");
 
             if (nodesToClick.isEmpty()) {
-                nodesToClick = node.findAccessibilityNodeInfosByText(getForceStopButtonName());
+                String forceStopButtonName = getForceStopButtonName();
+                if (forceStopButtonName != null) {
+                    nodesToClick = node.findAccessibilityNodeInfosByText(forceStopButtonName);
+                }
             }
             if (nodesToClick.isEmpty()) {
                 List<AccessibilityNodeInfo> buttons = new ArrayList<>();
@@ -165,16 +150,20 @@ public class FreezeService extends AccessibilityService {
                 if (buttons.size() == 2) {
                     AccessibilityNodeInfo rightNode = buttons.get(1);
                     AccessibilityNodeInfo leftNode = buttons.get(0);
-                    Log.w(TAG, "right: $rightNode, left: $leftNode");
+                    Log.w(TAG, "right: " + rightNode + ", left: " + leftNode);
 
                     // "force stop" contains two word, "uninstall" does not
-                    int amountWordRight = rightNode.getText().toString().trim().split(" ").length;
-                    int amountWordLeft = rightNode.getText().toString().trim().split(" ").length;
+                    CharSequence rightText = rightNode.getText();
+                    CharSequence leftText = leftNode.getText();
+                    if (rightText != null && leftText != null) {
+                        int amountWordRight = rightText.toString().trim().split(" ").length;
+                        int amountWordLeft = leftText.toString().trim().split(" ").length;
 
-                    if (amountWordRight == 2 && amountWordLeft == 1)
-                        nodesToClick = (List<AccessibilityNodeInfo>) leftNode;
-                    else if (amountWordRight == 1 && amountWordLeft == 2)
-                        nodesToClick = (List<AccessibilityNodeInfo>) rightNode;
+                        if (amountWordRight == 2 && amountWordLeft == 1)
+                            nodesToClick = new ArrayList<>(List.of(leftNode));
+                        else if (amountWordRight == 1 && amountWordLeft == 2)
+                            nodesToClick = new ArrayList<>(List.of(rightNode));
+                    }
                 }
             }
         });
@@ -183,11 +172,14 @@ public class FreezeService extends AccessibilityService {
     private void printNodes(AccessibilityNodeInfo parentNode) {
         if (parentNode == null) return;
         if (parentNode.isClickable()) {
-            Log.e(TAG, "    $parentNode");
+            Log.e(TAG, "    " + parentNode);
         }
         int amountChild = parentNode.getChildCount();
         for (int i = 0; i < amountChild; i++) {
-            printNodes(parentNode.getChild(i));
+            AccessibilityNodeInfo child = parentNode.getChild(i);
+            if (child != null) {
+                printNodes(child);
+            }
         }
     }
 
@@ -195,7 +187,7 @@ public class FreezeService extends AccessibilityService {
                              AccessibilityNodeInfo parentNode) {
 
         if (nodes.isEmpty()) {
-            Log.e(TAG, "Could not find the $buttonName button.");
+            Log.e(TAG, "Could not find the button.");
             Log.e(TAG, "Buttons:");
             printNodes(parentNode);
             stopAnyCurrentFreezing();
@@ -204,7 +196,7 @@ public class FreezeService extends AccessibilityService {
             }
             return false;
         } else if (nodes.size() > 1) {
-            Log.w(TAG, "Found more than one $buttonName button, clicking them all.");
+            Log.w(TAG, "Found more than one matching button, clicking them all.");
         }
 
         List<AccessibilityNodeInfo> clickableNodes = nodes.stream().filter(it -> it.isClickable() && it.isEnabled())
@@ -256,13 +248,16 @@ public class FreezeService extends AccessibilityService {
         }
         int amountNode = parentNode.getChildCount();
         for (int i = 0; i < amountNode; i++) {
-            getButtons(parentNode.getChild(i), l);
+            AccessibilityNodeInfo child = parentNode.getChild(i);
+            if (child != null) {
+                getButtons(child, l);
+            }
         }
     }
 
     public static void stopAnyCurrentFreezing() {
         if (nextAction != FreezeServiceNextAction.DO_NOTHING)
-            Log.i(TAG, "Stopping current freeze process (stopAnyCurrentFreezing()), nextAction was $nextAction");
+            Log.i(TAG, "Stopping current freeze process (stopAnyCurrentFreezing()), nextAction was " + nextAction);
         nextAction = FreezeServiceNextAction.DO_NOTHING;
         timeoutHandler.removeCallbacksAndMessages(null);
     }
@@ -320,7 +315,7 @@ public class FreezeService extends AccessibilityService {
             nextAction = FreezeServiceNextAction.PRESS_FORCE_STOP;
             notifyThereIsStillMovement(context);
         } else {
-            throw new IllegalStateException("Attempted to freeze, but was still busy (nextAction was $nextAction)");
+            throw new IllegalStateException("Attempted to freeze, but was still busy (nextAction was " + nextAction + ")");
         }
     }
 

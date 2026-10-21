@@ -1,13 +1,13 @@
 package com.god.ApplicationManager.Entity;
 
-import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.os.Build;
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.util.Log;
+
+import java.util.Objects;
 
 import androidx.annotation.NonNull;
 
@@ -18,7 +18,6 @@ public class AppInfo implements Parcelable {
     public boolean isSystemApp = false;
     public boolean isRunning = false;
     public boolean isFrozen = false;
-    private final String TAG = "AppInfo";
     public AppInfo(Drawable appIcon,String appName,String packageName){
         this.appIcon = appIcon;
         this.appName = appName;
@@ -54,19 +53,29 @@ public class AppInfo implements Parcelable {
         this.isRunning = isRunning;
         this.isFrozen = isFrozen;
     }
-    public AppInfo(Parcel in){
+    public AppInfo(Parcel in) {
         appName = in.readString();
         packageName = in.readString();
         isSystemApp = in.readByte() != 0;
         isRunning = in.readByte() != 0;
-        isFrozen = in.readByte()!=0;
-        try {
-            Bitmap iconBitmap = (Bitmap) in.readParcelable(getClass().getClassLoader());
-            appIcon = new BitmapDrawable(Resources.getSystem(), iconBitmap);
-
-        } catch (ClassCastException e) {
-            Log.e(TAG,e.getMessage());
+        isFrozen = in.readByte() != 0;
+        boolean hasIcon = in.readByte() != 0;
+        if (hasIcon) {
+            Bitmap iconBitmap = (Bitmap) in.readParcelable(Bitmap.class.getClassLoader());
+            appIcon = iconBitmap != null ? new BitmapDrawable(null, iconBitmap) : null;
         }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof AppInfo other)) return false;
+        return Objects.equals(packageName, other.packageName);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(packageName);
     }
     @Override
     public int describeContents() {
@@ -77,27 +86,30 @@ public class AppInfo implements Parcelable {
     public void writeToParcel(@NonNull Parcel dest, int flags) {
         dest.writeString(appName);
         dest.writeString(packageName);
-        if (appIcon != null) {
-                try{
-                    dest.writeParcelable((Parcelable) appIcon, flags);
-                }
-                catch (Exception e){
-                }
-        }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            dest.writeBoolean(isSystemApp);
-            dest.writeBoolean(isRunning);
-            dest.writeBoolean(isFrozen);
-        }
-        else {
-            dest.writeInt(isSystemApp ? 1 : 0);
-            dest.writeInt(isRunning ? 1 : 0);
-            dest.writeInt(isFrozen ? 1 : 0);
+        dest.writeByte((byte) (isSystemApp ? 1 : 0));
+        dest.writeByte((byte) (isRunning ? 1 : 0));
+        dest.writeByte((byte) (isFrozen ? 1 : 0));
+        Bitmap iconBitmap = toBitmap(appIcon);
+        dest.writeByte((byte) (iconBitmap != null ? 1 : 0));
+        if (iconBitmap != null) {
+            dest.writeParcelable(iconBitmap, flags);
         }
     }
 
-    public static class Settings {
+    private static Bitmap toBitmap(Drawable drawable) {
+        if (drawable == null) return null;
+        if (drawable instanceof BitmapDrawable bitmapDrawable) {
+            return bitmapDrawable.getBitmap();
+        }
+        int width = Math.max(1, drawable.getIntrinsicWidth());
+        int height = Math.max(1, drawable.getIntrinsicHeight());
+        Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+        drawable.draw(canvas);
+        return bitmap;
     }
+
     public static final Creator<AppInfo> CREATOR = new Creator<AppInfo>() {
         @Override
         public AppInfo createFromParcel(Parcel in) {

@@ -79,13 +79,19 @@ public class ListAppAdapter extends RecyclerView.Adapter<ListAppAdapter.AppItemH
         holder.appNameLabel.setText(crrAppInfo.appName);
         holder.appPackageLabel.setText(crrAppInfo.packageName);
         holder.appIcon.setImageDrawable(crrAppInfo.appIcon);
-        if (!crrAppInfo.isSystemApp) {
+        if (crrAppInfo.isSystemApp) {
+            holder.systemLabel.setText(R.string.system);
+            holder.systemLabel.setTextColor(Color.GRAY);
+        } else {
             holder.systemLabel.setText(R.string.user);
             holder.systemLabel.setTextColor(Color.GREEN);
         }
         if (crrAppInfo.isRunning) {
             holder.runningLabel.setText(R.string.running);
             holder.runningLabel.setTextColor(Color.GREEN);
+        } else {
+            holder.runningLabel.setText(R.string.stopped);
+            holder.runningLabel.setTextColor(Color.GRAY);
         }
         holder.setSelectedApp(listSelectedApp.contains(crrAppInfo));
         holder.itemView.setOnCreateContextMenuListener(this);
@@ -136,7 +142,8 @@ public class ListAppAdapter extends RecyclerView.Adapter<ListAppAdapter.AppItemH
         }
         if (holder != null) {
             int indexItemSelected = holder.getBindingAdapterPosition();
-            selectedAppInfo = (indexItemSelected < listApp.size()) ? listApp.get(indexItemSelected) : null;
+            selectedAppInfo = (indexItemSelected >= 0 && indexItemSelected < listApp.size())
+                    ? listApp.get(indexItemSelected) : null;
         }
     }
 
