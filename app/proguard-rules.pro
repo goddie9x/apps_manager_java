@@ -1,21 +1,24 @@
-# Add project specific ProGuard rules here.
-# You can control the set of applied configuration files using the
-# proguardFiles setting in build.gradle.
-#
-# For more details, see
-#   http://developer.android.com/guide/developing/tools/proguard.html
+# Project-specific R8/ProGuard rules.
 
-# If your project uses WebView with JS, uncomment the following
-# and specify the fully qualified class name to the JavaScript interface
-# class:
-#-keepclassmembers class fqcn.of.javascript.interface.for.webview {
-#   public *;
-#}
+# Keep source file / line info so crash stack traces stay readable.
+-keepattributes SourceFile,LineNumberTable
+-renamesourcefileattribute SourceFile
+-keepattributes *Annotation*,Signature,InnerClasses,EnclosingMethod
 
-# Uncomment this to preserve the line number information for
-# debugging stack traces.
-#-keepattributes SourceFile,LineNumberTable
+# Room: the database implementation is looked up reflectively by name, and
+# entities/DAOs must keep their shapes.
+-keep class com.god.ApplicationManager.DB.** { *; }
+-keep class * extends androidx.room.RoomDatabase { *; }
 
-# If you keep the line number information, uncomment this to
-# hide the original source file name.
-#-renamesourcefileattribute SourceFile
+# Keep the app's model/entity classes (also shielded by @Keep, belt and braces).
+-keep class com.god.ApplicationManager.Entity.** { *; }
+
+# libsuperuser spawns shells and parses process output; keep it whole.
+-keep class eu.chainfire.libsuperuser.** { *; }
+
+# Strip verbose/debug/info logging from release builds (warnings and errors stay).
+-assumenosideeffects class android.util.Log {
+    public static *** v(...);
+    public static *** d(...);
+    public static *** i(...);
+}
