@@ -132,10 +132,23 @@ class PermissionCenterActivity : AppCompatActivity() {
         Row(
             R.string.pc_shizuku,
             {
-                val installed = isPackageInstalled(SHIZUKU_PACKAGE)
-                installed to if (installed) R.string.pc_shizuku_installed else R.string.pc_shizuku_missing
+                when {
+                    !isPackageInstalled(SHIZUKU_PACKAGE) -> false to R.string.pc_shizuku_missing
+                    com.god.ApplicationManager.privilege.ShizukuShell.hasPermission() ->
+                        true to R.string.pc_status_granted
+                    com.god.ApplicationManager.privilege.ShizukuShell.isBinderAlive() ->
+                        false to R.string.pc_shizuku_installed
+                    else -> false to R.string.pc_shizuku_missing
+                }
             },
-            null,
+            {
+                // Ask Shizuku for permission in place; the status row refreshes on resume.
+                try {
+                    rikka.shizuku.Shizuku.requestPermission(REQUEST_SHIZUKU)
+                } catch (e: Exception) {
+                    // Shizuku not running yet: opening its manager is the user's next step.
+                }
+            },
         ),
     )
 
@@ -185,6 +198,7 @@ class PermissionCenterActivity : AppCompatActivity() {
 
     companion object {
         private const val REQUEST_POST_NOTIFICATIONS = 1001
+        private const val REQUEST_SHIZUKU = 1002
         private const val SHIZUKU_PACKAGE = "moe.shizuku.privileged.api"
     }
 }

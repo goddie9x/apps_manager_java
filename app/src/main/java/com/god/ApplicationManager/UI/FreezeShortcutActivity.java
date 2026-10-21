@@ -55,8 +55,11 @@ public class FreezeShortcutActivity extends AppCompatActivity {
         }
         {
             AppManagerFacade.setActivity(this);
-            if(AppManagerFacade.hasRootPermission){
-                List<String>listPackageName = new ArrayList<>();
+            if (com.god.ApplicationManager.privilege.PrivilegeManager.current(this).getBackend()
+                    != com.god.ApplicationManager.privilege.PrivilegeBackend.NON_ROOT){
+                // Durable path: enqueue the freeze list and let WorkManager drain it,
+                // so the freeze survives this activity (and the process) going away.
+                List<String> listPackageName = new ArrayList<>();
                 List<AppInfoDB> listAppFreeze =
                         AppInfoDB.find(AppInfoDB.class,
                         "is_have_to_be_freeze = 1");
@@ -64,7 +67,9 @@ public class FreezeShortcutActivity extends AppCompatActivity {
                         listAppFreeze) {
                     listPackageName.add(app.packageName);
                 }
-                AppManagerFacade.freezeListAppUsingRoot(listPackageName,this,false);
+                com.god.ApplicationManager.data.FreezeQueueRepository.enqueue(this, listPackageName);
+                com.god.ApplicationManager.work.FreezeWorkScheduler.enqueueFreezeNow(
+                        this, com.god.ApplicationManager.work.FreezeWorker.TRIGGER_MANUAL);
                 Toast.makeText(this, R.string.freeze_all_app_success,Toast.LENGTH_SHORT).show();
                 finish();
             }

@@ -64,8 +64,19 @@ public class SettingsDB {
         return instance;
     }
 
+    /** Persisted asynchronously on the DB executor; the in-memory instance stays the read source. */
     public void save() {
-        AppDatabase.getInstance().settingsDao().upsert(this);
+        SettingsDB snapshot = this;
+        AppDatabase.dbIo.execute(() ->
+                AppDatabase.getInstance().settingsDao().upsert(snapshot));
+    }
+
+    /**
+     * Loads the settings row into the singleton. Called once from App.onCreate on a
+     * background thread so later main-thread getInstance() calls never touch the DB.
+     */
+    public static void preload() {
+        getInstance();
     }
 
     public static void saveSettings() {

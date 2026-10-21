@@ -9,10 +9,14 @@ import android.util.Log;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
+import androidx.room.migration.Migration;
+import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import java.io.File;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * Room database replacing the abandoned Sugar ORM.
@@ -22,11 +26,11 @@ import java.util.Set;
  * freeze / notification rules and settings. The legacy file is renamed to
  * {@code .bak} after a successful import and is never read again.
  *
- * <p>{@code allowMainThreadQueries} is a transitional concession: the previous
- * Sugar-based API was synchronous and is called from the main thread in a few
- * places. It is removed when the callers move to coroutines (architecture batch).
+ * <p>Main-thread queries are NOT allowed: legacy synchronous call sites route
+ * through {@link #dbIo} (a single-thread executor that also serialises writes
+ * before reads), and the settings row is preloaded at process start.
  */
-@Database(entities = {AppInfoDB.class, SettingsDB.class}, version = 1, exportSchema = false)
+@Database(entities = {AppInfoDB.class, SettingsDB.class, FreezeQueueItem.class}, version = 2, exportSchema = false)
 public abstract class AppDatabase extends RoomDatabase {
     private static final String TAG = "AppDatabase";
     private static final String DB_NAME = "apps-manager.db";
@@ -36,9 +40,21 @@ public abstract class AppDatabase extends RoomDatabase {
 
     private static volatile AppDatabase instance;
 
+    /** Serialises all legacy synchronous DB access; also orders writes before later reads. */
+    public static final ExecutorService dbIo = Executors.newSingleThreadExecutor();
+
+    static final Migration MIGRATION_1_2 = new Migration(1, 2) {
+        @Override
+        public void migrate(SupportSQLiteDatabase db) {
+            db.execSQL("CREATE TABLE IF NOT EXISTS `freeze_queue` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `package_name` TEXT NOT NULL, `attempts` INTEGER NOT NULL, `enqueued_at` INTEGER NOT NULL)");
+        }
+    };
+
     public abstract AppInfoDao appInfoDao();
 
     public abstract SettingsDao settingsDao();
+
+    public abstract FreezeQueueDao freezeQueueDao();
 
     public static AppDatabase getInstance(Context context) {
         if (instance == null) {
@@ -46,7 +62,7 @@ public abstract class AppDatabase extends RoomDatabase {
                 if (instance == null) {
                     Context appContext = context.getApplicationContext();
                     instance = Room.databaseBuilder(appContext, AppDatabase.class, DB_NAME)
-                            .allowMainThreadQueries()
+                            .addMigrations(MIGRATION_1_2)
                             .build();
                     importLegacySugarIfNeeded(appContext, instance);
                 }

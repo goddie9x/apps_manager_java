@@ -43,13 +43,19 @@ public class AppInfoDB {
         return AppDatabase.getInstance().appInfoDao();
     }
 
+    /** Writes are queued on the DB executor; later shim reads observe them (same executor). */
     public void save() {
-        dao().upsert(this);
+        AppInfoDB snapshot = this;
+        AppDatabase.dbIo.execute(() -> dao().upsert(snapshot));
     }
 
     public static AppInfoDB find(String packageName) {
         if (packageName == null) return null;
-        return dao().findByPackage(packageName);
+        try {
+            return AppDatabase.dbIo.submit(() -> dao().findByPackage(packageName)).get();
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     /**
@@ -61,12 +67,19 @@ public class AppInfoDB {
     public static List<AppInfoDB> find(Class<AppInfoDB> clazz, String whereClause, String... whereArgs) {
         String clause = whereClause == null ? "" : whereClause.toLowerCase(Locale.ROOT).replaceAll("\\s+", " ").trim();
         List<AppInfoDB> result;
+        List<AppInfoDB> all;
+        try {
+            all = AppDatabase.dbIo.submit(() -> dao().getAll()).get();
+        } catch (Exception e) {
+            return new ArrayList<>();
+        }
         if (clause.contains("package_name=?") && whereArgs != null && whereArgs.length > 0) {
             result = new ArrayList<>();
-            AppInfoDB one = dao().findByPackage(whereArgs[0]);
-            if (one != null) result.add(one);
+            for (AppInfoDB candidate : all) {
+                if (candidate.packageName.equals(whereArgs[0])) result.add(candidate);
+            }
         } else {
-            result = new ArrayList<>(dao().getAll());
+            result = new ArrayList<>(all);
         }
         if (clause.contains("is_have_to_be_freeze")) {
             result.removeIf(app -> !app.isHaveToBeFreeze);
@@ -78,7 +91,11 @@ public class AppInfoDB {
     }
 
     public static List<AppInfoDB> listAll(Class<AppInfoDB> clazz) {
-        return dao().getAll();
+        try {
+            return AppDatabase.dbIo.submit(() -> dao().getAll()).get();
+        } catch (Exception e) {
+            return new ArrayList<>();
+        }
     }
 
     public static AppInfoDB findOrCreateByPackageName(String packageName,
