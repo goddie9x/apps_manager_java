@@ -30,13 +30,19 @@ import java.util.concurrent.Executors;
  * through {@link #dbIo} (a single-thread executor that also serialises writes
  * before reads), and the settings row is preloaded at process start.
  */
-@Database(entities = {AppInfoDB.class, SettingsDB.class, FreezeQueueItem.class, ActivityLogItem.class, BlockedNotificationItem.class, FreezeProfileItem.class}, version = 3, exportSchema = false)
+@Database(entities = {AppInfoDB.class, SettingsDB.class, FreezeQueueItem.class, ActivityLogItem.class, BlockedNotificationItem.class, FreezeProfileItem.class, ManualThreat.class, UserFlag.class, FeedInfo.class}, version = 4, exportSchema = false)
 public abstract class AppDatabase extends RoomDatabase {
     private static final String TAG = "AppDatabase";
     private static final String DB_NAME = "apps-manager.db";
     private static final String LEGACY_SUGAR_DB_NAME = "god.db.ApplicationManager";
     private static final String PREFS_NAME = "db-migration";
     private static final String PREF_LEGACY_IMPORTED = "legacy_sugar_imported";
+    private static final String PREF_FEED_SEEDED = "default_threat_feed_seeded";
+
+    /** Default online feed: AssoEchap/stalkerware-indicators ioc.yaml (public, reputable). */
+    public static final String DEFAULT_FEED_URL =
+            "https://raw.githubusercontent.com/AssoEchap/stalkerware-indicators/master/ioc.yaml";
+    public static final String DEFAULT_FEED_NAME = "stalkerware-indicators";
 
     private static volatile AppDatabase instance;
 
@@ -62,6 +68,15 @@ public abstract class AppDatabase extends RoomDatabase {
         }
     };
 
+    static final Migration MIGRATION_3_4 = new Migration(3, 4) {
+        @Override
+        public void migrate(SupportSQLiteDatabase db) {
+            db.execSQL("CREATE TABLE IF NOT EXISTS `manual_threats` (`package_name` TEXT NOT NULL, `severity` TEXT NOT NULL, `label` TEXT, `note` TEXT, `added_at` INTEGER NOT NULL, PRIMARY KEY(`package_name`))");
+            db.execSQL("CREATE TABLE IF NOT EXISTS `user_flags` (`package_name` TEXT NOT NULL, `kind` TEXT NOT NULL, `note` TEXT, `flagged_at` INTEGER NOT NULL, PRIMARY KEY(`package_name`))");
+            db.execSQL("CREATE TABLE IF NOT EXISTS `threat_feeds` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `url` TEXT, `name` TEXT, `format` TEXT, `enabled` INTEGER NOT NULL, `last_fetch` INTEGER NOT NULL, `last_status` TEXT, `entry_count` INTEGER NOT NULL)");
+        }
+    };
+
     public abstract AppInfoDao appInfoDao();
 
     public abstract SettingsDao settingsDao();
@@ -70,15 +85,18 @@ public abstract class AppDatabase extends RoomDatabase {
 
     public abstract FeatureDao featureDao();
 
+    public abstract SecurityDao securityDao();
+
     public static AppDatabase getInstance(Context context) {
         if (instance == null) {
             synchronized (AppDatabase.class) {
                 if (instance == null) {
                     Context appContext = context.getApplicationContext();
                     instance = Room.databaseBuilder(appContext, AppDatabase.class, DB_NAME)
-                            .addMigrations(MIGRATION_1_2, MIGRATION_2_3)
+                            .addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4)
                             .build();
                     importLegacySugarIfNeeded(appContext, instance);
+                    seedDefaultThreatFeed(appContext, instance);
                 }
             }
         }
@@ -126,6 +144,30 @@ public abstract class AppDatabase extends RoomDatabase {
                 }
             }
         }
+    }
+
+    /** Seeds the default online threat-intel feed once; never overwrites user edits. */
+    private static void seedDefaultThreatFeed(Context context, AppDatabase db) {
+        SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        if (prefs.getBoolean(PREF_FEED_SEEDED, false)) {
+            return;
+        }
+        dbIo.execute(() -> {
+            try {
+                if (db.securityDao().findFeedByUrl(DEFAULT_FEED_URL) == null) {
+                    FeedInfo feed = new FeedInfo();
+                    feed.url = DEFAULT_FEED_URL;
+                    feed.name = DEFAULT_FEED_NAME;
+                    feed.format = "yaml";
+                    feed.enabled = true;
+                    db.securityDao().upsertFeed(feed);
+                }
+            } catch (Exception e) {
+                Log.e(TAG, "Could not seed default threat feed", e);
+            } finally {
+                prefs.edit().putBoolean(PREF_FEED_SEEDED, true).apply();
+            }
+        });
     }
 
     private static boolean tableExists(SQLiteDatabase db, String table) {

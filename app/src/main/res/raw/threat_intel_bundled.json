@@ -1,0 +1,6807 @@
+{
+ "schema": 1,
+ "generated_at": "2026-11-01T10:22:58.208440+00:00",
+ "sources": [
+  {
+   "name": "stalkerware-indicators",
+   "url": "https://github.com/AssoEchap/stalkerware-indicators",
+   "feed": "https://raw.githubusercontent.com/AssoEchap/stalkerware-indicators/master/ioc.yaml",
+   "note": "Package names + signing-cert SHA-1 of known stalkerware/watchware apps"
+  },
+  {
+   "name": "hand-curated seeds",
+   "url": "",
+   "note": "Small seed list from public malware reports, see tools/build_threat_intel.py"
+  }
+ ],
+ "entries": [
+  {
+   "package": "Aktualizacja.apps",
+   "severity": "malware",
+   "label": "Spyone",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "YWZiZDFjZTg2NTZlOGI4NDkyYWJjZDJjZDE5ZTM0Mjk.MzkwMmNhZGFiZGZhMjMyZjQzNTJkYmQ1ODg1ZjI1NzA",
+   "severity": "malware",
+   "label": "Observer",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "a.tck.lvmchi",
+   "severity": "malware",
+   "label": "MobileTrackerFree",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "afs.hbmoczc",
+   "severity": "malware",
+   "label": "AndroidPolice",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "ahmyth.mine.king.ahmyth",
+   "severity": "malware",
+   "label": "Ahmyth",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "and.GuardTrial",
+   "severity": "malware",
+   "label": "MobiStealth",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "and.LocatorTrial",
+   "severity": "malware",
+   "label": "MobiStealth",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "android.helper.system",
+   "severity": "malware",
+   "label": "mSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "android.sys.process",
+   "severity": "malware",
+   "label": "mSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "apk.keylogger",
+   "severity": "malware",
+   "label": "AndroidSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "apk.kgl",
+   "severity": "malware",
+   "label": "AndroidSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "apk.kwoapsnde",
+   "severity": "malware",
+   "label": "AndroidSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "apk.screenshotrecorder",
+   "severity": "malware",
+   "label": "AndroidSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "app.EasyLogger",
+   "severity": "malware",
+   "label": "EasyLogger",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "app.Easylogger",
+   "severity": "malware",
+   "label": "EasyLogger",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "app.Elogger",
+   "severity": "malware",
+   "label": "EasyLogger",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "app.childsafetytracker",
+   "severity": "malware",
+   "label": "EasyLogger",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "app.cybrook.trackvieo",
+   "severity": "malware",
+   "label": "TrackView",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "app.cybrook.trackviep",
+   "severity": "malware",
+   "label": "TrackView",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "app.cybrook.trackvieq",
+   "severity": "malware",
+   "label": "TrackView",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "app.cybrook.trackvier",
+   "severity": "malware",
+   "label": "TrackView",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "app.cybrook.trackvies",
+   "severity": "malware",
+   "label": "TrackView",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "app.cybrook.trackviet",
+   "severity": "malware",
+   "label": "TrackView",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "app.cybrook.trackvieu",
+   "severity": "malware",
+   "label": "TrackView",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "app.cybrook.trackviev",
+   "severity": "malware",
+   "label": "TrackView",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "app.cybrook.trackview",
+   "severity": "malware",
+   "label": "TrackView",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "app.cybrook.trackviex",
+   "severity": "malware",
+   "label": "TrackView",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "app.cybrook.trackviey",
+   "severity": "malware",
+   "label": "TrackView",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "app.cybrook.trackviez",
+   "severity": "malware",
+   "label": "TrackView",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "app.cybrook.trustserv",
+   "severity": "malware",
+   "label": "TrackView",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "app.everspy.ru",
+   "severity": "malware",
+   "label": "Everspy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "app.gpsme",
+   "severity": "suspect",
+   "label": "KidsControl",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "app.lifecircle",
+   "severity": "malware",
+   "label": "TrackView",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "app.seniorsafety",
+   "severity": "malware",
+   "label": "EasyLogger",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "app.spy24.spy24installer",
+   "severity": "malware",
+   "label": "Spy24",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "app.spy24.systemwifi",
+   "severity": "malware",
+   "label": "Spy24",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "app.trackview",
+   "severity": "malware",
+   "label": "TrackView",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "app.trackview.pro",
+   "severity": "malware",
+   "label": "TrackView",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "br.com.appfornecedor.legal",
+   "severity": "malware",
+   "label": "MeuSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "br.com.cloud.aplicativo",
+   "severity": "malware",
+   "label": "MeuSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "br.com.cloud.backup",
+   "severity": "malware",
+   "label": "MeuSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "br.com.daggers.gameap",
+   "severity": "malware",
+   "label": "MeuSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "br.com.daggers.toshtec",
+   "severity": "malware",
+   "label": "MeuSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "br.com.eaglespy",
+   "severity": "malware",
+   "label": "eagleSPY",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "br.com.galaxys.gameap",
+   "severity": "malware",
+   "label": "MeuSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "br.com.gamelevel.cloudv3",
+   "severity": "malware",
+   "label": "MeuSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "br.com.gamelevel.playstart",
+   "severity": "malware",
+   "label": "MeuSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "br.com.maceda.android.antifurtow",
+   "severity": "malware",
+   "label": "AntiFurtoDroid",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "br.com.monsthers.gameap",
+   "severity": "malware",
+   "label": "MeuSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "br.com.phonecell.cloud1",
+   "severity": "malware",
+   "label": "MeuSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "br.com.phonecell.go5ge",
+   "severity": "malware",
+   "label": "MeuSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "br.com.phonecell.maps",
+   "severity": "malware",
+   "label": "MeuSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "br.com.phonecell.radio",
+   "severity": "malware",
+   "label": "MeuSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "br.com.phonecell.services",
+   "severity": "malware",
+   "label": "MeuSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "br.com.rastreadordenamorado",
+   "severity": "malware",
+   "label": "RastreadorDeNamorado",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "br.com.sistema.aplicativo",
+   "severity": "malware",
+   "label": "MeuSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "bv.vemzye",
+   "severity": "malware",
+   "label": "AndroidPolice",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "city.russ.alltrackercorp",
+   "severity": "malware",
+   "label": "AllTracker",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "city.russ.alltrackerfamily",
+   "severity": "malware",
+   "label": "AllTracker",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "city.russ.alltrackerinstaller",
+   "severity": "malware",
+   "label": "AllTracker",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "cmf0.c3b5bm90zq.patch",
+   "severity": "malware",
+   "label": "Hoverwatch",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "cn.trackview.shentan",
+   "severity": "malware",
+   "label": "TrackView",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.AwamiSolution.smartkeylogger",
+   "severity": "malware",
+   "label": "SmartKeylogger",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.USIB.Child.ChildControl",
+   "severity": "suspect",
+   "label": "FamiShield",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.accountable2you.ap1",
+   "severity": "suspect",
+   "label": "Accountable2you",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.afreesmstracker.app",
+   "severity": "malware",
+   "label": "AppSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.agpstracker.app",
+   "severity": "malware",
+   "label": "AppSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.aif.tracksp",
+   "severity": "malware",
+   "label": "AiSpyer",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.aisistem.instalao",
+   "severity": "malware",
+   "label": "MeuSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.aixlunro.uqfhkagb",
+   "severity": "malware",
+   "label": "KidsShield",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.aiyi.admin",
+   "severity": "malware",
+   "label": "Cocospy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.ajygpxjy.bnthtjou",
+   "severity": "malware",
+   "label": "SpyKontrol",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.aleghe.hatra",
+   "severity": "malware",
+   "label": "EasyPhoneTrack",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.alienmanfc6.wheresmyandroid",
+   "severity": "malware",
+   "label": "WheresMyDroid",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.amon",
+   "severity": "malware",
+   "label": "AndroidPolice",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.androdid.inteernet.aa21111227",
+   "severity": "malware",
+   "label": "MobileTrackerFree",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.android.core.mngi",
+   "severity": "malware",
+   "label": "Snoopza",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.android.core.mngj",
+   "severity": "malware",
+   "label": "Snoopza",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.android.core.mngk",
+   "severity": "malware",
+   "label": "Snoopza",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.android.core.mngl",
+   "severity": "malware",
+   "label": "Snoopza",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.android.core.mngn",
+   "severity": "malware",
+   "label": "Snoopza",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.android.core.mngo",
+   "severity": "malware",
+   "label": "Snoopza",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.android.core.mngp",
+   "severity": "malware",
+   "label": "Snoopza",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.android.core.mngq",
+   "severity": "malware",
+   "label": "Snoopza",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.android.core.mngr",
+   "severity": "malware",
+   "label": "Snoopza",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.android.core.mngs",
+   "severity": "malware",
+   "label": "Snoopza",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.android.core.mngt",
+   "severity": "malware",
+   "label": "Snoopza",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.android.core.mngu",
+   "severity": "malware",
+   "label": "Snoopza",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.android.core.mngv",
+   "severity": "malware",
+   "label": "Snoopza",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.android.core.mngw",
+   "severity": "malware",
+   "label": "Snoopza",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.android.core.mngx",
+   "severity": "malware",
+   "label": "Snoopza",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.android.core.mngy",
+   "severity": "malware",
+   "label": "Snoopza",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.android.core.mngz",
+   "severity": "malware",
+   "label": "Snoopza",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.android.core.mnt",
+   "severity": "malware",
+   "label": "Hoverwatch",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.android.core.mnta",
+   "severity": "malware",
+   "label": "Hoverwatch",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.android.core.mntah",
+   "severity": "malware",
+   "label": "Hoverwatch",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.android.core.mntb",
+   "severity": "malware",
+   "label": "Hoverwatch",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.android.core.mntd",
+   "severity": "malware",
+   "label": "Hoverwatch",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.android.core.mnte",
+   "severity": "malware",
+   "label": "Hoverwatch",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.android.core.mntf",
+   "severity": "malware",
+   "label": "Hoverwatch",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.android.core.mntg",
+   "severity": "malware",
+   "label": "Hoverwatch",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.android.core.mnth",
+   "severity": "malware",
+   "label": "Hoverwatch",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.android.core.mnti",
+   "severity": "malware",
+   "label": "Hoverwatch",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.android.core.mntj",
+   "severity": "malware",
+   "label": "Hoverwatch",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.android.core.mntk",
+   "severity": "malware",
+   "label": "Hoverwatch",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.android.core.mntl",
+   "severity": "malware",
+   "label": "Hoverwatch",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.android.core.mntm",
+   "severity": "malware",
+   "label": "Hoverwatch",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.android.core.mntn",
+   "severity": "malware",
+   "label": "Hoverwatch",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.android.core.mnto",
+   "severity": "malware",
+   "label": "Hoverwatch",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.android.core.mntp",
+   "severity": "malware",
+   "label": "Hoverwatch",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.android.core.mntq",
+   "severity": "malware",
+   "label": "Hoverwatch",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.android.core.mntr",
+   "severity": "malware",
+   "label": "Hoverwatch",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.android.core.mnts",
+   "severity": "malware",
+   "label": "Hoverwatch",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.android.core.mntt",
+   "severity": "malware",
+   "label": "Hoverwatch",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.android.core.mntu",
+   "severity": "malware",
+   "label": "Hoverwatch",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.android.core.mntv",
+   "severity": "malware",
+   "label": "Hoverwatch",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.android.core.mntw",
+   "severity": "malware",
+   "label": "Hoverwatch",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.android.core.mntx",
+   "severity": "malware",
+   "label": "Hoverwatch",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.android.core.mnty",
+   "severity": "malware",
+   "label": "Hoverwatch",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.android.core.mntz",
+   "severity": "malware",
+   "label": "Hoverwatch",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.android.core.monitor",
+   "severity": "malware",
+   "label": "Hoverwatch",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.android.core.monitor.debug",
+   "severity": "malware",
+   "label": "Hoverwatch",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.android.core.monitor.null",
+   "severity": "malware",
+   "label": "Hoverwatch",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.android.core.monitornull",
+   "severity": "malware",
+   "label": "Hoverwatch",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.android.fystem.maps",
+   "severity": "malware",
+   "label": "Tracku",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.android.innovaspy",
+   "severity": "malware",
+   "label": "HelloSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.android.inputmethod.latinmy",
+   "severity": "malware",
+   "label": "KidsShield",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.android.internet.a20200817",
+   "severity": "malware",
+   "label": "iKeyMonitor",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.android.internet.a20210916",
+   "severity": "malware",
+   "label": "iKeyMonitor",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.android.internet.a20220729",
+   "severity": "malware",
+   "label": "iKeyMonitor",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.android.internet.a20220829",
+   "severity": "malware",
+   "label": "iKeyMonitor",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.android.internet.a20220914",
+   "severity": "malware",
+   "label": "iKeyMonitor",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.android.keyboardhelper",
+   "severity": "malware",
+   "label": "mSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.android.omg",
+   "severity": "malware",
+   "label": "TheOneSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.android.phone.dialer",
+   "severity": "malware",
+   "label": "FlexiSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.android.preference.help.mole",
+   "severity": "malware",
+   "label": "BosSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.android.services",
+   "severity": "malware",
+   "label": "TheOneSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.android.settings.app",
+   "severity": "malware",
+   "label": "OneSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.android.system.app",
+   "severity": "malware",
+   "label": "OneSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.android.system.devicelogs",
+   "severity": "malware",
+   "label": "AppMia",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.android.system.maps",
+   "severity": "malware",
+   "label": "Tracku",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.android.wifi.tracker",
+   "severity": "malware",
+   "label": "Trackji",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.androidlost",
+   "severity": "malware",
+   "label": "AndroidLost",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.androidlost.smshandler",
+   "severity": "malware",
+   "label": "AndroidLost",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.ant.spymie.keylogger",
+   "severity": "malware",
+   "label": "Spymie",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.aphonetracker.app",
+   "severity": "malware",
+   "label": "AppSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.app.audiorec",
+   "severity": "malware",
+   "label": "TrackMyPhones",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.app.call_rec_hidden",
+   "severity": "malware",
+   "label": "TrackMyPhones",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.app.com.app.com.app.aplintal",
+   "severity": "malware",
+   "label": "MeuSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.app.insapp2",
+   "severity": "malware",
+   "label": "MeuSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.app.keylogger",
+   "severity": "malware",
+   "label": "TrackMyPhones",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.app.recorder",
+   "severity": "malware",
+   "label": "TrackMyPhones",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.app.remote_control",
+   "severity": "malware",
+   "label": "TrackingSmartphone",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.app.spy_call_recorder",
+   "severity": "malware",
+   "label": "TrackMyPhones",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.app.videorec",
+   "severity": "malware",
+   "label": "TrackMyPhones",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.apps.anti_theft",
+   "severity": "malware",
+   "label": "TrackMyPhones",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.apps.rct.CellTrackerActivity",
+   "severity": "malware",
+   "label": "TrackMyPhones",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.apspy.app",
+   "severity": "malware",
+   "label": "TheTruthSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.as.clipboardmanager",
+   "severity": "malware",
+   "label": "AndroidSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.as.facecapture",
+   "severity": "malware",
+   "label": "AndroidSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.as.gpstracker",
+   "severity": "malware",
+   "label": "AndroidSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.as.keylogger",
+   "severity": "malware",
+   "label": "AndroidSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.as.keylogger2",
+   "severity": "malware",
+   "label": "AndroidSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.as.klogger",
+   "severity": "malware",
+   "label": "AndroidSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.as.screenrecorder",
+   "severity": "malware",
+   "label": "AndroidSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.as.urllogger",
+   "severity": "malware",
+   "label": "AndroidSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.ass.antitheft",
+   "severity": "malware",
+   "label": "AbsoluTrack",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.ass.ladieschildprotection",
+   "severity": "malware",
+   "label": "AbsoluTrack",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.ass.remotesecurity",
+   "severity": "malware",
+   "label": "AbsoluTrack",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.at.wwka",
+   "severity": "malware",
+   "label": "WebWatcher",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.ati.client",
+   "severity": "malware",
+   "label": "WebWatcher",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.ati.monitor",
+   "severity": "malware",
+   "label": "WebWatcher",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.ati.webwatcherconsole",
+   "severity": "malware",
+   "label": "WebWatcher",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.atinc.slcompanion",
+   "severity": "malware",
+   "label": "WebWatcher",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.atiw.wc",
+   "severity": "malware",
+   "label": "WebWatcher",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.atracker.app",
+   "severity": "malware",
+   "label": "AppSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.autoforward.monitor",
+   "severity": "malware",
+   "label": "HighsterMobile",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.avi.scbase",
+   "severity": "malware",
+   "label": "pcTattletale",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.awarenesstech.monitor",
+   "severity": "malware",
+   "label": "WebWatcher",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.awarenesstech.wwpapp",
+   "severity": "malware",
+   "label": "WebWatcher",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.awarenesstechnologies.sideloadedws",
+   "severity": "malware",
+   "label": "WebWatcher",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.awti.slc",
+   "severity": "malware",
+   "label": "WebWatcher",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.backup.tt",
+   "severity": "malware",
+   "label": "jjspy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.bettertomorrowapps.spyyourlovefree",
+   "severity": "malware",
+   "label": "CouplerTracker",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.bnahrrbc.kwexsnhl",
+   "severity": "malware",
+   "label": "KidsShield",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.brot.storage.work",
+   "severity": "malware",
+   "label": "Reptilicus",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.bul.b",
+   "severity": "malware",
+   "label": "Bulgok",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.bulgakov.bug",
+   "severity": "malware",
+   "label": "Bulgok",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.bulgakov.controlphone",
+   "severity": "malware",
+   "label": "Bulgok",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.bytepioneers.coupletracker",
+   "severity": "malware",
+   "label": "CouplerTracker",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.bzbqbkya.hgozttiu",
+   "severity": "malware",
+   "label": "KidsShield",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.callhist.calltr",
+   "severity": "malware",
+   "label": "Trackplus",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.camhart.netcountable",
+   "severity": "suspect",
+   "label": "Trulpe",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.catrsy.jaluc",
+   "severity": "malware",
+   "label": "Trackplus",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.cellph.montrb",
+   "severity": "malware",
+   "label": "Trackplus",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.chaoqi.spyapp",
+   "severity": "malware",
+   "label": "Spylix",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.cisai.safenetchild",
+   "severity": "suspect",
+   "label": "SafeNet",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.cldprotect",
+   "severity": "malware",
+   "label": "SpyHuman",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.client.requestlogs",
+   "severity": "malware",
+   "label": "ShadowSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.cocospy",
+   "severity": "malware",
+   "label": "Cocospy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.connection.manager",
+   "severity": "malware",
+   "label": "Mrecorder",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.contentwatch.ghoti.cp2.child",
+   "severity": "suspect",
+   "label": "Netnanny",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.cryzp.leplluln",
+   "severity": "malware",
+   "label": "MyCellSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.cycle.start.mess",
+   "severity": "malware",
+   "label": "Reptilicus",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.dbzbpr.skt",
+   "severity": "malware",
+   "label": "Trackplus",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.ddiutilities.monitor",
+   "severity": "malware",
+   "label": "HighsterMobile",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.dev4playapps.whatsdeleted",
+   "severity": "malware",
+   "label": "TrackMyPhones",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.devspark.securityotp",
+   "severity": "malware",
+   "label": "SpySMS",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.discovenger.app",
+   "severity": "suspect",
+   "label": "Discovenger",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.droidwatcher",
+   "severity": "malware",
+   "label": "DroidWatcher",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.dromon",
+   "severity": "malware",
+   "label": "AndroidPolice",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.duiyun.cocospy",
+   "severity": "malware",
+   "label": "Cocospy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.duiyun.cocospy.v2",
+   "severity": "malware",
+   "label": "Cocospy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.duiyun.fonemonitor",
+   "severity": "malware",
+   "label": "Cocospy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.duiyun.spyic",
+   "severity": "malware",
+   "label": "Cocospy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.duiyun.spyine",
+   "severity": "malware",
+   "label": "Cocospy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.duiyun.spyzie",
+   "severity": "malware",
+   "label": "Cocospy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.dy.spyzie.v4",
+   "severity": "malware",
+   "label": "Cocospy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.elpatr.woac",
+   "severity": "malware",
+   "label": "Trackplus",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.epasufob.kybavfgt",
+   "severity": "malware",
+   "label": "Spyone",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.epbzrqcg.syzzkuqx",
+   "severity": "malware",
+   "label": "Spyone",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.ernell.thht",
+   "severity": "malware",
+   "label": "Trackplus",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.example.ghazi.sms",
+   "severity": "malware",
+   "label": "SpyAppGhazi",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.example.hellospy",
+   "severity": "malware",
+   "label": "HelloSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.example.lovespy.app",
+   "severity": "malware",
+   "label": "LoveSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.example.openanotherapp",
+   "severity": "malware",
+   "label": "Spy24",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.example.reverseshell2",
+   "severity": "malware",
+   "label": "AndroRat",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.example.wosc.androidclient",
+   "severity": "malware",
+   "label": "CatWatchful",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.eyezy.android",
+   "severity": "malware",
+   "label": "mSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.eytewqrm.wvdkgmrl",
+   "severity": "malware",
+   "label": "Spyone",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.familyorbit.child",
+   "severity": "suspect",
+   "label": "FamilyOrbit",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.fbhpdsej.gnuebduy",
+   "severity": "malware",
+   "label": "KidsShield",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.femimesusu.libapasopi",
+   "severity": "malware",
+   "label": "SpyApp",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.fenced.ai",
+   "severity": "malware",
+   "label": "Fenced",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.fhekpqbq.otlzonjx",
+   "severity": "malware",
+   "label": "KidsShield",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.fone",
+   "severity": "malware",
+   "label": "TheTruthSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.fp.backup",
+   "severity": "malware",
+   "label": "FlexiSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.fzvsdrtb.qamlhxri",
+   "severity": "malware",
+   "label": "BrunoEspiao",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.gcm_call_sms_tracker",
+   "severity": "malware",
+   "label": "TrackMyPhones",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.gcm_call_sms_tracker.updated",
+   "severity": "malware",
+   "label": "TrackMyPhones",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.gcm_call_tracker",
+   "severity": "malware",
+   "label": "TrackMyPhones",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.gcm_celltracker",
+   "severity": "malware",
+   "label": "TrackMyPhones",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.geozilla.family",
+   "severity": "suspect",
+   "label": "GeoZilla",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.get.mtf",
+   "severity": "malware",
+   "label": "MobileTrackerFree",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.gh.ob",
+   "severity": "malware",
+   "label": "Trackplus",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.github.muneebwanee.dash",
+   "severity": "malware",
+   "label": "Dash",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.gizmoquip.smstracker",
+   "severity": "malware",
+   "label": "CallSMSTracker",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.google.android.bacfup",
+   "severity": "malware",
+   "label": "Tracku",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.google.android.network",
+   "severity": "malware",
+   "label": "Buhsam",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.google.android.safe",
+   "severity": "malware",
+   "label": "Tracku",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.googleplay.settings",
+   "severity": "malware",
+   "label": "NetSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.googlesettings.setting",
+   "severity": "malware",
+   "label": "HelloSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.greatdata",
+   "severity": "malware",
+   "label": "Trackplus",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.gss.whereismyphone",
+   "severity": "malware",
+   "label": "AbsoluTrack",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.guest",
+   "severity": "malware",
+   "label": "TheTruthSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.gzomoyig.qwgawtaz",
+   "severity": "malware",
+   "label": "KidsShield",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.hellospy",
+   "severity": "malware",
+   "label": "HelloSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.hellospy.system",
+   "severity": "malware",
+   "label": "HelloSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.hp.vc",
+   "severity": "malware",
+   "label": "FreeAndroidSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.hp.vd",
+   "severity": "malware",
+   "label": "FreeAndroidSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.hyadesinc.curiosus",
+   "severity": "malware",
+   "label": "Curiosus",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.ibm.fb",
+   "severity": "malware",
+   "label": "AndroidMonitor",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.igyluazm.iytdhsky",
+   "severity": "malware",
+   "label": "SpyKontrol",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.imonitor.ainfo",
+   "severity": "malware",
+   "label": "iMonitorSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.ispyoo",
+   "severity": "malware",
+   "label": "TheTruthSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.ispyoo.traceyou",
+   "severity": "malware",
+   "label": "TheTruthSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.itqredn8dzrl",
+   "severity": "malware",
+   "label": "SpyLive360",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.jgeuhcex.ejcxndak",
+   "severity": "malware",
+   "label": "Spyone",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.juzyuwqt.thxxnjvf",
+   "severity": "malware",
+   "label": "Spyone",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.jyotin.ct",
+   "severity": "malware",
+   "label": "MobileTrackerFree",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.kaspersky.safekids",
+   "severity": "suspect",
+   "label": "KasperskySafeKids",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.kfhdha.fkjfgjdi",
+   "severity": "malware",
+   "label": "EspiaoAndroid",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.kiddoware.kidsplace",
+   "severity": "suspect",
+   "label": "Kiddoware",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.kids.pro",
+   "severity": "malware",
+   "label": "ClevGuard",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.kids.whatsapp",
+   "severity": "malware",
+   "label": "ClevGuard",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.kidslox.app",
+   "severity": "suspect",
+   "label": "KidsLox",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.kidsmobmon",
+   "severity": "malware",
+   "label": "Trackplus",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.laucass.androsmscontrol",
+   "severity": "malware",
+   "label": "Spyone",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.laucass.phonecontrolenabler",
+   "severity": "malware",
+   "label": "Spyone",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.laucass.phonecontroltarget",
+   "severity": "malware",
+   "label": "Spyone",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.life360.android.safetymapd",
+   "severity": "suspect",
+   "label": "Life360",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.local_cell_tracker",
+   "severity": "malware",
+   "label": "TrackMyPhones",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.local_cell_tracker_updated",
+   "severity": "malware",
+   "label": "TrackMyPhones",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.lrvciyti.unrxnfig",
+   "severity": "malware",
+   "label": "MobileTrackerFree",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.lsdroid.cerberus",
+   "severity": "malware",
+   "label": "Cerberus",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.lsdroid.cerberus.client",
+   "severity": "malware",
+   "label": "Cerberus",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.lsdroid.cerberus.enterprise",
+   "severity": "malware",
+   "label": "Cerberus",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.lsdroid.cerberus.kids",
+   "severity": "malware",
+   "label": "Cerberus",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.lsdroid.cerberus.persona",
+   "severity": "malware",
+   "label": "Cerberus",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.lsdroid.cerberus.persona2",
+   "severity": "malware",
+   "label": "Cerberus",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.lsdroid.cerberuss",
+   "severity": "malware",
+   "label": "Cerberus",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.lsdroid.lsp",
+   "severity": "malware",
+   "label": "Cerberus",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.m.service.control",
+   "severity": "malware",
+   "label": "MobileTrackerFree",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.mango.findmyphone",
+   "severity": "malware",
+   "label": "FindMyPhone",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.mango.findmyphone2",
+   "severity": "malware",
+   "label": "FindMyPhone",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.mango.findmyphone3",
+   "severity": "malware",
+   "label": "FindMyPhone",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.map.system",
+   "severity": "malware",
+   "label": "XNSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.maxxspy",
+   "severity": "malware",
+   "label": "HelloSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.maxxspy.system",
+   "severity": "malware",
+   "label": "HelloSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.metasploit.stage",
+   "severity": "malware",
+   "label": "Metasploit",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.meuspy",
+   "severity": "malware",
+   "label": "MeuSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.microsoft.familysafety",
+   "severity": "suspect",
+   "label": "MicrosoftFamilySafe",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.minspy.v2",
+   "severity": "malware",
+   "label": "Cocospy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.minspy.v3",
+   "severity": "malware",
+   "label": "Cocospy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.mit.networkadapter",
+   "severity": "malware",
+   "label": "VIPTrack",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.mit.viptrackpro",
+   "severity": "malware",
+   "label": "VIPTrack",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.mmguardian.childapp",
+   "severity": "suspect",
+   "label": "MMGuardian",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.mmguardian.parentapp",
+   "severity": "suspect",
+   "label": "MMGuardian",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.mmguardian.tabletsecurity",
+   "severity": "suspect",
+   "label": "MMGuardian",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.mnwkvijy.wzyxgrft",
+   "severity": "malware",
+   "label": "KidsShield",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.mob.service.control",
+   "severity": "malware",
+   "label": "MobileTrackerFree",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.mobiispy",
+   "severity": "malware",
+   "label": "HelloSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.mobiispy.system",
+   "severity": "malware",
+   "label": "HelloSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.mobile.asgard",
+   "severity": "malware",
+   "label": "GPSTrackerLoki",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.mobile.gps",
+   "severity": "malware",
+   "label": "MobileTrackerFree",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.mobile.loc",
+   "severity": "malware",
+   "label": "MobileTrackerFree",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.mobile.loki",
+   "severity": "malware",
+   "label": "GPSTrackerLoki",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.mobilefence.family",
+   "severity": "suspect",
+   "label": "MobileFence",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.mobilefindfree",
+   "severity": "malware",
+   "label": "AppSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.mobileservice.sync",
+   "severity": "malware",
+   "label": "Mrecorder",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.mobileservices2.synchronization",
+   "severity": "malware",
+   "label": "Mrecorder",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.mobilespy.io",
+   "severity": "malware",
+   "label": "Fenced",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.mobiletracker",
+   "severity": "malware",
+   "label": "MobileTrackerFree",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.mobiletrackerfree.secondapp",
+   "severity": "malware",
+   "label": "MobileTrackerFree",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.mobiletrackerfree.www",
+   "severity": "malware",
+   "label": "MobileTrackerFree",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.mobitra.todv",
+   "severity": "malware",
+   "label": "Trackplus",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.mobphn.monit",
+   "severity": "malware",
+   "label": "Trackplus",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.mobtr.danbel",
+   "severity": "malware",
+   "label": "Trackplus",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.monitor.phone.s0ft.phonemonitor",
+   "severity": "malware",
+   "label": "PhoneMonitor",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.monitorchecker",
+   "severity": "malware",
+   "label": "AndroidPolice",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.monspap.alarm",
+   "severity": "malware",
+   "label": "EasyPhoneTrack",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.mophtr.td",
+   "severity": "malware",
+   "label": "Trackplus",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.moxlndmp.uhzhgzjh",
+   "severity": "malware",
+   "label": "BrunoEspiao",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.mrblue.setting",
+   "severity": "malware",
+   "label": "HelloSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.mrbluetooth.setting",
+   "severity": "malware",
+   "label": "HelloSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.mrecorder.callrecorder",
+   "severity": "malware",
+   "label": "Mrecorder",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.mrtred.setred",
+   "severity": "malware",
+   "label": "HelloSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.mspy.lite",
+   "severity": "malware",
+   "label": "mSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.mtf.d",
+   "severity": "malware",
+   "label": "MobileTrackerFree",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.mtf.download",
+   "severity": "malware",
+   "label": "MobileTrackerFree",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.mxspy",
+   "severity": "malware",
+   "label": "TheTruthSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.my.spy.app",
+   "severity": "malware",
+   "label": "MySpyApps",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.myappspqwddeexo",
+   "severity": "malware",
+   "label": "SpyHuman",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.nationaledtech.Boomerang",
+   "severity": "suspect",
+   "label": "Boomrang",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.netowrk.service",
+   "severity": "malware",
+   "label": "MobileTrackerFree",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.nhevvtmt.thinkquo",
+   "severity": "malware",
+   "label": "BrunoEspiao",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.nsmon.guard",
+   "severity": "malware",
+   "label": "NeoSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.ntckdlhc.oifhnjwp",
+   "severity": "malware",
+   "label": "KidsShield",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.ots.antitheft",
+   "severity": "malware",
+   "label": "AbsoluTrack",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.ots.ladieschildprotection",
+   "severity": "malware",
+   "label": "AbsoluTrack",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.ots.remotesecurity",
+   "severity": "malware",
+   "label": "AbsoluTrack",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.ots.womenchildsafety",
+   "severity": "malware",
+   "label": "AbsoluTrack",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.ownspy.android",
+   "severity": "malware",
+   "label": "OwnSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.panspy.android",
+   "severity": "malware",
+   "label": "PanSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.parental.control.kidgy",
+   "severity": "suspect",
+   "label": "Kidgy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.phone.tracker.smsb",
+   "severity": "malware",
+   "label": "Trackplus",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.phonespector.app",
+   "severity": "malware",
+   "label": "HighsterMobile",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.phonetrackerofficial",
+   "severity": "malware",
+   "label": "SpyphoneMobileTracker",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.phonetrackerofficial1",
+   "severity": "malware",
+   "label": "SpyphoneMobileTracker",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.phtranlo.tifach",
+   "severity": "malware",
+   "label": "Trackplus",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.play.services",
+   "severity": "malware",
+   "label": "uMobix",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.popo.analyse",
+   "severity": "malware",
+   "label": "PhoneSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.probit.flare",
+   "severity": "suspect",
+   "label": "FlareFamilyLocator",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.prophoto.editor",
+   "severity": "malware",
+   "label": "HelloSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.protect",
+   "severity": "malware",
+   "label": "KidsShield",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.protect.download",
+   "severity": "malware",
+   "label": "MobileTrackerFree",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.psac.a.processservice",
+   "severity": "malware",
+   "label": "MobiSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.pser.sysutils",
+   "severity": "malware",
+   "label": "MyCellSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.pt.bark",
+   "severity": "malware",
+   "label": "bark",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.pvojpamt.tzzyqjyb",
+   "severity": "malware",
+   "label": "PhoneMonitor",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.qustodio.qustodioapp",
+   "severity": "suspect",
+   "label": "Qustodio",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.qwertyuiop.asdfghjkl",
+   "severity": "malware",
+   "label": "OneSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.qzogle.android.jacfut",
+   "severity": "malware",
+   "label": "Tracku",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.qzogle.xndroid.jacfup",
+   "severity": "malware",
+   "label": "Tracku",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.qzogle.xndroid.jacfut",
+   "severity": "malware",
+   "label": "Tracku",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.rana_aditya.child",
+   "severity": "malware",
+   "label": "Spyzier",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.realtime.spyapp",
+   "severity": "malware",
+   "label": "RealtimeSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.remote.app",
+   "severity": "malware",
+   "label": "XploitSPY",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.rephko.stha",
+   "severity": "malware",
+   "label": "Trackplus",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.retina.phonesheriff",
+   "severity": "malware",
+   "label": "PhoneSheriff",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.retina21.ms41",
+   "severity": "malware",
+   "label": "PhoneSheriff",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.retina22.ms6",
+   "severity": "malware",
+   "label": "PhoneSheriff",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.retinasoft.ephonetracker",
+   "severity": "malware",
+   "label": "PhoneSheriff",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.rspl15.nanny.android",
+   "severity": "malware",
+   "label": "PhoneSheriff",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.rspl16.nanny.android",
+   "severity": "malware",
+   "label": "PhoneSheriff",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.rspl17.nanny.android",
+   "severity": "malware",
+   "label": "PhoneSheriff",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.rspl18.nanny.android",
+   "severity": "malware",
+   "label": "PhoneSheriff",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.rspl19.nanny.android",
+   "severity": "malware",
+   "label": "PhoneSheriff",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.rspl20.nanny.android",
+   "severity": "malware",
+   "label": "PhoneSheriff",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.rspl21.nanny.android",
+   "severity": "malware",
+   "label": "PhoneSheriff",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.rspl22.retinaspy",
+   "severity": "malware",
+   "label": "PhoneSheriff",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.runaki.synclogs",
+   "severity": "malware",
+   "label": "ShadowSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.s2m",
+   "severity": "malware",
+   "label": "Trackplus",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.s2m.seas",
+   "severity": "malware",
+   "label": "Trackplus",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.sa.app",
+   "severity": "malware",
+   "label": "SpyAdvice",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.safesecureservice",
+   "severity": "malware",
+   "label": "SpyHuman",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.saloomughal.spyapp",
+   "severity": "malware",
+   "label": "BlurSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.sap4mobile",
+   "severity": "malware",
+   "label": "Trackplus",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.saxfamqvxj",
+   "severity": "malware",
+   "label": "SpyHuman",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.sc.cocospy.v2",
+   "severity": "malware",
+   "label": "Cocospy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.sc.fonemonitor",
+   "severity": "malware",
+   "label": "Cocospy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.sc.fonemonitor.v2",
+   "severity": "malware",
+   "label": "Cocospy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.sc.minspy.v2",
+   "severity": "malware",
+   "label": "Cocospy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.sc.neatspy.v2",
+   "severity": "malware",
+   "label": "Cocospy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.sc.safespy.v2",
+   "severity": "malware",
+   "label": "Cocospy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.sc.safespy.v3",
+   "severity": "malware",
+   "label": "Cocospy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.sc.spyic.v2",
+   "severity": "malware",
+   "label": "Cocospy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.sc.spyic.v3",
+   "severity": "malware",
+   "label": "Cocospy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.sc.spyier.v2",
+   "severity": "malware",
+   "label": "Cocospy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.sc.spyine.v2",
+   "severity": "malware",
+   "label": "Cocospy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.sc.spyzie.v2",
+   "severity": "malware",
+   "label": "Cocospy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.sc.teensafe.v2",
+   "severity": "malware",
+   "label": "Cocospy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.screentime",
+   "severity": "malware",
+   "label": "WebWatcher",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.screentime.rc",
+   "severity": "suspect",
+   "label": "ScreenTime",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.sec.android.internet.im.service.im20190118",
+   "severity": "malware",
+   "label": "iKeyMonitor",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.sec.android.internet.im.service.im20190419",
+   "severity": "malware",
+   "label": "iKeyMonitor",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.sec.android.internet.im.service.im20210815",
+   "severity": "malware",
+   "label": "iKeyMonitor",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.sec.provider.mobile.android",
+   "severity": "malware",
+   "label": "MonitorUltra",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.selgdg.febgdsra",
+   "severity": "malware",
+   "label": "KidsShield",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.selgdg.mardsdaf",
+   "severity": "malware",
+   "label": "KidsShield",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.semantic.childcontrol",
+   "severity": "malware",
+   "label": "SpyMasterPro",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.sepfsp.jasend",
+   "severity": "malware",
+   "label": "KidsShield",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.service.mug",
+   "severity": "malware",
+   "label": "SpyMug",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.services.phone",
+   "severity": "malware",
+   "label": "MobileTrackerFree",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.sev.android.systemdev",
+   "severity": "malware",
+   "label": "MyCellSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.shadow.client.android",
+   "severity": "malware",
+   "label": "ShadowSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.shadyspy.monitor",
+   "severity": "malware",
+   "label": "ShadySpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.simundkarten.g4.cc.starter",
+   "severity": "malware",
+   "label": "Stalkerware",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.sl360",
+   "severity": "malware",
+   "label": "SpyLive360",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.smart",
+   "severity": "malware",
+   "label": "Trackplus",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.smart.guardoffline",
+   "severity": "malware",
+   "label": "AbsoluTrack",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.smartback",
+   "severity": "malware",
+   "label": "Trackplus",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.smstra.xanris",
+   "severity": "malware",
+   "label": "Trackplus",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.snapch.monabcab",
+   "severity": "malware",
+   "label": "EasyPhoneTrack",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.snapchat.trmonap",
+   "severity": "malware",
+   "label": "EasyPhoneTrack",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.softalogy.thiefguard",
+   "severity": "malware",
+   "label": "AbsoluTrack",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.soh",
+   "severity": "malware",
+   "label": "TrackMyPhones",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.spappm_mondow.alarm",
+   "severity": "malware",
+   "label": "EasyPhoneTrack",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.spapptrakapp.alarm",
+   "severity": "malware",
+   "label": "SpyPhoneApp",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.spatrakappp.alarm",
+   "severity": "malware",
+   "label": "SpyPhoneApp",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.spy2mobile",
+   "severity": "malware",
+   "label": "Trackplus",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.spy2mobile.light",
+   "severity": "malware",
+   "label": "Trackplus",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.spyapp247.system",
+   "severity": "malware",
+   "label": "SpyApp247",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.spyhumanrev",
+   "severity": "malware",
+   "label": "SpyHuman",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.spyic",
+   "severity": "malware",
+   "label": "Cocospy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.spynote.software.stubspynote",
+   "severity": "malware",
+   "label": "SpyNote",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.spytoapp.system",
+   "severity": "malware",
+   "label": "SpyToApp",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.spyzee",
+   "severity": "malware",
+   "label": "TheTruthSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.ssurebrec",
+   "severity": "malware",
+   "label": "Cerberus",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.stmrsa.htxt",
+   "severity": "malware",
+   "label": "Trackplus",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.surebrec",
+   "severity": "malware",
+   "label": "Cerberus",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.system.settings",
+   "severity": "malware",
+   "label": "Observer",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.system.task",
+   "severity": "malware",
+   "label": "XNSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.system.user",
+   "severity": "malware",
+   "label": "uMobix",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.systemservice",
+   "severity": "malware",
+   "label": "TheTruthSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.tag.viptrack",
+   "severity": "malware",
+   "label": "VIPTrack",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.tbntxear.vfmkjxme",
+   "severity": "malware",
+   "label": "KidsShield",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.tccplos.spth",
+   "severity": "malware",
+   "label": "Trackplus",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.telephony.android",
+   "severity": "malware",
+   "label": "FlexiSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.tevi.walpi",
+   "severity": "malware",
+   "label": "Trackplus",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.thaxygpc.xjsjobpn",
+   "severity": "malware",
+   "label": "BrunoEspiao",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.thecybernanny.andapp",
+   "severity": "malware",
+   "label": "Reptilicus",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.thetruth",
+   "severity": "malware",
+   "label": "TheTruthSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.thewispy",
+   "severity": "malware",
+   "label": "TheWiSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.timeon.litclient",
+   "severity": "suspect",
+   "label": "LockItTight",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.tools.secretcamcorder",
+   "severity": "malware",
+   "label": "SecretCamRecorder",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.topspy",
+   "severity": "malware",
+   "label": "HelloSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.topspy.system",
+   "severity": "malware",
+   "label": "HelloSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.tracker.sms.mobile",
+   "severity": "malware",
+   "label": "Trackplus",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.trackerapps.whatsaptracker",
+   "severity": "malware",
+   "label": "TrackMyPhones",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.tracking_smartphone",
+   "severity": "malware",
+   "label": "TrackingSmartphone",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.trackmyphone_pro",
+   "severity": "malware",
+   "label": "TrackMyPhones",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.trackmyphones.livefamilytracker",
+   "severity": "malware",
+   "label": "TrackMyPhones",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.trackmyphones.recoverphoneusingchatmessages",
+   "severity": "malware",
+   "label": "TrackMyPhones",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.trackmyphones.tmpusingchatmessages",
+   "severity": "malware",
+   "label": "TrackMyPhones",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.trackview",
+   "severity": "malware",
+   "label": "TrackView",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.trackzone.kids",
+   "severity": "malware",
+   "label": "Trackplus",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.trandmon.tool",
+   "severity": "malware",
+   "label": "Trackplus",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.trphwhat.prob",
+   "severity": "malware",
+   "label": "Trackplus",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.ts_settings",
+   "severity": "malware",
+   "label": "TrackingSmartphone",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.ttsapp.catchcheating",
+   "severity": "malware",
+   "label": "TheTruthSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.tuner.funnelwebview",
+   "severity": "malware",
+   "label": "uMobix",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.tutorial.instalao",
+   "severity": "malware",
+   "label": "MeuSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.udxlbuno.plwnnhop",
+   "severity": "malware",
+   "label": "SpyKontrol",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.uxgbipup.pdtvcgzc",
+   "severity": "malware",
+   "label": "KidsShield",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.uzoifhzk.qmqnpwaf",
+   "severity": "malware",
+   "label": "KidsShield",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.viewcalls.rem",
+   "severity": "malware",
+   "label": "Trackplus",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.viewsms.remb",
+   "severity": "malware",
+   "label": "Trackplus",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.virsys.tracker",
+   "severity": "malware",
+   "label": "HelloSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.vvt.android.syncmanager",
+   "severity": "malware",
+   "label": "FlexiSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.w0f0",
+   "severity": "malware",
+   "label": "SpyLive360",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.w1f1",
+   "severity": "malware",
+   "label": "SpyLive360",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.wSpyEra",
+   "severity": "malware",
+   "label": "SpyEra",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.wb.production",
+   "severity": "malware",
+   "label": "Cocospy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.whtrack.monit",
+   "severity": "malware",
+   "label": "Trackplus",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.wifi0",
+   "severity": "malware",
+   "label": "SpyLive360",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.wifiset.service",
+   "severity": "malware",
+   "label": "HelloSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.wifisettings.service",
+   "severity": "malware",
+   "label": "HelloSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.wisemo.host.v10",
+   "severity": "malware",
+   "label": "WiseMo",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.wisemo.wsmguest.v18",
+   "severity": "malware",
+   "label": "WiseMo",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.wlset.info",
+   "severity": "malware",
+   "label": "PhoneSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.wondershare.famisafe",
+   "severity": "suspect",
+   "label": "FamiSafe",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.wondershare.famisafe.kids",
+   "severity": "suspect",
+   "label": "FamiSafe",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.ws.sc",
+   "severity": "malware",
+   "label": "Cocospy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.ws.scli",
+   "severity": "malware",
+   "label": "Cocospy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.wtspy.apps",
+   "severity": "malware",
+   "label": "WtSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.ww.companion",
+   "severity": "malware",
+   "label": "WebWatcher",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.wwtspy",
+   "severity": "malware",
+   "label": "WtSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.wzogle.zndroid.yacfup",
+   "severity": "malware",
+   "label": "Tracku",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.xhunter.client",
+   "severity": "malware",
+   "label": "xHunter",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.xno.systemservice",
+   "severity": "malware",
+   "label": "Xnore",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.xnspy.dashboard",
+   "severity": "malware",
+   "label": "XNSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.yurpdpvxnybmlgh",
+   "severity": "malware",
+   "label": "SpyHuman",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.zkftwsel.fqnoquuv",
+   "severity": "malware",
+   "label": "KidsShield",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "com.zoemob.gpstracking",
+   "severity": "suspect",
+   "label": "ZoeMob",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "core.framework",
+   "severity": "malware",
+   "label": "mSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "core.update.framework",
+   "severity": "malware",
+   "label": "mSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "cybrook.trackview",
+   "severity": "malware",
+   "label": "TrackView",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "dell.scream.application",
+   "severity": "malware",
+   "label": "SpyNote",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "edu.virginia.cs.cs4720.ispy",
+   "severity": "malware",
+   "label": "ISpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "efexmsz.mzuooelftl",
+   "severity": "malware",
+   "label": "AndroidPolice",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "fka.ugsonrqogw",
+   "severity": "malware",
+   "label": "AndroidPolice",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "fod.loqpf",
+   "severity": "malware",
+   "label": "AndroidPolice",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "g.google.llc",
+   "severity": "malware",
+   "label": "MobileTrackerFree",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "googlesettings.setting",
+   "severity": "malware",
+   "label": "HelloSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "ifk.ghumlh",
+   "severity": "malware",
+   "label": "AndroidPolice",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "iiw.orqjtwbkx",
+   "severity": "malware",
+   "label": "AndroidPolice",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "in.servidor.service",
+   "severity": "malware",
+   "label": "MeuSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "in.spyapp.patanjali.android",
+   "severity": "malware",
+   "label": "PatanSpyApp",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "inc.imonitor",
+   "severity": "malware",
+   "label": "iMonitorSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "io.github.vvb2060.packageinstaller.test",
+   "severity": "malware",
+   "label": "Msafely",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "iqual.calculadora.pro",
+   "severity": "malware",
+   "label": "SpyMasterPro",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "ir.novinarya",
+   "severity": "malware",
+   "label": "Novinarya stealer (seed)",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "ir.spy24.updater",
+   "severity": "malware",
+   "label": "Spy24",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "ir.spy24.wifi",
+   "severity": "malware",
+   "label": "Spy24",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "kenkbltcf.pwpwkvdwmjk",
+   "severity": "malware",
+   "label": "AndroidPolice",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "lookOut.Secure",
+   "severity": "malware",
+   "label": "MobiStealth",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "m.mob.control",
+   "severity": "malware",
+   "label": "MobileTrackerFree",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "m.mob.service2020",
+   "severity": "malware",
+   "label": "MobileTrackerFree",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "m.mobile.control",
+   "severity": "malware",
+   "label": "SpyHuman",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "m.phone.control2020",
+   "severity": "malware",
+   "label": "MobileTrackerFree",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "m.protect.children",
+   "severity": "malware",
+   "label": "MobileTrackerFree",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "m.protect.parental",
+   "severity": "malware",
+   "label": "MobileTrackerFree",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "m.secu.children",
+   "severity": "malware",
+   "label": "MobileTrackerFree",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "m.security.parental",
+   "severity": "malware",
+   "label": "MobileTrackerFree",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "me.hawkshaw",
+   "severity": "malware",
+   "label": "AndroidSpyApp",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "med.mspy.mspy",
+   "severity": "malware",
+   "label": "mSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "mg.locations.track5",
+   "severity": "malware",
+   "label": "OneLocator",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "mhu.bylbcwc",
+   "severity": "malware",
+   "label": "AndroidPolice",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "mob.protect.children",
+   "severity": "malware",
+   "label": "MobileTrackerFree",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "mob.service.parental2020",
+   "severity": "malware",
+   "label": "MobileTrackerFree",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "mobile.controlparental2020",
+   "severity": "malware",
+   "label": "MobileTrackerFree",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "mobile.monitor.child2021",
+   "severity": "malware",
+   "label": "MobileTrackerFree",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "mobile.monitor.child2022",
+   "severity": "malware",
+   "label": "MobileTrackerFree",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "mobile.monitor.child2023",
+   "severity": "malware",
+   "label": "MobileTrackerFree",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "mobile.monitor.child2034",
+   "severity": "malware",
+   "label": "MobileTrackerFree",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "mobile.parental2021",
+   "severity": "malware",
+   "label": "MobileTrackerFree",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "mobile.protect.children",
+   "severity": "malware",
+   "label": "MobileTrackerFree",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "mobile.protect.children2020",
+   "severity": "malware",
+   "label": "MobileTrackerFree",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "net.androidcoreapp.androidbackup",
+   "severity": "malware",
+   "label": "Reptilicus",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "net.cybrook.trackvieo",
+   "severity": "malware",
+   "label": "TrackView",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "net.cybrook.trackviep",
+   "severity": "malware",
+   "label": "TrackView",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "net.cybrook.trackvieq",
+   "severity": "malware",
+   "label": "TrackView",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "net.cybrook.trackvier",
+   "severity": "malware",
+   "label": "TrackView",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "net.cybrook.trackvies",
+   "severity": "malware",
+   "label": "TrackView",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "net.cybrook.trackviet",
+   "severity": "malware",
+   "label": "TrackView",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "net.cybrook.trackvieu",
+   "severity": "malware",
+   "label": "TrackView",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "net.cybrook.trackviev",
+   "severity": "malware",
+   "label": "TrackView",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "net.cybrook.trackview",
+   "severity": "malware",
+   "label": "TrackView",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "net.cybrook.trackviex",
+   "severity": "malware",
+   "label": "TrackView",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "net.cybrook.trackviey",
+   "severity": "malware",
+   "label": "TrackView",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "net.cybrook.trackviez",
+   "severity": "malware",
+   "label": "TrackView",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "net.cybrook.trustserv",
+   "severity": "malware",
+   "label": "TrackView",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "net.delphiboardlayer.androidcoreapp",
+   "severity": "malware",
+   "label": "Reptilicus",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "net.droid.talk218",
+   "severity": "malware",
+   "label": "Ahmyth",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "net.homesafe",
+   "severity": "malware",
+   "label": "TrackView",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "net.kidlogger.kidlogger",
+   "severity": "malware",
+   "label": "KidsShield",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "net.majorkernelpanic.spydroid",
+   "severity": "malware",
+   "label": "SpyDroid",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "net.reptilicus.clientapp",
+   "severity": "malware",
+   "label": "Reptilicus",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "net.someapp1.somecorp2",
+   "severity": "malware",
+   "label": "KidsShield",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "net.spy24.wifi",
+   "severity": "malware",
+   "label": "Spy24",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "net.swiftnova.bridge",
+   "severity": "malware",
+   "label": "Novinarya loader (seed)",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "net.system_updater_abs341",
+   "severity": "malware",
+   "label": "Reptilicus",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "net.teslineservice.kidl5",
+   "severity": "malware",
+   "label": "KidsShield",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "net.trackview",
+   "severity": "malware",
+   "label": "TrackView",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "net.trackview.pro",
+   "severity": "malware",
+   "label": "TrackView",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "net.vkurhandler",
+   "severity": "malware",
+   "label": "Reptilicus",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "ns.antapp.module",
+   "severity": "malware",
+   "label": "NeoSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "one.enix.smsforward",
+   "severity": "malware",
+   "label": "SMSForward",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "oo.ptkqyawh",
+   "severity": "malware",
+   "label": "AndroidPolice",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "org.alltracker.security",
+   "severity": "malware",
+   "label": "AllTracker",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "org.connecting.updived.hygeist.interplays",
+   "severity": "malware",
+   "label": "MobileTool",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "org.findmykids.app",
+   "severity": "malware",
+   "label": "FindMyKids",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "org.findmykids.child",
+   "severity": "malware",
+   "label": "FindMyKids",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "org.gtmedia.seekdroid",
+   "severity": "suspect",
+   "label": "SeekDroid",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "org.poleward.burghs.hydrotherapy.homonymously",
+   "severity": "malware",
+   "label": "MobileTool",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "org.secure.smsgps",
+   "severity": "malware",
+   "label": "HighsterMobile",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "org.system.kernel",
+   "severity": "malware",
+   "label": "OwnSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "org.traccar.client",
+   "severity": "malware",
+   "label": "Traccar",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "org.traccar.client.hidden",
+   "severity": "malware",
+   "label": "Traccar",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "org.urates.amirates.suffocate.chiliast",
+   "severity": "malware",
+   "label": "MobileTool",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "phone.Secure",
+   "severity": "malware",
+   "label": "MobiStealth",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "pl.lidwin.letmespy",
+   "severity": "malware",
+   "label": "LetMeSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "pl.lidwin.letmespy2",
+   "severity": "malware",
+   "label": "LetMeSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "pl.lidwin.letmespy3",
+   "severity": "malware",
+   "label": "LetMeSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "pl.lidwin.letmespy4",
+   "severity": "malware",
+   "label": "LetMeSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "pl.lidwin.letmespy5",
+   "severity": "malware",
+   "label": "LetMeSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "pl.lidwin.lms",
+   "severity": "malware",
+   "label": "LetMeSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "pl.lidwin.remote",
+   "severity": "malware",
+   "label": "LetMeSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "pl.lidwin.remote1",
+   "severity": "malware",
+   "label": "LetMeSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "pl.lidwin.remote2",
+   "severity": "malware",
+   "label": "LetMeSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "pl.radeal.lms4",
+   "severity": "malware",
+   "label": "LetMeSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "pl.spyone.agent2",
+   "severity": "malware",
+   "label": "Spyone",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "ru.usafe.kid.unisafekids",
+   "severity": "malware",
+   "label": "Unisafe",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "ru.usafe.u_safe",
+   "severity": "malware",
+   "label": "Unisafe",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "ru.usafe.usafe",
+   "severity": "malware",
+   "label": "Unisafe",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "se.vkur.clientapp",
+   "severity": "malware",
+   "label": "Reptilicus",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "seC.fqjx.sqBB",
+   "severity": "malware",
+   "label": "OneSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "security.mobile.parental",
+   "severity": "malware",
+   "label": "MobileTrackerFree",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "service.download.app",
+   "severity": "malware",
+   "label": "MobileTrackerFree",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "stealthLight.sys",
+   "severity": "malware",
+   "label": "MobiStealth",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "su.unisafe.unisafe",
+   "severity": "malware",
+   "label": "Unisafe",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "sy.slvzccd",
+   "severity": "malware",
+   "label": "AndroidPolice",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "system.framework",
+   "severity": "malware",
+   "label": "mSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "t.tools.app",
+   "severity": "malware",
+   "label": "TalkLog",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "tech.logsettings",
+   "severity": "malware",
+   "label": "TalkLog",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "technic.settings",
+   "severity": "malware",
+   "label": "TalkLog",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "tej.flashkeylogger",
+   "severity": "malware",
+   "label": "FlashKeylogger",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "tej.flashkeyloggerpro",
+   "severity": "malware",
+   "label": "FlashKeylogger",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "tej.flashkeylogges",
+   "severity": "malware",
+   "label": "FlashKeylogger",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "tracker.mob.gps",
+   "severity": "malware",
+   "label": "MobileTrackerFree",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "tv.familynk",
+   "severity": "malware",
+   "label": "TrackView",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "tv.familynl",
+   "severity": "malware",
+   "label": "TrackView",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "update.service.android",
+   "severity": "malware",
+   "label": "mSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "update.service.android.installer",
+   "severity": "malware",
+   "label": "mSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "update.service.android.pynger",
+   "severity": "malware",
+   "label": "Spynger",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "us.trackview",
+   "severity": "malware",
+   "label": "TrackView",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "vmf.uxytqgrl",
+   "severity": "malware",
+   "label": "AndroidPolice",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "vn.ehkfqgvn",
+   "severity": "malware",
+   "label": "AndroidPolice",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "wosc.cwf",
+   "severity": "malware",
+   "label": "CatWatchful",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "wosc.cwf2",
+   "severity": "malware",
+   "label": "CatWatchful",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "xd.spy.app",
+   "severity": "malware",
+   "label": "XDSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "yc.sysupd.client",
+   "severity": "malware",
+   "label": "Reptilicus",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "yogaworkouts.dailyyoga.yogafitness",
+   "severity": "malware",
+   "label": "MobileTrackerFree",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "package": "yr.tubjypbl",
+   "severity": "malware",
+   "label": "AndroidPolice",
+   "source": "stalkerware-indicators"
+  }
+ ],
+ "certs": [
+  {
+   "sha1": "002DD372C94E80600C7C60192CBD701A3C3B87EE",
+   "severity": "malware",
+   "label": "jjspy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "00F618C4C43C28B107DAB8F5641AD00D3A774AFD",
+   "severity": "malware",
+   "label": "Buhsam",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "0172D7D80D2F0656711ED87C2433988BFF820E3D",
+   "severity": "malware",
+   "label": "Msafely",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "018D06B4A5679892572CB9DA44BA1A8C1E3B68A5",
+   "severity": "malware",
+   "label": "MeuSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "01E49C220A9776D4978C1D28D6C32F86D145B8AE",
+   "severity": "malware",
+   "label": "ShadowSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "01EFA0C8FAE43215125ACA78308EFB1768FB4049",
+   "severity": "malware",
+   "label": "Tracku",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "021985CEA754D8E58D538D2FEDFF6B1565A6B45B",
+   "severity": "malware",
+   "label": "mSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "021A3F097EDA780798DF5ECB16EF338C08236847",
+   "severity": "malware",
+   "label": "MobileTrackerFree",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "0387135D057AEAA0F8BCFCE2AFA84D9BD1FA6F30",
+   "severity": "malware",
+   "label": "Trackplus",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "0568E0400308CBFC58E11A324EA233F5B2E923BF",
+   "severity": "malware",
+   "label": "MobileTrackerFree",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "05B23C7E9156A4C55768DA27936FF2D7AF09BB8F",
+   "severity": "malware",
+   "label": "Spymie",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "06A49FE1347C7D2E596DF2F08B8C235C00975AF8",
+   "severity": "malware",
+   "label": "XDSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "07525D7D2E83CE865F98E1B9C0F6095B1C29D48A",
+   "severity": "malware",
+   "label": "AppSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "07906D1FA933730B8EB44F03910C88FDAC2C0135",
+   "severity": "malware",
+   "label": "EasyLogger",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "08ACB92D02487EBC0CEA42B672A631BA7EA59ADF",
+   "severity": "malware",
+   "label": "TalkLog",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "09273A6004A46078991F3FBA2A4868DA26DBB508",
+   "severity": "malware",
+   "label": "MobileTrackerFree",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "095514BA4F28DBE521C74ABF77972BE3C86A50A5",
+   "severity": "suspect",
+   "label": "FamiSafe",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "09DCBFDB7C7262F143089C5493435AB07564FD67",
+   "severity": "malware",
+   "label": "MobileTrackerFree",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "0AD33649F0D0532B5EB0A36A81712962AA79BF54",
+   "severity": "malware",
+   "label": "AppSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "0AF3219D3A9525CB4A618215DB7A29CBFD9FFE78",
+   "severity": "malware",
+   "label": "MeuSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "0B6C1B010FBEA4316EB01602F71CDD6A8F365023",
+   "severity": "malware",
+   "label": "FlexiSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "0C01AEB7346C700D02613EBA513BD40E87A182F8",
+   "severity": "malware",
+   "label": "CallSMSTracker",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "0C422F0025F866C311DF61A7549FCD519683898D",
+   "severity": "malware",
+   "label": "iKeyMonitor",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "0C5AB4D05A2C804D3A4D0472CEAC50B89833E6E4",
+   "severity": "malware",
+   "label": "Trackplus",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "0D025A887A1546585D9BBA6F023F42B8BE0274E1",
+   "severity": "malware",
+   "label": "KidsShield",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "0DCD7C9CC6A76AD28D7D992C4EF3DF2F768EA473",
+   "severity": "malware",
+   "label": "MonitorUltra",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "0E0BE37D31CA21F19095FC38F9F1BEF310CE227C",
+   "severity": "malware",
+   "label": "Hoverwatch",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "0ECD5FD80682776D804715AB5B8504DAF59A4B54",
+   "severity": "malware",
+   "label": "Ahmyth",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "0F64B6EBB49849AC685FE5DF605908594623368E",
+   "severity": "malware",
+   "label": "Trackplus",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "0FB6108D34289681BA0181ED9A4350514EB07665",
+   "severity": "malware",
+   "label": "MobileTrackerFree",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "0FB6643902E891C230F6E6662083442EEA1F16CE",
+   "severity": "malware",
+   "label": "OneSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "1128939E0D8B8BAEAB14C41AEBFAA100C319AD8F",
+   "severity": "malware",
+   "label": "MobileTrackerFree",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "114C4DC0F254EFD81F0AC7F41DBE882FFDB2E127",
+   "severity": "malware",
+   "label": "MeuSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "123C09B261DFA0F67D817E9BA079942830C31D54",
+   "severity": "malware",
+   "label": "Spyone",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "14A071616D4BC37F08BE865D375101F4C963777A",
+   "severity": "malware",
+   "label": "OwnSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "14EE7779B2E84A0FF1309DEA72881670D78E98AB",
+   "severity": "malware",
+   "label": "Trackplus",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "159B64B29BC8842ACDF8022B70730B13E288044B",
+   "severity": "malware",
+   "label": "BrunoEspiao",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "16226330EBB138A5D47913151827A86567AD9CD4",
+   "severity": "malware",
+   "label": "AndroidPolice",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "16254E7CBDFEC82B6CCE599DFCE6A6E84CF25504",
+   "severity": "malware",
+   "label": "MobileTrackerFree",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "18C94FAB82F77F89546600F84D2D2B48A0C0B927",
+   "severity": "malware",
+   "label": "MeuSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "18CD402CC43DF0BC03E9951B0F843DC4B1552DC6",
+   "severity": "malware",
+   "label": "CouplerTracker",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "1988EDEA389D42983CEC8B5F8A9C27AE49F800F9",
+   "severity": "malware",
+   "label": "Snoopza",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "19C0868F028757F49FD8F7BDF39FF70C771D622B",
+   "severity": "suspect",
+   "label": "Life360",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "1A6D10E15280C6A938EED9BEF53A31DA0CEBA45A",
+   "severity": "malware",
+   "label": "KidsShield",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "1BB7F1E962C35F00BE2EF97A64C753CCA0993637",
+   "severity": "malware",
+   "label": "Trackplus",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "1BE914194D14B3DEDA93EA06E0C58ECD420BB89F",
+   "severity": "malware",
+   "label": "Msafely",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "1C6E171D3A6E51947DF9E83946BB115ED4A41C6A",
+   "severity": "malware",
+   "label": "AbsoluTrack",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "1CD94B411B5D4D2F5F525D775876FF0993B4B716",
+   "severity": "malware",
+   "label": "AndroidPolice",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "1CE722F401C3FA8FE498FF824669C0007A200AA9",
+   "severity": "malware",
+   "label": "MobileTrackerFree",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "1DB0D66C1D21DD4B185D03B13D6CF620E4FACBAA",
+   "severity": "malware",
+   "label": "TrackingSmartphone",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "1E15B0D27C0551061885340A3990D52A93F646B8",
+   "severity": "malware",
+   "label": "SMSForward",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "1EBFFD9FE9463B2ED24582D2846990A5ABEF79B9",
+   "severity": "malware",
+   "label": "HelloSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "1ECC7F67BBD1BFAB97ADDCB05A496BCA7B6B135F",
+   "severity": "malware",
+   "label": "mSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "20948233C3EF1662E79850AE0AB959C4760114C2",
+   "severity": "malware",
+   "label": "Trackplus",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "20AB40ACC2822A34EC199622CDCA9D7A63BB302B",
+   "severity": "malware",
+   "label": "Unisafe",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "20C940625B322C487A89B1FEBF6C090845B040C1",
+   "severity": "malware",
+   "label": "FlexiSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "20F092BEC76C406223A7943371A1DBBB5BF66C13",
+   "severity": "malware",
+   "label": "pcTattletale",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "219D2D7FEC2B2DA6E25693A75FC15D2C6F4F6E67",
+   "severity": "malware",
+   "label": "AllTracker",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "219D542F901D8DB85C729B0F7AE32410096077CB",
+   "severity": "malware",
+   "label": "SpyNote",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "230E35A26E471352DF5DBDBCF9834E0711500CB0",
+   "severity": "malware",
+   "label": "Reptilicus",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "240E97A0587BF99441787EA3BCB2B2D8827564FE",
+   "severity": "malware",
+   "label": "Snoopza",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "2441F6D331D6CFD8624346ED4B1987EAE6534FA3",
+   "severity": "malware",
+   "label": "Spyone",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "24D3251C7A1184649211B9068820545397B112C9",
+   "severity": "malware",
+   "label": "EasyLogger",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "26AF8554EE338D6969FAC51BF4DAC3186098056E",
+   "severity": "malware",
+   "label": "SpyPhoneApp",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "26DDA9B261169FB0A63A6CEA5B682B7A190328B6",
+   "severity": "malware",
+   "label": "Trackplus",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "26FC20C25AF99E4B6C16ABAD8E8D76AFA55973BB",
+   "severity": "malware",
+   "label": "Trackplus",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "271CA9A77AF56B94F942EDA8F517E4B0FD44206C",
+   "severity": "malware",
+   "label": "Trackplus",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "272CD0BC357FA03AF87940644CB8FFDECD2FDDC6",
+   "severity": "malware",
+   "label": "KidsShield",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "28393DBA55F5B08294D1E54962BE1648C1EFB4A2",
+   "severity": "malware",
+   "label": "AbsoluTrack",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "284E4AF2E92E8E49EDC2C8792D7008759813CB68",
+   "severity": "malware",
+   "label": "FlexiSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "28AFF3C41C0D42ACBB6B73C6C08868C442088640",
+   "severity": "malware",
+   "label": "Spyone",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "2919FF38F04D757BA6FE344F1729275739F43E89",
+   "severity": "malware",
+   "label": "Trackplus",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "29FFFE437675D2B55512953759C40776E547592D",
+   "severity": "malware",
+   "label": "MobileTrackerFree",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "2A1C74FFFE33C7D867C7B284FFDBBA4DDD024450",
+   "severity": "malware",
+   "label": "Tracku",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "2A57777E3B9491A37392AFCE2E69D030DBF95037",
+   "severity": "suspect",
+   "label": "FindMyKids",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "2A84B79A7E17E1F49642E8D5EA9828CFEA763E8C",
+   "severity": "malware",
+   "label": "MobileTrackerFree",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "2B02F9708FAD9017D9F709AB2C5C8B5BD0D29394",
+   "severity": "malware",
+   "label": "Trackplus",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "2C08279BCC8EB16B2B31ACFBD7E1D4BB28E49A87",
+   "severity": "malware",
+   "label": "Reptilicus",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "2CF347EA59967F7799AA2C1FDB5D711B2B93D586",
+   "severity": "malware",
+   "label": "Spylix",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "2E104C33C8DA4DB32E59A45701D8E0C4CAD16BD3",
+   "severity": "malware",
+   "label": "VIPTrack",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "2F033070A8CD93CEAC60F9E203BA33C9A9A3D226",
+   "severity": "malware",
+   "label": "MobileTrackerFree",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "2FD8BEF4081F126D4DA655B40E9FC63F116DD857",
+   "severity": "malware",
+   "label": "Reptilicus",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "317A9577A5B2D0930D06E0D8D7427E2F8FCAD29D",
+   "severity": "malware",
+   "label": "Spyone",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "31A6ECECD97CF39BC4126B8745CD94A7C30BF81C",
+   "severity": "malware",
+   "label": "TheTruthSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "32570AD62B2DF951A67251ACB49E39E96B8A43BA",
+   "severity": "malware",
+   "label": "BosSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "32F6E28DD3E2E61ED94446591E31F89AEE3A9BD2",
+   "severity": "malware",
+   "label": "Spyone",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "3397C095EAD93B13CC5B9979D1F3B4FAEF1D194C",
+   "severity": "malware",
+   "label": "KidsShield",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "339B5C1746A1CDEA945D51BBE967C1320AE73CC4",
+   "severity": "malware",
+   "label": "AndroidPolice",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "340E571CB1A64E6EE384D3F8A544681459CF3F5F",
+   "severity": "malware",
+   "label": "LetMeSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "340FE1F4AA4A401AD8E326907E35FB9E0C2486BD",
+   "severity": "malware",
+   "label": "FlashKeylogger",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "34B791B5D35A874D189202EEA1FA99188F58A4C1",
+   "severity": "malware",
+   "label": "jjspy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "35B05ACC96D02849E20D9ED3BA9CEA41C2B83FFA",
+   "severity": "malware",
+   "label": "MeuSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "35CD797D1736484786152A231920575FABC5C12A",
+   "severity": "malware",
+   "label": "MobileTrackerFree",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "35D1DB3904A84793394FE5DF7B678E263B1B33A0",
+   "severity": "malware",
+   "label": "KidsShield",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "35D7CF057BFA5023CE739A725ADA0DA1FD34D1FF",
+   "severity": "malware",
+   "label": "EasyLogger",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "35E90A29262F1E6CC25B6E483DEC67161513DE30",
+   "severity": "malware",
+   "label": "WebWatcher",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "36E6671BC4397F475A350905D9A649A5ADE97BB2",
+   "severity": "malware",
+   "label": "TheTruthSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "377223C40330F7925BB238E3A2AC6E1BE1A05749",
+   "severity": "malware",
+   "label": "MobileTrackerFree",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "37ACE0321E8833F25BDDB363AB395C81354E88A0",
+   "severity": "malware",
+   "label": "TrackMyPhones",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "38819265668EEAE6AC3C6C80D1A6530EAE99AD0E",
+   "severity": "malware",
+   "label": "SpyApp",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "3930B621F30D13D24692CBBBBC67C59F92F1C9BD",
+   "severity": "malware",
+   "label": "mSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "3935E474CD6EDACB19F24192809B337D376656F6",
+   "severity": "malware",
+   "label": "MobileTrackerFree",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "39DDEFD8261C1946E4F3160F6A9E200F59F06C11",
+   "severity": "malware",
+   "label": "Trackplus",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "3A041A8B1CF12E01AD4AA14779C1FCCA0701FE5C",
+   "severity": "malware",
+   "label": "Trackplus",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "3BA583488F36C708025C078D9EB4BEDC3918B098",
+   "severity": "malware",
+   "label": "AndroidPolice",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "3D4D65F3584201E74B186A90C3333C468D3C6A09",
+   "severity": "malware",
+   "label": "Observer",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "3E1A6646C93A7423A25104A88DA5BECE2F35EFF0",
+   "severity": "malware",
+   "label": "mSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "3E4E5813CA5B9D9BB50B70FAD3C201FAA54B4FD5",
+   "severity": "malware",
+   "label": "Trackplus",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "3E929DB5941C185EA4FAC2B0D7BA7589D40A379E",
+   "severity": "malware",
+   "label": "MeuSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "3E9B3E5190F64BA9A952B7F57942AA21FFDA50BA",
+   "severity": "malware",
+   "label": "MobileTool",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "3EA68714AE224B0C0EEED64A14B11D3983C3D6F8",
+   "severity": "malware",
+   "label": "iMonitorSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "40159690AF08A01670E3FA07A021F7B1C1437042",
+   "severity": "malware",
+   "label": "AbsoluTrack",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "409B589FDEAE073A94D609E2B41A6C0EA952B35A",
+   "severity": "malware",
+   "label": "Cerberus",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "4140120093B5655CF559B2A786269CF3F82E3AE9",
+   "severity": "malware",
+   "label": "Tracku",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "41862C48D4BBC2A83DB3CE6EBA0D0C53E3D882B6",
+   "severity": "malware",
+   "label": "Unisafe",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "437940A417B58B1C2CDB85EDE4D37C3DE6EFDC95",
+   "severity": "malware",
+   "label": "VIPTrack",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "43D45CE7BEE36E449434C14973B7D285209414C7",
+   "severity": "malware",
+   "label": "AllTracker",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "4474D3395029E6C6744A470EE5F2107DBAEF16A0",
+   "severity": "malware",
+   "label": "Tracku",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "4569A62308FA134A33A5DDCC065D6FDAE5653435",
+   "severity": "malware",
+   "label": "Trackplus",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "4579E9E02465DAC399B7A47682813F5104E5D914",
+   "severity": "malware",
+   "label": "Trackplus",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "457D2470CA3E635178D224C14C0D743B7C7F9F80",
+   "severity": "malware",
+   "label": "MobileTrackerFree",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "4591BD0E4CBE86FD7510F1427BA6538BB269AE4D",
+   "severity": "malware",
+   "label": "AndroidPolice",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "4598FFB867E28560BC1198D61EC83A1CCA0F1612",
+   "severity": "suspect",
+   "label": "FamiShield",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "45DECBF059864164A4BC644D3EAB8127FC98238A",
+   "severity": "malware",
+   "label": "FlexiSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "473F919A69BBAD3457AF2F0E3AFC34E513F103F1",
+   "severity": "malware",
+   "label": "bark",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "483716998F0C092FE82B0B12B1A4BA399D941318",
+   "severity": "malware",
+   "label": "TheTruthSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "48A2190050B80F31E1E3CCFAF9909FAD238D9849",
+   "severity": "malware",
+   "label": "HighsterMobile",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "492FF617A79F6C8D80B453815CFE6586E21C5F72",
+   "severity": "malware",
+   "label": "AppSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "493812991A9A1CC7BEEFD45F2180CD2FC0AF8913",
+   "severity": "malware",
+   "label": "MeuSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "4A3742E0C96AFB91954D613AAA637076750E5A0B",
+   "severity": "malware",
+   "label": "EasyPhoneTrack",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "4AF16661FC885F7CC84358CCB8F272308436D5E3",
+   "severity": "malware",
+   "label": "jjspy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "4BBD8F7E244B86B6B82F2A343EE8EDB5E797FEF8",
+   "severity": "suspect",
+   "label": "KidsLox",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "4CACA12EB37B7A7F07AE380C7E1741D2C36531DF",
+   "severity": "malware",
+   "label": "BlurSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "4DAD108F915E237CA2834FAC70C077AD8105E804",
+   "severity": "malware",
+   "label": "iKeyMonitor",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "4E6B680EF3B588EF53097BC7CEFB778833B8A475",
+   "severity": "malware",
+   "label": "WebWatcher",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "4F6AD2383DADACCF93EA5BE4300571C315DBDF5B",
+   "severity": "malware",
+   "label": "Hoverwatch",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "4FEAF05665D7CA7D017962CADFDB4E38CC8D79E7",
+   "severity": "malware",
+   "label": "Msafely",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "4FF0174BEDC1D16BE55AC53B98599398AC461F82",
+   "severity": "malware",
+   "label": "TheTruthSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "5037E917539B4F31E0B92EBB7A9089C5DC567518",
+   "severity": "malware",
+   "label": "CatWatchful",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "5051413BB7C4931F5CD25260FFF173739CBE0F3A",
+   "severity": "malware",
+   "label": "Tracku",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "50CADBA5487E7C00D67C8FF0D3A952D7B62BEE9A",
+   "severity": "malware",
+   "label": "MeuSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "523C42BF2F6CBAFC78BE41043E8E3E3BB311CBA2",
+   "severity": "malware",
+   "label": "CatWatchful",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "5284272445CE993DE601BB23CAE6BA9E43E4589C",
+   "severity": "malware",
+   "label": "Hoverwatch",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "52B12772C6558D6A44A2DAF9E18FFAE48C577CA7",
+   "severity": "malware",
+   "label": "Cerberus",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "53486B8F8790D1848E0842F37B5C6DFA15CD3EBB",
+   "severity": "malware",
+   "label": "MeuSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "53FADDAF873B7BD00E5AD9F5F05E7888A398CE70",
+   "severity": "malware",
+   "label": "EasyLogger",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "5407E1CC26F28D6024E0384693045AEA2B24C5DA",
+   "severity": "malware",
+   "label": "Tracku",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "54E4D1ACDA9E3071D27AA7B6470E23F75BF1380B",
+   "severity": "malware",
+   "label": "Trackplus",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "554137DEE63BE07CE9687C5886244954277227F5",
+   "severity": "malware",
+   "label": "TrackMyPhones",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "558765849658A3821FE4054ED2C1FF6E28B4B8A0",
+   "severity": "malware",
+   "label": "AndroidMonitor",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "56BD8EB8A20904E4766D99F6D38D87466C44B114",
+   "severity": "malware",
+   "label": "AndroidSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "56C8FA19250EDBA1A91A37F500DA91FBC0657B1F",
+   "severity": "malware",
+   "label": "SpyMug",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "56EF5244378FB6B4EF82D2B9E99BF41F7B97D93A",
+   "severity": "malware",
+   "label": "TheTruthSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "57178BA7BE0677C3143C24362FD35A9CF0E311A8",
+   "severity": "malware",
+   "label": "MobileTrackerFree",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "575A730BC2411897A318DEB23B3C3CC4F63422F5",
+   "severity": "malware",
+   "label": "MobileTrackerFree",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "575F8E8A04A5967E78BC5B5A3E31FDACF42F4FB1",
+   "severity": "malware",
+   "label": "uMobix",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "597C0169D8C27DE7C6B62C2C252F9ECAC0E562C4",
+   "severity": "malware",
+   "label": "SpyHuman",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "5A73C8FE7CBA5C9E70B0DF69B3A111C42A10B215",
+   "severity": "malware",
+   "label": "VIPTrack",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "5AD2ACB089F8BE5112FF5125D94036983DE3E8D5",
+   "severity": "malware",
+   "label": "MobiStealth",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "5B2265CD0F004A70A0DE7483A5DD450A051F4108",
+   "severity": "malware",
+   "label": "Stalkerware",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "5C5EF3DFE98B02251A6EC82609F22A092562AFEE",
+   "severity": "malware",
+   "label": "iMonitorSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "5C77395F77E17F293CC8C4E3E1FDD48296EE4B28",
+   "severity": "malware",
+   "label": "AndroidPolice",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "5C9031E2340478521630198F3F90E5C8D38D3B64",
+   "severity": "malware",
+   "label": "Trackplus",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "5D655F30DE8B8BDABCCDF660582C6369145E7A5A",
+   "severity": "malware",
+   "label": "AbsoluTrack",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "5D7B59F3AFB74D86CCD56440F99CA2FC83A23F22",
+   "severity": "malware",
+   "label": "TheTruthSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "5E16BA998632C1C3E4D4AE707D6EE2454ED2AEB5",
+   "severity": "malware",
+   "label": "Snoopza",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "5E3C376B52C672C81439358DE6348F25F96EAAA4",
+   "severity": "malware",
+   "label": "TheTruthSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "5EC970BC602D0EBB2F3C7A5135E24C330B71DE59",
+   "severity": "malware",
+   "label": "PhoneSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "5EEC898F0DBBD70A9B33DD16EE5FF06B6DE26EA6",
+   "severity": "malware",
+   "label": "mSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "5EF38D0143F601FD01AA39BFE9079E9927920208",
+   "severity": "malware",
+   "label": "KidsShield",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "5F2DCC133AF3E19D3935A85A3E2871856602A21D",
+   "severity": "malware",
+   "label": "Fenced",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "5F43A60BFC663FB37F419A40015495431649310B",
+   "severity": "malware",
+   "label": "MobileTrackerFree",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "5F61BEB9591ADBDF9DA5B141A1EF35CDC0944C8C",
+   "severity": "malware",
+   "label": "SpyphoneMobileTracker",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "6000C3F6A35C81C0AE6ACA73DBF7B7D19DCDB7BC",
+   "severity": "malware",
+   "label": "MobileTrackerFree",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "60277E8CE202D8023F2ECC86F1726A50D9990576",
+   "severity": "malware",
+   "label": "WebWatcher",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "603881E46350999FF7A5CBD68FE6A5897C50CEDE",
+   "severity": "malware",
+   "label": "TrackingSmartphone",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "6041F01561EC43309CCC8452719C4F515C32F3C2",
+   "severity": "malware",
+   "label": "BrunoEspiao",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "60DA6A5B04C0100DFCE1213C850EFBDEB0D1E8D7",
+   "severity": "malware",
+   "label": "EspiaoAndroid",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "6144ED2E25B6F3A5FAFCF914965CA071A685674B",
+   "severity": "malware",
+   "label": "Hoverwatch",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "6156DB551938BB4560D4643B54527E4F169ED44F",
+   "severity": "malware",
+   "label": "GPSTrackerLoki",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "61B90229F79F730043D06FEE46BB8FD9E3A0E70B",
+   "severity": "suspect",
+   "label": "FamiSafe",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "630BB83172B184A6571126229E2B2DCA2EB4123F",
+   "severity": "malware",
+   "label": "SpyLive360",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "636F6FE622D3059B569C9989F3CD491607F23A5D",
+   "severity": "malware",
+   "label": "FlexiSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "64403A61F41848F987D6FD0BE00392E9561A0EF7",
+   "severity": "malware",
+   "label": "Hoverwatch",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "64AC17A447EB4BCAF556B57C5C66F232C489C7A7",
+   "severity": "malware",
+   "label": "Observer",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "656CD7890ED79CE8570D1B7156C31958D5AC1606",
+   "severity": "malware",
+   "label": "HelloSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "665D624FD53E4D538DFE9F7A87087C513CB40506",
+   "severity": "malware",
+   "label": "TrackingSmartphone",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "6696449AA96EBA57CDF4707F0F84274958BE4523",
+   "severity": "malware",
+   "label": "uMobix",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "683722A1C629AD5734B93E08ADFAA61775AD196F",
+   "severity": "malware",
+   "label": "HighsterMobile",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "68AC78A7CD660ED204B4BC3C73A3F91DA1AE45FC",
+   "severity": "malware",
+   "label": "TrackMyPhones",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "68E4A16FD2B8D41E817CC5A06BA95B9CED9BD9F9",
+   "severity": "malware",
+   "label": "CatWatchful",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "69B327860EDB531DDFFB1B5DBF0C24245A75F3E4",
+   "severity": "malware",
+   "label": "FlexiSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "69C28343A4D0F2156D7B56AE4616E1386173A047",
+   "severity": "malware",
+   "label": "Cerberus",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "69EE83CB3E0968B49E33849D40F7D91B0592C7DB",
+   "severity": "malware",
+   "label": "LetMeSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "6A610D0211E543113EFE1A82CC4D270B6A45C526",
+   "severity": "malware",
+   "label": "AndroidPolice",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "6B1DC3EAE0E8C59E7769A6E0A1BAA1938620A191",
+   "severity": "malware",
+   "label": "MeuSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "6B660EAAEBA47793B7A1278D714669A6612BCA5B",
+   "severity": "malware",
+   "label": "HelloSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "6C0B8CF7F47DB7A82A2C06D410690935FDD912DF",
+   "severity": "malware",
+   "label": "MeuSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "6C4E74FD002AEC131F8D05852566055C349E0A54",
+   "severity": "malware",
+   "label": "AllTracker",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "6CA8C06D7DAC5F5685E014AE5C4D2062F77B42D6",
+   "severity": "malware",
+   "label": "KidsShield",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "6CC6FB667F4D178DF4E9111FE96BE9AEAEE485EF",
+   "severity": "malware",
+   "label": "AndroidPolice",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "6D0FF787BF4534F1077D1E4BF2E18BA381D97061",
+   "severity": "malware",
+   "label": "Reptilicus",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "6DB1F33668AA745163DFB6C5614C3800BCA8D693",
+   "severity": "malware",
+   "label": "TrackMyPhones",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "6DFB725019C7784B400D940DAAEDAED18C5B898B",
+   "severity": "malware",
+   "label": "jjspy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "6EB49E72D6138B4210D1CA60247D419E5660315C",
+   "severity": "malware",
+   "label": "HelloSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "6EF8C27EBCF808FFA377A391DB9892B997AF16C9",
+   "severity": "malware",
+   "label": "AllTracker",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "6F1CE95315749AC6F377B310C0B831CF05B04C68",
+   "severity": "malware",
+   "label": "MobileTrackerFree",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "6F1FDA1889463BFA646A950E49E121B7829A884D",
+   "severity": "malware",
+   "label": "Tracku",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "6F93929AB60AC760000E873CD7C56BA79A9E6CAD",
+   "severity": "malware",
+   "label": "SpyToApp",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "718F3191938DA39D3A4EAC0EF0F44C70F32B0989",
+   "severity": "malware",
+   "label": "Mrecorder",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "71AD1F579C3DCF32AA1E00E02245D359F80C260B",
+   "severity": "malware",
+   "label": "Bulgok",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "71BE35691A181E1524DDF83F931FBC62DC4E7EC6",
+   "severity": "malware",
+   "label": "Cocospy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "724C6500F11737C12C0B89185A60427989656697",
+   "severity": "malware",
+   "label": "Cerberus",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "73BF44A503427F7682C7136B109631E3BE4114DE",
+   "severity": "malware",
+   "label": "SpyLive360",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "757DB1C635344324B665BAF056DC3E4B1D0CC39B",
+   "severity": "malware",
+   "label": "CatWatchful",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "7688EA09EE353ED077E0A90D401881B63F115A3F",
+   "severity": "malware",
+   "label": "CatWatchful",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "76A90B5E41FA2AFE14478CDA24A0CA6B4F7FC5F3",
+   "severity": "malware",
+   "label": "Trackplus",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "76F6C302533751BED738D40882AC219BAAD65E7B",
+   "severity": "malware",
+   "label": "SpyHuman",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "77032E80CC0ECEE49B8F2F58F9999330026E0DB3",
+   "severity": "malware",
+   "label": "CatWatchful",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "77142DA3A865C256FCDD24E187FDCEBA1B4EC587",
+   "severity": "malware",
+   "label": "Mrecorder",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "77C411957F307F6B971C7C07825CA5EA06F0E36D",
+   "severity": "malware",
+   "label": "KidsShield",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "77E86A5C583256B5A52A5AEEB70542CD1BE34A99",
+   "severity": "malware",
+   "label": "MeuSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "783B1880ECDC5E75620A4C484E3BDBE08D6D4397",
+   "severity": "malware",
+   "label": "CatWatchful",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "786325AB3E614F868CA2A7F2F0E75EC76A047311",
+   "severity": "malware",
+   "label": "iKeyMonitor",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "789A24C1605F1BF2B6D64580C697BD38D9446A7E",
+   "severity": "malware",
+   "label": "KidsShield",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "78CFFA689DD23FDD7E84DDFBF28F86D4843C6129",
+   "severity": "suspect",
+   "label": "Accountable2you",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "795C30FAD432EE48EDF52B0748BA2749F0915CA3",
+   "severity": "malware",
+   "label": "SwiftMobileSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "79C395148C34F0826E04B37A6632A53A7977A1AA",
+   "severity": "malware",
+   "label": "Spy24",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "7A22EB86FD8D817ED7BFAA03E7A280A03AF20779",
+   "severity": "malware",
+   "label": "XDSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "7A55C057800823F710BF32A7D9865B300777E2D5",
+   "severity": "malware",
+   "label": "Tracku",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "7AFD651F96C7C938351396A53895C3C0704F6B96",
+   "severity": "malware",
+   "label": "HelloSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "7D0F4308B87223AEEFFA65060F0F752E84D363BE",
+   "severity": "malware",
+   "label": "Tracku",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "7D9EDDE23B4D3D7AC459B06ECEBE8EA1350D4F8F",
+   "severity": "malware",
+   "label": "Trackplus",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "7DED7756C3DBE351A23BE061E989273888414FE6",
+   "severity": "malware",
+   "label": "Trackplus",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "7F0D7ED5D614B03962014483E654A215A40F029F",
+   "severity": "suspect",
+   "label": "SafeNet",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "7F11358AC560C5E90B735A21B907F1C8143353DF",
+   "severity": "malware",
+   "label": "MobileTool",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "7F5C0D54A813BA9B87A91420CA2C3DE5E7948F09",
+   "severity": "malware",
+   "label": "HelloSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "7FFE6DA96346FEE822E1F791176CD6970A1DC770",
+   "severity": "malware",
+   "label": "mSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "813A3AD37D87AA36120DFEC64146C311DB5F4CA9",
+   "severity": "malware",
+   "label": "SpyEra",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "839FBBE6F3DF8153BB6582247DBBC2A42864A87D",
+   "severity": "malware",
+   "label": "AndroidSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "8418703221A74C73405AD273C28CBC12444D7520",
+   "severity": "malware",
+   "label": "Cocospy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "842676B67005E6561808B650152F598035D12800",
+   "severity": "malware",
+   "label": "SmartKeylogger",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "842933609E604063B55C04BBB47763AC7C0FC327",
+   "severity": "suspect",
+   "label": "MMGuardian",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "845705FB0FE177970768CE3F5241AEBD99F3BEEE",
+   "severity": "malware",
+   "label": "MobileTrackerFree",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "849D181E1BEE5084CBE1BACBA8442996A8B1F8C6",
+   "severity": "malware",
+   "label": "TrackMyPhones",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "8508603AE680C3BCDE91E6F909BF400F6DC878B4",
+   "severity": "malware",
+   "label": "MeuSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "854F7978408EA58C5B792C1C1EF9733FC2D5E813",
+   "severity": "malware",
+   "label": "Snoopza",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "85A4C4F357A99888725862C351119FBB12C45695",
+   "severity": "malware",
+   "label": "AndroidPolice",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "85AF7A95F8A95541F6B6DE88A8EBC24FF1658E98",
+   "severity": "malware",
+   "label": "Observer",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "85F12B25CEB58B8376F83209D8D128841132DC51",
+   "severity": "malware",
+   "label": "MobileTrackerFree",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "86238EC6DF27DD0886B701D73397E2DA99C74066",
+   "severity": "malware",
+   "label": "EasyPhoneTrack",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "8698564FBEC700167FCC53D1AED00FFADF6BED6C",
+   "severity": "malware",
+   "label": "EasyLogger",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "86D94A8CE736F82D834FA588F34106AE7B69D325",
+   "severity": "malware",
+   "label": "TrackingSmartphone",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "87EF370B8D6E3089E7F8CDDD6E830B5E4C8CF60B",
+   "severity": "malware",
+   "label": "TrackMyPhones",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "8851279B5177EF52B0B8540EE1FCED4BABDFB318",
+   "severity": "malware",
+   "label": "AbsoluTrack",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "892C4F172AD3262EC398B40BBF8130C6421040A1",
+   "severity": "malware",
+   "label": "EasyPhoneTrack",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "8A718113C6EDE9473FE4BF1F29E2E807B7EB7B56",
+   "severity": "malware",
+   "label": "MobileTrackerFree",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "8A92A4F6F9FC52BC8788F17704944614C744716C",
+   "severity": "malware",
+   "label": "MobileTrackerFree",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "8AD595A53B76014B7B919ED231DB372096D358E7",
+   "severity": "malware",
+   "label": "SpyMasterPro",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "8AE2267AEEA0DBFF7D7CC1C82E54343B1B0CFA22",
+   "severity": "malware",
+   "label": "KidsShield",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "8B187B3EBEF7D1BC8E32BEC78D36CBF95505A1C1",
+   "severity": "malware",
+   "label": "KidsShield",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "8B9540311C46184984B48BF9CB51F1742A8AFB42",
+   "severity": "malware",
+   "label": "MobileTrackerFree",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "8C017FDB2A81807EC879A8E30F4AB05D5CA02034",
+   "severity": "malware",
+   "label": "SpyPhoneApp",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "8C76B4444DAE08ECF578AF51D295836F0D9BADC6",
+   "severity": "malware",
+   "label": "Trackplus",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "8CD8FB235EA7F9B0FC308C1A59AB561C3869878C",
+   "severity": "malware",
+   "label": "RealtimeSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "8CED75E875A2F11B3327A73A6DBD0B25E26533F2",
+   "severity": "malware",
+   "label": "MobileTrackerFree",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "8D7FEC36654F6B35FA89E079685D637CCEE27755",
+   "severity": "malware",
+   "label": "Trackplus",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "8E352F2EE18054DF97C238915C0375AA13305DEC",
+   "severity": "malware",
+   "label": "CatWatchful",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "8E38D577187544D4E0F747CAEF32B47FD15B07E5",
+   "severity": "malware",
+   "label": "BrunoEspiao",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "8F0EAD4F1DA5DAAF8C0F7A51096CECEEF81D0C76",
+   "severity": "malware",
+   "label": "LetMeSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "8F23E1457ADC6189F6ED504A60DF8896FEC6D970",
+   "severity": "malware",
+   "label": "EasyLogger",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "8F576BEEB71EA74E5F27764917BFF5B508017B68",
+   "severity": "malware",
+   "label": "CallSMSTracker",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "917BB5B2D40EC40018541784A06285DE0F50F60F",
+   "severity": "malware",
+   "label": "TheTruthSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "91ED4F75A763A63471E1D1D39BA012DF867550D4",
+   "severity": "malware",
+   "label": "ShadySpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "9225C8FD380154467908AE344FBE75CE7EF996B8",
+   "severity": "malware",
+   "label": "MobileTrackerFree",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "9256E291823DA741B64CB23F7E371D0940E5272E",
+   "severity": "malware",
+   "label": "Reptilicus",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "927CA44949D7788AA86F9D7F04D7FDACECD1DFB9",
+   "severity": "malware",
+   "label": "MobileTrackerFree",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "9284CB43B87E9F9C77DA509F1672E884BD6CA876",
+   "severity": "malware",
+   "label": "iKeyMonitor",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "92DF71DB15BEEAB77DF36FD879A89E5E0DEF4617",
+   "severity": "malware",
+   "label": "CatWatchful",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "92EBDB7D7C18A34705A6918B5F327DDB0E8C8452",
+   "severity": "malware",
+   "label": "AndroidMonitor",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "93135ABA6FF4B6CFE9B06153B9BDF769AEBC1D87",
+   "severity": "malware",
+   "label": "CatWatchful",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "9329632A70D41158EBAB6EED27B12D8CB0D47579",
+   "severity": "malware",
+   "label": "Trackplus",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "93385A087BB5CAB96EAE83A1AF874E0E39B2990F",
+   "severity": "malware",
+   "label": "FlexiSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "933C19015525266982AC6D830CB6B3D25079777B",
+   "severity": "malware",
+   "label": "jjspy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "934A3C0DC8912C4F2F8620F666FC7621BD7B97B8",
+   "severity": "malware",
+   "label": "pcTattletale",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "9427212B33E9D3636970EAB73E2845E0DC59B5AA",
+   "severity": "malware",
+   "label": "Tracku",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "9442F1D40FBAAD7053D130986C4487D0BA5C079F",
+   "severity": "malware",
+   "label": "MobileTrackerFree",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "9477420001BC79500623374EC586B054AAC97BF9",
+   "severity": "malware",
+   "label": "SpyPhoneApp",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "95D589A90971992A2038E5961B39C8B6BC77CF19",
+   "severity": "malware",
+   "label": "KidsShield",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "96A1F635F940D8D154FD42D550B6201B60692744",
+   "severity": "malware",
+   "label": "TrackView",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "970B463F5103B36326AF8C8349A4106F6932835B",
+   "severity": "malware",
+   "label": "AndroidPolice",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "98140CAE57F4D4CA53EF81F6521E7A0FD601F6E9",
+   "severity": "malware",
+   "label": "Trackplus",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "984F8786102D9BF26E5244BBC93733D3609948F4",
+   "severity": "malware",
+   "label": "FlexiSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "986E5892EFB97E807772698BAC701F49CE9CAEA8",
+   "severity": "malware",
+   "label": "Trackplus",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "98E76043B54DD7CB76E0E6E384A83646F1865BAE",
+   "severity": "malware",
+   "label": "Trackplus",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "98ED5841256A44FB1525FE154C0516ACED82FFF3",
+   "severity": "malware",
+   "label": "iKeyMonitor",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "9997E63018756CC7034F94B005205A5E15A3770C",
+   "severity": "malware",
+   "label": "Spynger",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "9B07A93BC509C0AE614AEAFFCD6B56797CD02166",
+   "severity": "malware",
+   "label": "SpyMasterPro",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "9B48840CBF93379410172B4B85989624D2B33D59",
+   "severity": "malware",
+   "label": "WiseMo",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "9BCE25527FF174A4AD6CDE233B17038641A5EEF9",
+   "severity": "malware",
+   "label": "Xnore",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "9BD494107EFED96F630D29D6E18AE4DCC47149E2",
+   "severity": "malware",
+   "label": "Reptilicus",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "9DE8D6C6757152EC819C1A09F5665B77F72493A2",
+   "severity": "malware",
+   "label": "TheOneSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "9E09874197988F20DB51EB6A34BFD908AC42C35B",
+   "severity": "malware",
+   "label": "AppSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "9ED8DD944D3EB545E1EEEEEC1D8174772CF37C07",
+   "severity": "malware",
+   "label": "NeoSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "9EECE9B4ECF4DC0C5981FEACFB271E1C0A2967FF",
+   "severity": "malware",
+   "label": "AndroidLost",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "9F6F25AB4EB39CA27BBB22465E6FDC1FC3791C85",
+   "severity": "malware",
+   "label": "AndroidSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "9FE876AF76CDCB685102A38528A3A732B0872DC6",
+   "severity": "malware",
+   "label": "CatWatchful",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "A1AA4CD5B6CDBD906E3B27A7D1FA42EA2416ADC3",
+   "severity": "malware",
+   "label": "BrunoEspiao",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "A2CD01EE20E3C25575D2D9B9645A52A1FA8C36C6",
+   "severity": "malware",
+   "label": "Trackplus",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "A2CE290D98B66B577880F3D7807DC01EB7FCE01B",
+   "severity": "malware",
+   "label": "Trackplus",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "A2EBDD14E2AE17F52363BCB751CCBE15BE5A2F8D",
+   "severity": "malware",
+   "label": "KidsShield",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "A36C70833A8A796F94CCD56B810D2A123F4F0485",
+   "severity": "malware",
+   "label": "SpyKontrol",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "A40D8FDC7953AD69D970FF00658EB0F58B3A052A",
+   "severity": "malware",
+   "label": "HelloSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "A4817668612688754B4905C44AB9F70C58C25CB2",
+   "severity": "malware",
+   "label": "MobileTrackerFree",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "A4E169AAF0068A1FC5F7900B7F59A438B833364C",
+   "severity": "malware",
+   "label": "NetSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "A519EF2B8C4E73A097065B322687C9D38DED610C",
+   "severity": "malware",
+   "label": "Unisafe",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "A759EC34A1144DC3443A9D4C3286F9F3A4F23FB1",
+   "severity": "malware",
+   "label": "Traccar",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "A75B340A58545B28B7E837582259C1CC2CE21512",
+   "severity": "malware",
+   "label": "MobileTrackerFree",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "A7E75010B3709D54D52CCE914AF06946744F5F67",
+   "severity": "malware",
+   "label": "MeuSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "A93266E83B136CBC220062898D308213263E793A",
+   "severity": "malware",
+   "label": "TrackMyPhones",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "A9A302C9606AF4BE4468A4FC74F7873DDADA2AB0",
+   "severity": "malware",
+   "label": "Tracku",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "AA0458B6C035E767E61DB7456CBCA89CC4D42090",
+   "severity": "malware",
+   "label": "AndroidSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "AA4F85CD7C24116BB51FA733BE59290B7BB8C204",
+   "severity": "malware",
+   "label": "KidsShield",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "AA752803419B66BC6D5CFCD61A7C88935FFE5511",
+   "severity": "malware",
+   "label": "Traccar",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "ACB2CA50376456FD81B5C6C19CF6D717CFBB888B",
+   "severity": "malware",
+   "label": "iKeyMonitor",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "AD231A7CD57E2CEF8162F4D341C3573DE2B8F443",
+   "severity": "malware",
+   "label": "ShadowSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "AD62CBB4BD298CF69CDA40997C3E5D70112D7161",
+   "severity": "malware",
+   "label": "WebWatcher",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "ADF393A6628366341BA488B85A5AE738793BFD17",
+   "severity": "malware",
+   "label": "Trackplus",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "AF113D18054A6B8DE74644BCE3F0AE41206B16AC",
+   "severity": "malware",
+   "label": "MeuSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "AF821DD021558AEDF49730D2892063BD502DEA14",
+   "severity": "malware",
+   "label": "TalkLog",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "AFC457A96258490FBC284EE889634B5F3E325B8E",
+   "severity": "malware",
+   "label": "Hoverwatch",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "B0A100360B029E0B2105F60E2C8EEB9053998A7E",
+   "severity": "malware",
+   "label": "MeuSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "B0B09157DC34E3D20DF6A92EBA0014D36A27C451",
+   "severity": "malware",
+   "label": "MobileTrackerFree",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "B0F639B67819EDBADC73B9FEFF2582FC58B8F115",
+   "severity": "malware",
+   "label": "TheTruthSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "B1336A5F3A017394186563E84AE0D2649FC1697D",
+   "severity": "malware",
+   "label": "TheTruthSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "B14E50E56D5D483031137FD247D4A5466D0E61B4",
+   "severity": "malware",
+   "label": "TrackView",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "B374A75F87F992A6F57CF99A24197ABCEB17A1E7",
+   "severity": "malware",
+   "label": "SpyAdvice",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "B4A1513C2C71F08D2EE763CD3FAE585F71F268A9",
+   "severity": "malware",
+   "label": "Cocospy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "B4ED5FA9E2A9176DA53324717A9B10F57191859C",
+   "severity": "malware",
+   "label": "Cerberus",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "B5075AB201EE483C8ECADE1BC4FC711293D6932B",
+   "severity": "malware",
+   "label": "MobiSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "B57FAAB701E26B4C92972442D3A428881E18441A",
+   "severity": "malware",
+   "label": "AndroidPolice",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "B5895930053256D408DE74B66BA132B73CB21527",
+   "severity": "malware",
+   "label": "Unisafe",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "B61326887306E5A65726AE6BFD1D720D2760CEFF",
+   "severity": "malware",
+   "label": "Reptilicus",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "B6A744B0E8AE049AC0C20402EBC137B1192699A9",
+   "severity": "malware",
+   "label": "AllTracker",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "B6B58148F1B2198C94BDE546FD2E0734EC7838D6",
+   "severity": "malware",
+   "label": "Hoverwatch",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "B6D2D36C75931CCA18538B79C5DE3A04EF4AF777",
+   "severity": "malware",
+   "label": "TheOneSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "B7285348B05EDAEFF7F032384E4F90182E1C1F27",
+   "severity": "malware",
+   "label": "TrackMyPhones",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "B7322B2126B2C4F4DED940D719FE1E63FD233D35",
+   "severity": "malware",
+   "label": "MobileTrackerFree",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "B7B561250288C8BB44932B591B5451D852A95109",
+   "severity": "malware",
+   "label": "eagleSPY",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "B7BB744C68FD6EB4C49298E7506BED53DC4773FF",
+   "severity": "malware",
+   "label": "AndroidSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "B8C908630D7D1ED52FA4E5AEC2A2BDA0414F8B3F",
+   "severity": "malware",
+   "label": "Trackplus",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "B8CA103D22C39282D7A1E8028D93333E481CCA83",
+   "severity": "malware",
+   "label": "MeuSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "B8D8C25B1CFE2829D397C8FB166895A6791A43D5",
+   "severity": "malware",
+   "label": "MobileTrackerFree",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "B8F5FDFAE5920C4CFB6ACE214D39327F299FA76D",
+   "severity": "malware",
+   "label": "iKeyMonitor",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "B8FCBCA563B1CD0E79CAC595002422C2E54072B7",
+   "severity": "malware",
+   "label": "jjspy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "B927DACA3BB3876523E2E8B1BDB56CE84B0DFFF7",
+   "severity": "malware",
+   "label": "CatWatchful",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "B9D5BAEDCF0C711317E8B6E54D60F0A5EDEE9517",
+   "severity": "malware",
+   "label": "WebWatcher",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "B9F546776987F0F2FF893325D2CCDF7F62F0D56E",
+   "severity": "malware",
+   "label": "MeuSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "BB59FC701EAC40C51C9274EA6A8EE623F5002802",
+   "severity": "malware",
+   "label": "Trackplus",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "BB5E2C0E8DFDC54730C1E9B48754977E7DBCCCF9",
+   "severity": "malware",
+   "label": "WtSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "BC53CC2A9996DE47BF72348F2A592DC0EBDAF06B",
+   "severity": "malware",
+   "label": "CouplerTracker",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "BC682A41C2AA1EFFFD65CE42BBE3FA967A561EEC",
+   "severity": "malware",
+   "label": "Trackplus",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "BC693B48B7EC988E275CF9E1CDAA1447A31717D9",
+   "severity": "malware",
+   "label": "Cerberus",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "BCA2BCB87F6E28FB403CED643311B135CA0DC0A2",
+   "severity": "malware",
+   "label": "AiSpyer",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "BD3986483D9B962B029D65BF34BF4B7C568FF204",
+   "severity": "malware",
+   "label": "Tracku",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "BEF28CC19ADFBEADC95137A2BD5035B6046666E9",
+   "severity": "malware",
+   "label": "AndroidPolice",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "BFC4C15E35E3506095B42E2B428E4016B1FFA1AB",
+   "severity": "malware",
+   "label": "iMonitorSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "BFF94895A64AEB38B5278BC41B1DB242CD82DA62",
+   "severity": "malware",
+   "label": "TheWiSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "C1D83F5FFE3EC319FF103EC7346CDDF218B5634D",
+   "severity": "malware",
+   "label": "iKeyMonitor",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "C270531A6D75EB4EA2AA0F4D6DF2980AFB494CB3",
+   "severity": "malware",
+   "label": "SpyHuman",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "C276C3B087207C9D3CEEDA766C01E0BDEF7EAC71",
+   "severity": "malware",
+   "label": "XNSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "C377ADFF5DF116AB7297D32850ADE8A8FC3F8FB9",
+   "severity": "malware",
+   "label": "Cocospy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "C44894EE63F2E861A6960834A21EB27169150722",
+   "severity": "malware",
+   "label": "ShadySpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "C4B56E3768543190FDBE0AA01DD628E579F5514C",
+   "severity": "malware",
+   "label": "Spyone",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "C51C36FE4F1DFC0C5B8CD55F74773135C1C1E1E5",
+   "severity": "malware",
+   "label": "AppMia",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "C656605BDB536B842319AC008FBB249D8B0A7422",
+   "severity": "malware",
+   "label": "MobileTrackerFree",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "C7FBC97C3BD3949A6C19FF332E6CF2F2E5CEE561",
+   "severity": "malware",
+   "label": "NemoSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "C863D800B89648724CD483911FBF756F36497CC9",
+   "severity": "malware",
+   "label": "AndroidSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "C87A87F7F5EDE2D279DDA0CCDE55E6AB85549D70",
+   "severity": "malware",
+   "label": "Cerberus",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "C8BAE63357CA1DCD9B084BCC99399C96A5B67D49",
+   "severity": "malware",
+   "label": "SpyMasterPro",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "C9BE6C42B975258DEA10EB6946A7986E4FE955E2",
+   "severity": "malware",
+   "label": "AbsoluTrack",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "CA5304E94F4BC97DA9D147E76858DBF70AB8B4E6",
+   "severity": "malware",
+   "label": "OwnSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "CA6F27DDCBE5D7929C82F42F63FF24703A352756",
+   "severity": "malware",
+   "label": "Trackplus",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "CB28ADFD818FBFFDF5542F2EFC5140D596EE957E",
+   "severity": "malware",
+   "label": "mSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "CB6E6DEB296275EDF70DC71A62A75AB7B9C8DB89",
+   "severity": "malware",
+   "label": "MobileTrackerFree",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "CB97E71AFA4665D6D28697B9197046C81E5E5D6C",
+   "severity": "malware",
+   "label": "TrackView",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "CBDA86758FBE8E5A6AB805F493AA151B1F2B95F4",
+   "severity": "malware",
+   "label": "TheTruthSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "CC4A78DBE96AC1FA5977E03C97052A9A334113B4",
+   "severity": "malware",
+   "label": "Hoverwatch",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "CC866E79BDAD431A2B1E07229B92E64808221610",
+   "severity": "malware",
+   "label": "Cocospy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "CCCD74B31E53685BFA5A23AD0AE020AF74689085",
+   "severity": "malware",
+   "label": "MySpyApps",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "CCD5678FF73D6ECF4E74317166422AFE67D77406",
+   "severity": "malware",
+   "label": "PanSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "CCE55D4C3E844E8A7542036D40BFBB4AA98B89D7",
+   "severity": "malware",
+   "label": "ClevGuard",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "CD5724426B602C1CD0BF3BD65EF75B9021C0EC3A",
+   "severity": "malware",
+   "label": "MobileTrackerFree",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "CD8F39DAECC7793F33D8D847A598373B8F25A7B7",
+   "severity": "malware",
+   "label": "HelloSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "CE3BB9701274C15D26A92C1D7D34110961EB73F1",
+   "severity": "malware",
+   "label": "MobileTrackerFree",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "CE94B8512390676F62F3EC61BECEDDDE9AB5519F",
+   "severity": "malware",
+   "label": "AntiFurtoDroid",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "CF627144481D3F1DCFBB6CF12291C540AE325FBE",
+   "severity": "malware",
+   "label": "jjspy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "D09EE9D79FF75E737429DDE34FD13EDFDDA34E78",
+   "severity": "malware",
+   "label": "MyCellSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "D15A276F181C839E0390672A43065E8D97F140E9",
+   "severity": "malware",
+   "label": "EasyLogger",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "D1BB66A93F621A66094F28856988C7A2AE9972D0",
+   "severity": "malware",
+   "label": "AbsoluTrack",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "D244AA1DD3D4296CE875EDA2E1B0332459F7DACE",
+   "severity": "malware",
+   "label": "MobileTrackerFree",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "D2A84922F8F747FD7582EFEF4189E06897FA8839",
+   "severity": "malware",
+   "label": "Spyone",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "D3A7E0E542A3E1112741806AC31F341C4200FBA1",
+   "severity": "malware",
+   "label": "Reptilicus",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "D3E6A092741CBA59BE9308FBA72DF887EAB184FD",
+   "severity": "malware",
+   "label": "jjspy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "D44524FA0D7866F1798C41C28953DA899B46BE65",
+   "severity": "malware",
+   "label": "Observer",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "D46492F02F25877E9F5D6CFFA4CE99DAC64D981A",
+   "severity": "malware",
+   "label": "TheOneSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "D667A33203776F2285EBA3E826CD286356EF05D0",
+   "severity": "malware",
+   "label": "TheTruthSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "D8418B279414687729D37B34E53AB75D502B9F73",
+   "severity": "malware",
+   "label": "jjspy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "D943998AEC15B3D70DA3BF00FF7BF580A41F6E4B",
+   "severity": "malware",
+   "label": "MobileTrackerFree",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "D98C69B50C1092FE21F7CF748DC8B2F91BE56B64",
+   "severity": "malware",
+   "label": "AppSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "DAE17DA900E269741688CEA3DAF929A8D896536D",
+   "severity": "malware",
+   "label": "Traccar",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "DB8DF9C3D6524B298F3EAD22E6A77D7FB2F1003A",
+   "severity": "suspect",
+   "label": "FamilyOrbit",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "DBA6211533A354E4BBF685A2EA458AC372C4ECE4",
+   "severity": "malware",
+   "label": "Trackji",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "DBC4B607C3B07C48F40F9D184DE443D651436CA5",
+   "severity": "malware",
+   "label": "Bulgok",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "DD34B4E5125F07BA50738192FBE7B745785FC15A",
+   "severity": "malware",
+   "label": "MeuSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "DDCF7F1032E7D9DA4E3D245A5145363F69F9C393",
+   "severity": "malware",
+   "label": "MobileTrackerFree",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "DDE822BAF53EF55C49096E866A995464CECB8B1C",
+   "severity": "malware",
+   "label": "AndroidPolice",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "DE648A3253C16692AF71141C069D15C87C3E5495",
+   "severity": "malware",
+   "label": "TheTruthSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "E0103BF20E95E826920A3F0F7B3BD03A899127D7",
+   "severity": "malware",
+   "label": "FreeAndroidSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "E023517B163AAAE209CBD97E312752960F575D38",
+   "severity": "malware",
+   "label": "Snoopza",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "E0E02AD30F042E096A7A5654217B846EA08C02D1",
+   "severity": "malware",
+   "label": "MeuSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "E0FCD3E782FB859F7388E4F44A44A5D694114968",
+   "severity": "malware",
+   "label": "AndroidPolice",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "E169250B134E5C46C3064F166E457CDBFCC16524",
+   "severity": "malware",
+   "label": "SpyHuman",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "E2AC495C52B9FBD49B83CFAE0C167878A2F796A5",
+   "severity": "malware",
+   "label": "SpyHuman",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "E3620714FB24A45614A456DF1176D482BCD1B032",
+   "severity": "malware",
+   "label": "SpyApp",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "E401C172FE10C4893A13B38B1FABAA43473E2900",
+   "severity": "malware",
+   "label": "Trackplus",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "E43B5671CBA3F48619BF00D6E380BBC2F02A5DCA",
+   "severity": "malware",
+   "label": "OneLocator",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "E458DC7CD8928A41865F502A884F0D51309E0BEF",
+   "severity": "malware",
+   "label": "OneSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "E48C6714DBFD2AB6E5CF85C87EFD05BD8E11E6FB",
+   "severity": "malware",
+   "label": "ClevGuard",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "E6157A76E1DCF43159529212009A0AA335499B7D",
+   "severity": "suspect",
+   "label": "Boomrang",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "E6502D8A870C3F3910EA34F5B46D20D923047580",
+   "severity": "malware",
+   "label": "TheTruthSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "E689432F7C2A39379BD64CB0BD2A6028F3A666DD",
+   "severity": "malware",
+   "label": "WebWatcher",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "E6F85CAB3903304DC16197B7EDA8F67ED6D65A1A",
+   "severity": "malware",
+   "label": "AndroidPolice",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "E7D395DF3B8077C733D9BE67D841FDF271F49406",
+   "severity": "malware",
+   "label": "OneSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "E82EDEDCDC22C6FA054AA74274AB789412B1C2F5",
+   "severity": "malware",
+   "label": "Msafely",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "E8395BE2A32B62C1BA21E37663E3BF1583E00FAA",
+   "severity": "malware",
+   "label": "MobileTrackerFree",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "E871393054ED858ACB5854C0DB9F674C42160344",
+   "severity": "malware",
+   "label": "NemoSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "E8FF1077D207E47AB4B53F275C437C0889579658",
+   "severity": "malware",
+   "label": "Hoverwatch",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "E906D462FA05007DE06423A10539C7E7EAB041CD",
+   "severity": "malware",
+   "label": "Observer",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "EA35FC50B3B0E0A9E5405BAC2D7E58D7F9559FD0",
+   "severity": "malware",
+   "label": "SpyKontrol",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "EAD44242A3C0A73DEF7976C56AC10A4530E8F67A",
+   "severity": "malware",
+   "label": "AndroidPolice",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "EBD3713DFB02D79ADC90C88DE1E0B547882F5A42",
+   "severity": "malware",
+   "label": "TrackMyPhones",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "ED5BADBC20B1B027F5858D29DAFBF66535C46DB9",
+   "severity": "malware",
+   "label": "AndroidPolice",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "EE35E2740576480486307C991C762A3FBA8DA46D",
+   "severity": "malware",
+   "label": "jjspy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "EE74E09E40A324B806AE5ED68A4543E50C3B6FC2",
+   "severity": "suspect",
+   "label": "GeoZilla",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "EF6BC4C13FE455CD98192E56D96317069BDF7658",
+   "severity": "malware",
+   "label": "LetMeSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "EF8006163D09D176083936CFB068BB07A8918118",
+   "severity": "malware",
+   "label": "Trackplus",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "F038CD90AFEA9C037A801FFAE67DF55A870879C4",
+   "severity": "malware",
+   "label": "AiSpyer",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "F18B3369F152EC3C74EC884BE977B3CA0E0C996D",
+   "severity": "malware",
+   "label": "CatWatchful",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "F1912CEE4B5D6C1EA4070B53B440E2F660FFCBBD",
+   "severity": "malware",
+   "label": "AllTracker",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "F21ECAFCFF000686E8EC090F1ECDAECE08798BFF",
+   "severity": "malware",
+   "label": "Hoverwatch",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "F25D72FCCB84BAF7F73467FC9571024B7E274CA3",
+   "severity": "malware",
+   "label": "Cocospy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "F2633353631EE72F7B7A7B946FABE1EF0A339041",
+   "severity": "malware",
+   "label": "Cerberus",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "F28F3A97D25E51AB266E56D3B80F04747D242E50",
+   "severity": "malware",
+   "label": "PhoneSheriff",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "F3E17DFDB98B1F7774A16967FD1D84D3D9D59389",
+   "severity": "malware",
+   "label": "SpyApp",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "F4E6DA34F0071AEB70010EBB69875E5212D69140",
+   "severity": "malware",
+   "label": "uMobix",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "F4F16BDEB31AED018276B47CAD9007063029FD22",
+   "severity": "malware",
+   "label": "Traccar",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "F575CA9980D3075CF728F2081D9EC5F910CC17E8",
+   "severity": "malware",
+   "label": "KidsShield",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "F57CACB890BE22907709DDE69ED3887F6943734E",
+   "severity": "malware",
+   "label": "AndroidSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "F57CBB4CBB9834A14AF675222CECA6A0D26D838E",
+   "severity": "malware",
+   "label": "PhoneSheriff",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "F5A5336B28456208EF357B4630A93A91206CF21A",
+   "severity": "malware",
+   "label": "TrackMyPhones",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "F5C25A3B800311E8053295676ADB112753E03F0B",
+   "severity": "malware",
+   "label": "Spy24",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "F5EAEFDECAD39B93134E859BEDC7D3ED42FBE2B3",
+   "severity": "malware",
+   "label": "Trackplus",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "F6422B9D4DD3C7370E3ED2879EA4DC8F463CD2A2",
+   "severity": "malware",
+   "label": "FlexiSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "F6914F044B9385D6005DC9C50A9AECDC2349F413",
+   "severity": "malware",
+   "label": "HelloSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "F747F0BBEF33FFEE6AFC4E7CFA03B28215985F24",
+   "severity": "malware",
+   "label": "iKeyMonitor",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "F7871F09D6E58B9BEA5913FB2FA879E5427725E3",
+   "severity": "malware",
+   "label": "AllTracker",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "F8FC21D0709C3C0A3E4FBA81D24AB50979F25C19",
+   "severity": "malware",
+   "label": "WheresMyDroid",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "F9181C6CF9AACB3AB1092F5338C3198A8D833431",
+   "severity": "malware",
+   "label": "TheTruthSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "F9265164219A1C5DEE4A76D66BEA0C35A1FD6032",
+   "severity": "malware",
+   "label": "SpyHuman",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "F9761F7C7AA6317B667671CB8F66479970630EAD",
+   "severity": "suspect",
+   "label": "ZoeMob",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "FB2EEA183C183B486B3001EC5FC4E8C906593356",
+   "severity": "malware",
+   "label": "MobileTrackerFree",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "FB8F23C57D0AFD255FD255B290B2EF6DBB2EAFD8",
+   "severity": "malware",
+   "label": "SpyKontrol",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "FB926CF2937331BB8A46E2C5280233C04DA2342E",
+   "severity": "malware",
+   "label": "AppSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "FBC83FD67E3B534B8B03D3B341249DB3186374E2",
+   "severity": "malware",
+   "label": "PhoneSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "FC5A4AD10F0686AA8EAE2C08BA13CC451CBD6037",
+   "severity": "malware",
+   "label": "EasyPhoneTrack",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "FC786B8F918655D45245C685A471BD57F02FB366",
+   "severity": "malware",
+   "label": "WebWatcher",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "FCB6F780EA8F2FE7249F66C6348572BDBD54F576",
+   "severity": "malware",
+   "label": "Unisafe",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "FD4C2144DF6E431378A46EAEACC696AF94DE9D56",
+   "severity": "malware",
+   "label": "Trackplus",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "FD5E1BBC94E5609F366DD4816C975C1CF4003F40",
+   "severity": "malware",
+   "label": "Bulgok",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "FD84821C80C1499A2446F6F7E13BF8BDA6A66402",
+   "severity": "malware",
+   "label": "KidsShield",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "FE7626A8D3C38FD78EA2A729B39B943BA814F014",
+   "severity": "malware",
+   "label": "ShadowSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "FE821A533BDC31822D9EB5F98243EB16917C8EE7",
+   "severity": "malware",
+   "label": "mSpy",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "FED69D6F09AE8C98DD4053C1934CCAF57D31824D",
+   "severity": "malware",
+   "label": "MobiStealth",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "FEEF07EA18BA2EF7B75AD311F45A45AB4C1E8F0E",
+   "severity": "malware",
+   "label": "Tracku",
+   "source": "stalkerware-indicators"
+  },
+  {
+   "sha1": "FF8CCD9816B0524A58FBDE1809FB227DBCDFD692",
+   "severity": "malware",
+   "label": "TheTruthSpy",
+   "source": "stalkerware-indicators"
+  }
+ ]
+}

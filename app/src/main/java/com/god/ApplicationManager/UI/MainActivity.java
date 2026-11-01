@@ -443,6 +443,8 @@ public class MainActivity extends AppCompatActivity {
                 handleToggleWarning();
             } else if (id == R.id.action_permission_center) {
                 startActivity(new Intent(this, PermissionCenterActivity.class));
+            } else if (id == R.id.drawer_security) {
+                startActivity(new Intent(this, SecurityActivity.class));
             } else if (id == R.id.drawer_profiles) {
                 startActivity(new Intent(this, ProfilesActivity.class));
             } else if (id == R.id.drawer_activity_log) {

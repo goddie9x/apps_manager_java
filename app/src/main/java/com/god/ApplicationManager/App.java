@@ -6,6 +6,7 @@ import com.god.ApplicationManager.DB.AppDatabase;
 import com.god.ApplicationManager.DB.SettingsDB;
 import com.god.ApplicationManager.privilege.PrivilegeManager;
 import com.god.ApplicationManager.work.FreezeWorkScheduler;
+import com.god.ApplicationManager.work.ThreatIntelRefreshWorker;
 import com.google.android.material.color.DynamicColors;
 
 import java.util.concurrent.Executors;
@@ -25,6 +26,7 @@ public class App extends Application {
         PrivilegeManager.refreshRootAsync();
         FreezeWorkScheduler.schedulePeriodicBackstop(this);
         FreezeWorkScheduler.scheduleUsageReminder(this);
+        ThreatIntelRefreshWorker.schedule(this);
     }
 
     /**
