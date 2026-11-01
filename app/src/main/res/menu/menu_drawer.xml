@@ -68,6 +68,10 @@
         android:id="@+id/drawer_rescue"
         android:title="@string/drawer_rescue" />
     <item
+        android:id="@+id/drawer_security"
+        android:title="@string/security_title"
+        android:icon="@drawable/ic_disable_warning" />
+    <item
         android:id="@+id/action_permission_center"
         android:title="@string/permission_center"
         android:icon="@drawable/ic_disable_warning" />

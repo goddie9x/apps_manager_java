@@ -16,6 +16,10 @@
 # libsuperuser spawns shells and parses process output; keep it whole.
 -keep class eu.chainfire.libsuperuser.** { *; }
 
+# SnakeYAML (threat-intel feed parsing) uses reflection internally; keep it whole.
+-keep class org.yaml.snakeyaml.** { *; }
+-dontwarn org.yaml.snakeyaml.**
+
 # Strip verbose/debug/info logging from release builds (warnings and errors stay).
 -assumenosideeffects class android.util.Log {
     public static *** v(...);

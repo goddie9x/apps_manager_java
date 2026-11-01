@@ -54,6 +54,37 @@ app takes you to the system screen where you can create/grant it — the feature
 simply stays inactive until then. The master switch *Disable auto turn off
 notification* in the drawer pauses the whole feature without changing the list.
 
+### Security center — strange / junk / malicious apps
+
+**Overview.** A dedicated drawer menu that scans every installed app and
+groups the results into Dangerous, Suspicious and Junk with a 0–100 risk
+score. Each row offers quick actions: app details, uninstall, freeze, flag as
+junk/dangerous, or whitelist. Separate tabs list apps holding sensitive
+permissions, manage the threat-intel sources, and show your hand-set flags.
+
+**How it detects.** All offline, no root needed: known-bad package names and
+signing-cert SHA-1s (a renamed malware APK is still caught), installer
+provenance (sideload vs known stores), signature spoofing, hidden apps (no
+launcher icon), dangerous/sensitive permissions, *granted* sensitive access
+(overlay, install-packages, usage stats, accessibility, notification listener,
+device admin), debuggable/test-only builds, ancient target SDK, never launched.
+
+**Intel sources (manual > online > bundled).** A bundled offline copy
+(`tools/build_threat_intel.py` regenerates it from the public
+AssoEchap/stalkerware-indicators repo); online feeds over HTTPS refreshed
+daily (custom JSON or ioc.yaml feeds can be added); a hand-entered list with
+JSON import/export.
+
+**Prerequisites** — INTERNET for feed refresh; Usage Access sharpens the
+"never launched" signal; uninstall/freeze use the normal privilege backends
+(root/Shizuku perform the real action, otherwise the system uninstall screen
+opens). The app never flags itself.
+
+**Input validation.** Package names are validated before any shell use; feed
+URLs must be https and are size-capped; a feed cache is only replaced after a
+clean parse; import lines are validated individually and reported as
+applied/rejected/not-installed.
+
 ### Force stop & app info
 
 **Overview.** One-tap force stop (root) or jump to the system app-info screen

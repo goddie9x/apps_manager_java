@@ -35,8 +35,8 @@ android {
         applicationId 'com.god.ApplicationManager'
         minSdk 24
         targetSdk 36
-        versionCode 19
-        versionName "1.2.0"
+        versionCode 20
+        versionName "1.3.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -72,6 +72,8 @@ dependencies {
     implementation libs.kotlinx.coroutines.android
     implementation libs.androidx.lifecycle.viewmodel.ktx
     implementation libs.androidx.lifecycle.runtime.ktx
+    implementation libs.androidx.viewpager2
+    implementation libs.snakeyaml
 
     testImplementation libs.junit
     androidTestImplementation libs.androidx.test.ext.junit
